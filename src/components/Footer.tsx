@@ -42,9 +42,21 @@ export default function Footer({ onTabChange }: FooterProps) {
           {/* Network links col */}
           <div className="md:col-span-3 flex flex-col gap-space-xs">
             <span className="font-label-mono text-xs uppercase tracking-widest text-on-surface-variant">
-              Dispatches &amp; Network
+              Index &amp; Network
             </span>
             <div className="flex flex-wrap gap-x-space-md gap-y-space-xs font-label-technical text-xs">
+              <button
+                onClick={() => onTabChange?.('blog')}
+                className="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors cursor-pointer text-left"
+              >
+                Dispatches
+              </button>
+              <button
+                onClick={() => onTabChange?.('pricing')}
+                className="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors cursor-pointer text-left"
+              >
+                Pricing
+              </button>
               <a
                 className="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors"
                 href="https://github.com"
@@ -65,16 +77,8 @@ export default function Footer({ onTabChange }: FooterProps) {
                 onClick={() => onTabChange?.('contact')}
                 className="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors cursor-pointer text-left"
               >
-                Email
+                Contact
               </button>
-              <a
-                className="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors"
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                X ↗
-              </a>
             </div>
           </div>
         </div>

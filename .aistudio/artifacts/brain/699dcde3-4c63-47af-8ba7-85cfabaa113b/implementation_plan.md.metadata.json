@@ -1,6 +1,6 @@
 {
-  "summary":  "Implementation plan for CSS-based Dark Mode theme with inverted obsidian/cream palette and dynamic header toggle with localStorage and system OS detection.",
-  "updatedAt":  "2026-10-23T12:32:36.816644129Z",
+  "summary":  "Implementation plan for adding the Blog (Editorial Technical Dispatches) and Pricing (Engineering Engagement Tiers) views into the broadsheet portfolio application.",
+  "updatedAt":  "2026-10-23T12:53:45.922480008Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

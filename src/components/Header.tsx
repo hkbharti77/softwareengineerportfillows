@@ -27,6 +27,8 @@ export default function Header({
     { id: 'work', label: 'Work' },
     { id: 'engineering', label: 'Engineering & AI' },
     { id: 'experience', label: 'Experience' },
+    { id: 'blog', label: 'Dispatches' },
+    { id: 'pricing', label: 'Pricing' },
     { id: 'about', label: 'About' },
     { id: 'contact', label: 'Contact' },
   ];

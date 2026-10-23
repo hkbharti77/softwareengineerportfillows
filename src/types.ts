@@ -1,4 +1,4 @@
-export type TabType = 'work' | 'engineering' | 'experience' | 'about' | 'contact';
+export type TabType = 'work' | 'engineering' | 'experience' | 'blog' | 'pricing' | 'about' | 'contact';
 
 export type ProjectCategory = 'all' | 'generative-ai' | 'distributed-systems' | 'full-stack';
 
@@ -36,4 +36,40 @@ export interface InquestFormData {
   inquiryType: 'Full-time Role' | 'AI System Build' | 'Advisory & Consultation';
   message: string;
   ndaRequired: boolean;
+}
+
+export type BlogCategory = 'all' | 'voice-ai' | 'distributed' | 'rag-search' | 'architecture';
+
+export interface DispatchArticle {
+  id: string;
+  issueNumber: string;
+  category: BlogCategory;
+  categoryLabel: string;
+  title: string;
+  subtitle: string;
+  date: string;
+  readTime: string;
+  excerpt: string;
+  content: string[];
+  codeSnippet?: {
+    language: string;
+    filename: string;
+    code: string;
+  };
+  tags: string[];
+}
+
+export interface PricingTier {
+  id: string;
+  tierNumber: string;
+  name: string;
+  tagline: string;
+  price: string;
+  period: string;
+  commitment: string;
+  isPopular?: boolean;
+  deliverables: string[];
+  idealFor: string;
+  turnaround: string;
+  ctaText: string;
 }

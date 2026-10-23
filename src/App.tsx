@@ -6,6 +6,8 @@ import ScrollProgressBar from './components/ScrollProgressBar';
 import WorkView from './views/WorkView';
 import EngineeringView from './views/EngineeringView';
 import ExperienceView from './views/ExperienceView';
+import BlogView from './views/BlogView';
+import PricingView from './views/PricingView';
 import AboutView from './views/AboutView';
 import type { TabType } from './types';
 import { CheckCircle2, BookOpen } from 'lucide-react';
@@ -57,6 +59,10 @@ export default function App() {
         setActiveTab('engineering');
       } else if (hash === 'experience') {
         setActiveTab('experience');
+      } else if (hash === 'blog' || hash === 'dispatches' || hash === 'journal') {
+        setActiveTab('blog');
+      } else if (hash === 'pricing' || hash === 'services' || hash === 'rates') {
+        setActiveTab('pricing');
       } else if (hash === 'about') {
         setActiveTab('about');
       } else if (hash === 'contact') {
@@ -98,6 +104,8 @@ export default function App() {
     if (tab === 'work') window.location.hash = 'work';
     else if (tab === 'engineering') window.location.hash = 'engineering-ai';
     else if (tab === 'experience') window.location.hash = 'experience';
+    else if (tab === 'blog') window.location.hash = 'blog';
+    else if (tab === 'pricing') window.location.hash = 'pricing';
     else if (tab === 'about') window.location.hash = 'about';
 
     setActiveTab(tab);
@@ -153,6 +161,20 @@ export default function App() {
             <ExperienceView
               onTabChange={handleTabChange}
               onOpenResume={() => setIsResumeOpen(true)}
+              onTriggerToast={triggerToast}
+            />
+          )}
+
+          {activeTab === 'blog' && (
+            <BlogView
+              onTabChange={handleTabChange}
+              onTriggerToast={triggerToast}
+            />
+          )}
+
+          {activeTab === 'pricing' && (
+            <PricingView
+              onTabChange={handleTabChange}
               onTriggerToast={triggerToast}
             />
           )}
