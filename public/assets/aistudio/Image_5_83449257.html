@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-primary":"#b5c4ff","primary-fixed":"#dce1ff","on-secondary-fixed":"#351000","primary-fixed-dim":"#b5c4ff","surface-variant":"#e4e3dc","secondary-container":"#fc8546","secondary":"#a04100","error-container":"#ffdad6","outline":"#747684","on-tertiary":"#ffffff","surface-bright":"#fbf9f3","on-background":"#1b1c18","tertiary-fixed-dim":"#accebe","tertiary":"#3d5c4f","surface":"#fbf9f3","primary":"#244dbb","tertiary-fixed":"#c7ebd9","on-primary":"#ffffff","background":"#fbf9f3","primary-container":"#4267d5","inverse-on-surface":"#f2f1ea","on-primary-fixed-variant":"#053cab","error":"#ba1a1a","on-surface":"#1b1c18","on-tertiary-fixed":"#002116","surface-container-lowest":"#ffffff","on-secondary-container":"#682700","on-primary-fixed":"#00164e","on-secondary":"#ffffff","tertiary-container":"#557567","surface-container-high":"#e9e8e2","on-tertiary-fixed-variant":"#2e4d40","surface-container-low":"#f5f4ed","outline-variant":"#c4c5d5","surface-container-highest":"#e4e3dc","on-surface-variant":"#434653","surface-tint":"#2f56c4","on-tertiary-container":"#d7fae9","inverse-surface":"#30312d","secondary-fixed":"#ffdbcc","secondary-fixed-dim":"#ffb693","surface-container":"#efeee7","on-error":"#ffffff","on-primary-container":"#f1f1ff","on-secondary-fixed-variant":"#7a3000","on-error-container":"#93000a","surface-dim":"#dbdad4"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-lg":"2rem","gutter-mobile":"1rem","margin-mobile":"1.25rem","space-xl":"4rem","space-sm":"0.5rem",gutter:"1.5rem","space-xs":"0.25rem","space-md":"1rem",margin:"3rem"},fontFamily:{"headline-md":["EB Garamond"],"body-sm":["Hanken Grotesk"],"headline-lg-mobile":["EB Garamond"],"headline-lg":["EB Garamond"],"label-technical":["Hanken Grotesk"],"headline-md-mobile":["EB Garamond"],"body-md":["Hanken Grotesk"],"display-hero-mobile":["EB Garamond"],"headline-sm":["EB Garamond"],"display-hero":["EB Garamond"],"body-lg":["Hanken Grotesk"],"label-mono":["Hanken Grotesk"],"title-editorial":["EB Garamond"]},fontSize:{"headline-md":["36px",{lineHeight:"44px",fontWeight:"500"}],"body-sm":["13px",{lineHeight:"20px",fontWeight:"400"}],"headline-lg-mobile":["36px",{lineHeight:"42px",letterSpacing:"-0.01em",fontWeight:"400"}],"headline-lg":["56px",{lineHeight:"64px",letterSpacing:"-0.015em",fontWeight:"400"}],"label-technical":["12px",{lineHeight:"16px",letterSpacing:"0.04em",fontWeight:"500"}],"headline-md-mobile":["28px",{lineHeight:"34px",fontWeight:"500"}],"body-md":["15px",{lineHeight:"24px",fontWeight:"400"}],"display-hero-mobile":["48px",{lineHeight:"52px",letterSpacing:"-0.01em",fontWeight:"400"}],"headline-sm":["24px",{lineHeight:"32px",fontWeight:"500"}],"display-hero":["84px",{lineHeight:"92px",letterSpacing:"-0.02em",fontWeight:"400"}],"body-lg":["18px",{lineHeight:"28px",fontWeight:"400"}],"label-mono":["11px",{lineHeight:"16px",letterSpacing:"0.08em",fontWeight:"600"}],"title-editorial":["20px",{lineHeight:"28px",letterSpacing:"0.01em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 w-full px-margin-mobile lg:px-margin flex items-center justify-between"><div class="flex items-center gap-space-md"><img alt="Himanshu Bharti Monogram Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UJJ2pvQQ0FOrA5qgfs7cdUk3Sfx3v4uBXHV6UUNdS8QfUaExHu1ZYgXvWtCXTc4DCIebHFZ7PWMg3vVFYUZBSoz18kjRLtZ-6Syys4_Evj4oswoygoJ3VuWXit36JFEYekNV4OHO8-bUB2QQiiD3QIwN5vmJuug05J4308F5qhvVbKVbvXH9ToW8xDYPap8O1dK6Kf_jg7YXa46a5QD8owWeGjg6IiQefZDu1xU6zi3PVJ5u1Ra_oKUrHz"/><div class="flex flex-col"><span class="font-label-technical text-label-technical tracking-wider uppercase text-on-surface">Himanshu Bharti</span><span class="font-label-mono text-label-mono text-on-surface-variant uppercase tracking-widest">Software &amp; AI</span></div></div><nav class="hidden lg:flex items-center gap-space-lg" data-active-classes="text-on-surface font-semibold"><a class="font-label-technical text-label-technical text-on-surface-variant hover:text-on-surface transition-colors uppercase tracking-widest" data-path="work" href="#">Work</a><a aria-current="page" class="transition-colors uppercase tracking-widest text-on-surface font-semibold" data-path="engineering-ai" href="#">Engineering &amp; AI</a><a class="font-label-technical text-label-technical text-on-surface-variant hover:text-on-surface transition-colors uppercase tracking-widest" data-path="experience" href="#">Experience</a><a class="font-label-technical text-label-technical text-on-surface-variant hover:text-on-surface transition-colors uppercase tracking-widest" data-path="about" href="#">About</a><a class="font-label-technical text-label-technical text-on-surface-variant hover:text-on-surface transition-colors uppercase tracking-widest" data-path="contact" href="#">Contact</a></nav><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center px-space-md py-space-xs rounded-full bg-surface-container-high text-on-surface font-label-technical text-label-technical tracking-wider uppercase hover:bg-inverse-surface hover:text-inverse-on-surface transition-all" data-path="resume" href="#">Download Résumé</a><a class="inline-flex items-center px-space-md py-space-xs rounded-full bg-secondary-container text-on-secondary-container font-label-technical text-label-technical font-semibold tracking-wider uppercase hover:bg-secondary hover:text-on-secondary transition-all" data-path="contact" href="#">Let's Connect</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Dossier Ledger & Header -->
+<section class="w-full px-margin-mobile lg:px-margin pt-space-lg pb-space-xl">
+<div class="flex flex-col gap-space-md">
+<!-- Registry Topline -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm border-b border-surface-variant/70 pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="inline-block w-2 h-2 bg-secondary-container"></span>
+<span class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface-variant">Arch-ID: HB-SYS-2025-ALPHA</span>
+<span class="text-outline-variant font-label-mono text-label-mono">/</span>
+<span class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface">Specification &amp; Topology</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Runtime Protocol: HTTP/3 + WebRTC + WSS</span>
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed font-label-mono text-label-mono uppercase">Status: Production Live</span>
+</div>
+</div>
+<!-- Main Editorial Header -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-end pt-space-md">
+<div class="lg:col-span-8 flex flex-col gap-space-xs">
+<span class="font-label-mono text-label-mono uppercase tracking-widest text-secondary font-semibold">Technical Dossier · Volume 02</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Engineering Systems &amp; AI Architecture</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mt-space-xs">
+            Deep dive into production-grade backend services, distributed telemetry flows, real-time voice orchestration, and multi-agent systems designed with architectural rigor.
+          </p>
+</div>
+<div class="lg:col-span-4 flex flex-col justify-end">
+<div class="bg-surface-container-low p-space-md flex flex-col gap-space-xs shadow-sm">
+<span class="font-label-mono text-label-mono uppercase text-on-surface-variant">Architecture Philosophy</span>
+<p class="font-body-sm text-body-sm text-on-surface italic">
+              "Isolate non-deterministic neural inferences behind strictly typed, verifiable event buses. Treat latency as an integrity metric."
+            </p>
+</div>
+</div>
+</div>
+<!-- Metric Telemetry Ribbon -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter mt-space-lg">
+<div class="bg-surface-container p-space-md flex flex-col gap-space-xs shadow-sm">
+<span class="font-label-mono text-label-mono uppercase tracking-wider text-on-surface-variant">Deployed Workflows</span>
+<span class="font-headline-md text-headline-md text-on-surface">12+</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Production AI pipelines in 24/7 service</span>
+</div>
+<div class="bg-surface-container p-space-md flex flex-col gap-space-xs shadow-sm">
+<span class="font-label-mono text-label-mono uppercase tracking-wider text-secondary">E2E Voice Roundtrip</span>
+<span class="font-headline-md text-headline-md text-primary">&lt;450ms</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Barge-in responsive streaming threshold</span>
+</div>
+<div class="bg-surface-container p-space-md flex flex-col gap-space-xs shadow-sm">
+<span class="font-label-mono text-label-mono uppercase tracking-wider text-on-surface-variant">Vector Substrate</span>
+<span class="font-headline-md text-headline-md text-on-surface">pgvector</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">HNSW indexing with cosine semantic space</span>
+</div>
+<div class="bg-surface-container p-space-md flex flex-col gap-space-xs shadow-sm">
+<span class="font-label-mono text-label-mono uppercase tracking-wider text-tertiary">Factual Grounding</span>
+<span class="font-headline-md text-headline-md text-tertiary">0-Halluc.</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Typed JSON assertion &amp; circuit breakers</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 01: Real-Time Streaming Voice AI Pipeline Blueprint -->
+<section class="w-full px-margin-mobile lg:px-margin py-space-xl bg-surface-container-low">
+<div class="flex flex-col gap-space-lg">
+<!-- Section Intro Plaque -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm pb-space-sm">
+<div>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-primary font-semibold uppercase tracking-widest">
+<span>Blueprint 01</span>
+<span>·</span>
+<span>Sub-500ms Audio Pipeline</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-space-xs">Real-Time Streaming Voice AI Engine</h2>
+</div>
+<div class="font-label-mono text-label-mono text-on-surface-variant">
+          PROTOCOL: WEBRTC / OPUS 16KHZ ↔ PCM STREAM
+        </div>
+</div>
+<!-- Interactive Stepper Diagram Blueprint -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-stretch">
+<!-- Interactive Step Selector Column -->
+<div class="lg:col-span-5 flex flex-col gap-space-sm">
+<!-- Step 1 -->
+<div class="step-card bg-surface p-space-md cursor-pointer transition-all shadow-md" id="step-btn-1" onclick="switchVoiceStep(1)">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-primary uppercase font-bold">[ 01. Ingestion &amp; VAD ]</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">t = 0ms → 40ms</span>
+</div>
+<h3 class="font-title-editorial text-title-editorial text-on-surface mt-space-xs">WebRTC Chunking &amp; Silero VAD</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+              Raw 16kHz PCM audio frames analyzed over a 30ms sliding window. Eliminates transmission of dead space and truncates dead air early.
+            </p>
+</div>
+<!-- Step 2 -->
+<div class="step-card bg-surface-container p-space-md cursor-pointer transition-all" id="step-btn-2" onclick="switchVoiceStep(2)">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-on-surface-variant uppercase font-bold">[ 02. Speech to Text ]</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">t = 40ms → 180ms</span>
+</div>
+<h3 class="font-title-editorial text-title-editorial text-on-surface mt-space-xs">Deepgram Nova-2 Streaming STT</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+              WebSocket stream emits interim and final transcription tokens with smart punctuation and domain-specific vocabulary biasing.
+            </p>
+</div>
+<!-- Step 3 -->
+<div class="step-card bg-surface-container p-space-md cursor-pointer transition-all" id="step-btn-3" onclick="switchVoiceStep(3)">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-on-surface-variant uppercase font-bold">[ 03. Cognitive Reasoning ]</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">t = 180ms → 320ms</span>
+</div>
+<h3 class="font-title-editorial text-title-editorial text-on-surface mt-space-xs">Claude 3.5 / GPT-4o Token Pipelining</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+              Immediate token yield via Server-Sent Events. First 4 words trigger TTS generation before the complete sentence has settled.
+            </p>
+</div>
+<!-- Step 4 -->
+<div class="step-card bg-surface-container p-space-md cursor-pointer transition-all" id="step-btn-4" onclick="switchVoiceStep(4)">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-on-surface-variant uppercase font-bold">[ 04. Neural Speech Synthesis ]</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">t = 320ms → 440ms</span>
+</div>
+<h3 class="font-title-editorial text-title-editorial text-on-surface mt-space-xs">ElevenLabs Turbo Stream to Audio Context</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+              Chunked binary audio streamed over TLS socket directly into a Web Audio API ring buffer with millisecond-exact drift correction.
+            </p>
+</div>
+</div>
+<!-- Dynamic Visual Blueprint Display Canvas -->
+<div class="lg:col-span-7 bg-surface p-space-lg flex flex-col justify-between shadow-xl relative overflow-hidden">
+<div class="flex items-center justify-between pb-space-sm border-b border-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-mono text-label-mono uppercase text-on-surface font-semibold">Active Inspector:</span>
+<span class="px-2 py-0.5 bg-primary-container text-on-primary-container font-label-mono text-label-mono" id="active-step-badge">STAGE 01: SILERO_VAD</span>
+</div>
+<span class="font-label-mono text-label-mono text-on-surface-variant">Buffer: 4096 Samples</span>
+</div>
+<!-- Interactive Graphic Visualizer Canvas Mockup -->
+<div class="my-space-md flex flex-col gap-space-md">
+<!-- Simulated Waveform & Oscilloscope Graphic -->
+<div class="bg-surface-container-high p-space-md">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-mono text-label-mono uppercase text-on-surface">Waveform Audio Buffer (16,000 Hz)</span>
+<span class="font-label-mono text-label-mono text-secondary font-semibold">SNR: 28.4 dB</span>
+</div>
+<svg class="w-full h-24 text-primary" fill="none" viewbox="0 0 600 96" xmlns="http://www.w3.org/2000/svg">
+<!-- Grid hairlines -->
+<line stroke="currentColor" stroke-dasharray="4 4" stroke-opacity="0.2" x1="0" x2="600" y1="48" y2="48"></line>
+<line stroke="currentColor" stroke-opacity="0.1" x1="150" x2="150" y1="0" y2="96"></line>
+<line stroke="currentColor" stroke-opacity="0.1" x1="300" x2="300" y1="0" y2="96"></line>
+<line stroke="currentColor" stroke-opacity="0.1" x1="450" x2="450" y1="0" y2="96"></line>
+<!-- Audio Dynamic Envelope -->
+<path d="M0 48 Q 25 48, 40 48 T 80 48 Q 100 20, 120 70 T 150 15 T 180 82 T 210 25 T 240 68 T 270 48 T 320 48 T 360 30 T 390 65 T 420 18 T 450 78 T 480 35 T 510 55 T 550 48 L 600 48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+<!-- Confidence Area Envelope -->
+<path d="M80 48 Q 100 20, 120 70 T 150 15 T 180 82 T 210 25 T 240 68 T 270 48 L 270 48 L 80 48 Z" fill="currentColor" fill-opacity="0.08"></path>
+<path d="M340 48 Q 360 30, 390 65 T 420 18 T 450 78 T 480 35 T 510 55 T 550 48 L 550 48 L 340 48 Z" fill="currentColor" fill-opacity="0.08"></path>
+</svg>
+</div>
+<!-- Dynamic Inspector Panel Content -->
+<div class="bg-surface-container-low p-space-md flex flex-col gap-space-xs" id="inspector-content">
+<span class="font-label-mono text-label-mono text-secondary uppercase tracking-wider font-semibold">Engine Mechanism: Voice Activity Detection</span>
+<p class="font-body-md text-body-md text-on-surface">
+                Audio is received as raw PCM chunk packets over a bi-directional WebRTC Datachannel. The lightweight Silero model (ONNX Runtime) computes confidence scores every 30ms. Only frames scoring &gt; 0.65 voice probability are pushed to Deepgram, immediately cutting compute costs and eliminating STT hallucination over background HVAC hums.
+              </p>
+<div class="grid grid-cols-3 gap-space-sm pt-space-xs">
+<div class="bg-surface p-space-xs flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface-variant">Chunk Duration</span>
+<span class="font-label-technical text-label-technical text-on-surface font-bold">30.0 ms</span>
+</div>
+<div class="bg-surface p-space-xs flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface-variant">VAD Inference</span>
+<span class="font-label-technical text-label-technical text-on-surface font-bold">&lt; 3.2 ms</span>
+</div>
+<div class="bg-surface p-space-xs flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface-variant">Packet Loss Tolerance</span>
+<span class="font-label-technical text-label-technical text-on-surface font-bold">Up to 15%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Architectural Guardrail Callout -->
+<div class="p-space-md bg-secondary-fixed/30 flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-sm">warning</span>
+<span class="font-label-mono text-label-mono uppercase tracking-wider text-secondary font-bold">Critical Engineering Edge Case: Interruption &amp; Echo Cancellation</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              When the client begins speaking while the synthesizer is playing back audio, the client sends a synchronized <code class="bg-surface px-1 font-label-mono text-label-mono text-primary">BARGE_IN_TRIGGER</code> packet. The backend immediately flushes the ElevenLabs output buffer, transmits a silence packet to the client speaker ring, and resets the LLM inference context to branch on user priority.
+            </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 02: Autonomous WhatsApp Enterprise Sales Bot & CRM -->
+<section class="w-full px-margin-mobile lg:px-margin py-space-xl bg-surface">
+<div class="flex flex-col gap-space-lg">
+<!-- Section Intro -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm border-b border-surface-variant pb-space-sm">
+<div>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-secondary font-semibold uppercase tracking-widest">
+<span>Blueprint 02</span>
+<span>·</span>
+<span>Event-Driven Architecture</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-space-xs">Autonomous WhatsApp Sales &amp; CRM Engine</h2>
+</div>
+<div class="font-label-mono text-label-mono text-on-surface-variant">
+          THROUGHPUT: 1,200 REQ/SEC CONCURRENT INGESTION
+        </div>
+</div>
+<!-- Distributed Flow Blueprint Pipeline -->
+<div class="w-full bg-surface-container-low p-space-lg shadow-md">
+<span class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface-variant block mb-space-md">Distributed End-to-End Topology</span>
+<!-- Nodes Grid Flow -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-gutter relative">
+<!-- Node 1 -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-mono text-label-mono text-primary font-bold">NODE 01</span>
+<span class="w-2 h-2 bg-primary"></span>
+</div>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">Meta Webhook</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+                WhatsApp Graph API delivers HMAC-SHA256 encrypted JSON payload.
+              </p>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+              Target: edge.api.v1
+            </div>
+</div>
+<!-- Node 2 -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-mono text-label-mono text-tertiary font-bold">NODE 02</span>
+<span class="w-2 h-2 bg-tertiary"></span>
+</div>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">Cloudflare Worker</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+                Validates signature header, drops replay attacks, responds 200 OK within 12ms.
+              </p>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+              Latency: ~8ms
+            </div>
+</div>
+<!-- Node 3 -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-mono text-label-mono text-secondary font-bold">NODE 03</span>
+<span class="w-2 h-2 bg-secondary"></span>
+</div>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">Redis BullMQ</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+                Persistent buffer queue with deduplication and exponential retry policies.
+              </p>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+              Concurrency: 60/core
+            </div>
+</div>
+<!-- Node 4 -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-mono text-label-mono text-primary-container font-bold">NODE 04</span>
+<span class="w-2 h-2 bg-primary-container"></span>
+</div>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">FastAPI Worker</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+                Asynchronous state orchestration, prompt compression &amp; role dispatch.
+              </p>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+              Python 3.12 + AsyncIO
+            </div>
+</div>
+<!-- Node 5 -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-mono text-label-mono text-tertiary-container font-bold">NODE 05</span>
+<span class="w-2 h-2 bg-tertiary-container"></span>
+</div>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">Vector Memory</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+                pgvector semantic search retrieving historical user interaction profiles.
+              </p>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+              PostgreSQL 16 HNSW
+            </div>
+</div>
+<!-- Node 6 -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-mono text-label-mono text-secondary-container font-bold">NODE 06</span>
+<span class="w-2 h-2 bg-secondary-container"></span>
+</div>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">Tool Execution</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+                Stripe invoicing, Google Calendar API &amp; HubSpot CRM automated updates.
+              </p>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+              Typed Tool Schemas
+            </div>
+</div>
+</div>
+</div>
+<!-- Deep Dive Code & Telemetry Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Production Code Snippet in Warm Sand Block -->
+<div class="lg:col-span-7 bg-surface-container p-space-lg shadow-sm">
+<div class="flex items-center justify-between pb-space-sm border-b border-surface-variant mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-mono text-label-mono text-on-surface font-semibold">orchestrator.py</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant">• Dynamic Tool Execution Core</span>
+</div>
+<span class="font-label-mono text-label-mono text-primary font-semibold">PYTHON 3.12</span>
+</div>
+<!-- Styled Monospace Code Display -->
+<pre class="font-label-mono text-[12px] leading-5 text-on-surface overflow-x-auto p-space-sm bg-surface"><code><span class="text-secondary font-bold">from</span> typing <span class="text-secondary font-bold">import</span> Annotated, TypedDict
+<span class="text-secondary font-bold">from</span> pydantic <span class="text-secondary font-bold">import</span> BaseModel, Field
+<span class="text-secondary font-bold">from</span> langchain_core.tools <span class="text-secondary font-bold">import</span> tool
+
+<span class="text-tertiary"># Rigorous Schema Definition prevents parameter hallucination</span>
+<span class="text-secondary font-bold">class</span> <span class="text-primary font-bold">InvoiceRequest</span>(BaseModel):
+    client_phone: <span class="text-primary">str</span> = Field(..., description=<span class="text-tertiary">"E.164 formatted phone number"</span>)
+    amount_cents: <span class="text-primary">int</span> = Field(..., gt=<span class="text-secondary">0</span>, description=<span class="text-tertiary">"Amount in USD cents"</span>)
+    item_sku: <span class="text-primary">str</span> = Field(..., description=<span class="text-tertiary">"Validated catalogue SKU identifier"</span>)
+    idempotency_key: <span class="text-primary">str</span> = Field(..., description=<span class="text-tertiary">"Client-session UUIDv4"</span>)
+
+<span class="text-primary font-bold">@tool</span>(args_schema=InvoiceRequest)
+<span class="text-secondary font-bold">async def</span> <span class="text-primary-container font-bold">generate_stripe_payment_link</span>(
+    client_phone: <span class="text-primary">str</span>,
+    amount_cents: <span class="text-primary">int</span>,
+    item_sku: <span class="text-primary">str</span>,
+    idempotency_key: <span class="text-primary">str</span>
+) -&gt; <span class="text-primary">dict</span>:
+    <span class="text-tertiary">"""Executes atomic invoice creation with idempotency locks."""</span>
+    <span class="text-secondary font-bold">async with</span> redis_pool.lock(f<span class="text-tertiary">"lock:invoice:{idempotency_key}"</span>, timeout=<span class="text-secondary">10</span>):
+        session = <span class="text-secondary font-bold">await</span> stripe.checkout.Session.create_async(
+            customer_creation=<span class="text-tertiary">"always"</span>,
+            payment_method_types=[<span class="text-tertiary">"card"</span>],
+            line_items=[{<span class="text-tertiary">"price"</span>: item_sku, <span class="text-tertiary">"quantity"</span>: <span class="text-secondary">1</span>}],
+            mode=<span class="text-tertiary">"payment"</span>,
+            idempotency_key=idempotency_key
+        )
+        <span class="text-secondary font-bold">await</span> audit_ledger.record_dispatch(client_phone, session.url)
+        <span class="text-secondary font-bold">return</span> {<span class="text-tertiary">"status"</span>: <span class="text-tertiary">"READY"</span>, <span class="text-tertiary">"url"</span>: session.url}</code></pre>
+<div class="mt-space-md flex items-center justify-between font-label-mono text-label-mono text-on-surface-variant">
+<span>• Idempotency Guarantee: Redis Distributed Mutex</span>
+<span>Zero-Trust Validation</span>
+</div>
+</div>
+<!-- System Narrative & Metrics -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<div class="bg-surface-container-high p-space-md flex flex-col gap-space-xs shadow-sm">
+<span class="font-label-mono text-label-mono uppercase text-secondary font-semibold">Resilience Mechanism</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Defensive Webhook Queue Ingestion</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+              Direct webhook calls from Meta risk dropped requests under burst loads. By terminating Webhooks at Cloudflare edge workers and writing immediately to an append-only BullMQ queue, the system achieves 99.998% uptime with zero message loss during viral traffic surges.
+            </p>
+</div>
+<div class="bg-surface-container-low p-space-md flex flex-col gap-space-sm shadow-sm">
+<span class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface-variant">Live Throughput Audit</span>
+<div class="flex items-center justify-between pb-space-xs border-b border-surface-variant">
+<span class="font-label-technical text-label-technical text-on-surface">Edge Signature Auth</span>
+<span class="font-label-mono text-label-mono text-tertiary font-bold">100% Passed</span>
+</div>
+<div class="flex items-center justify-between pb-space-xs border-b border-surface-variant">
+<span class="font-label-technical text-label-technical text-on-surface">Worker Pool Availability</span>
+<span class="font-label-mono text-label-mono text-on-surface font-bold">32 / 32 Healthy</span>
+</div>
+<div class="flex items-center justify-between pb-space-xs border-b border-surface-variant">
+<span class="font-label-technical text-label-technical text-on-surface">pgvector Query Overhead</span>
+<span class="font-label-mono text-label-mono text-primary font-bold">14.2 ms avg</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-technical text-label-technical text-on-surface">Tool Call Execution Success</span>
+<span class="font-label-mono text-label-mono text-tertiary font-bold">99.84%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 03: Technical Capabilities Matrix -->
+<section class="w-full px-margin-mobile lg:px-margin py-space-xl bg-surface-container-low">
+<div class="flex flex-col gap-space-lg">
+<!-- Section Title -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm border-b border-surface-variant pb-space-sm">
+<div>
+<span class="font-label-mono text-label-mono text-on-surface-variant uppercase tracking-widest">Capabilities Grid</span>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-space-xs">Production Engineering Matrix</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">
+          Structured capability domains deployed across enterprise infrastructures. Emphasizing rigor, typesafety, and verifiable execution over experimentation.
+        </p>
+</div>
+<!-- 4 Capability Groups Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Group A: AI & Agentic Systems -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-primary font-bold">[ DOMAIN 01 ]</span>
+<span class="w-3 h-3 bg-primary"></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">AI &amp; Agentic Systems</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Autonomous cognitive architectures, self-correcting generation flows, and strict grounding engines.
+            </p>
+<ul class="flex flex-col gap-space-xs pt-space-xs border-t border-surface-variant">
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Multi-Agent Orchestration (LangGraph, DSPy)</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">RAG Systems &amp; Semantic Hybrid Search</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Structured Function Calling &amp; JSON Schemas</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Continuous LLM Evaluation &amp; Guardrails</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Streaming Token Buffering Protocols</span>
+</li>
+</ul>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+            Primary: PyTorch • vLLM • LangChain
+          </div>
+</div>
+<!-- Group B: Backend & Distributed Core -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-secondary font-bold">[ DOMAIN 02 ]</span>
+<span class="w-3 h-3 bg-secondary"></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Backend &amp; Distributed Core</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              High-concurrency services, event-driven streaming buses, and ACID-compliant storage layers.
+            </p>
+<ul class="flex flex-col gap-space-xs pt-space-xs border-t border-surface-variant">
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-secondary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">FastAPI (Python) &amp; Go Microservices</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-secondary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Node.js / TypeScript Async Runtimes</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-secondary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">PostgreSQL, pgvector, Redis Cluster</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-secondary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Kafka &amp; BullMQ Distributed Queues</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-secondary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">WebSocket &amp; gRPC RPC Frameworks</span>
+</li>
+</ul>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+            Primary: Go • Python • SQL • Redis
+          </div>
+</div>
+<!-- Group C: Cloud & DevOps -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-tertiary font-bold">[ DOMAIN 03 ]</span>
+<span class="w-3 h-3 bg-tertiary"></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Cloud &amp; DevOps</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Infrastructure as code, containerized serverless orchestration, and zero-downtime deployment pipelines.
+            </p>
+<ul class="flex flex-col gap-space-xs pt-space-xs border-t border-surface-variant">
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-tertiary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Docker Multi-Stage &amp; Kubernetes (EKS)</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-tertiary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">AWS ECS, Lambda &amp; S3 Storage</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-tertiary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Cloudflare Workers Edge Compute</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-tertiary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">GitHub Actions CI/CD with Test Suites</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-tertiary mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Prometheus &amp; Grafana Observability</span>
+</li>
+</ul>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+            Primary: AWS • Docker • Terraform
+          </div>
+</div>
+<!-- Group D: Frontend & Graphics Visualization -->
+<div class="bg-surface p-space-md flex flex-col justify-between shadow-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-primary-container font-bold">[ DOMAIN 04 ]</span>
+<span class="w-3 h-3 bg-primary-container"></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Frontend &amp; Graphics</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              High-frame-rate user interfaces, shader-driven WebGL experiences, and state-driven architectural design systems.
+            </p>
+<ul class="flex flex-col gap-space-xs pt-space-xs border-t border-surface-variant">
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary-container mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Next.js App Router &amp; React Server Comp.</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary-container mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Three.js, WebGL &amp; Custom GLSL Shaders</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary-container mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Tailwind CSS Architectural Tokens</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary-container mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">XState Deterministic Finite State Machines</span>
+</li>
+<li class="flex items-start gap-space-xs">
+<span class="font-label-mono text-label-mono text-primary-container mt-0.5">•</span>
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Web Audio API Low-Latency Mixers</span>
+</li>
+</ul>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-surface-variant font-label-mono text-label-mono text-on-surface-variant">
+            Primary: Next.js • Three.js • WebGL
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 04: Engineering Principles & Guardrails -->
+<section class="w-full px-margin-mobile lg:px-margin py-space-xl bg-surface">
+<div class="flex flex-col gap-space-lg">
+<!-- Section Title -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm border-b border-surface-variant pb-space-sm">
+<div>
+<span class="font-label-mono text-label-mono text-secondary font-semibold uppercase tracking-widest">Architectural Principles</span>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-space-xs">Production Guardrails &amp; Integrity</h2>
+</div>
+<div class="font-label-mono text-label-mono text-on-surface-variant">
+          STANDARD: ZERO UNAUDITED INFERENCE
+        </div>
+</div>
+<!-- 3 Pillar Editorial Broadside Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter items-stretch">
+<!-- Pillar 1 -->
+<div class="bg-surface-container p-space-lg flex flex-col justify-between shadow-sm">
+<div class="flex flex-col gap-space-sm">
+<div class="w-10 h-10 bg-primary flex items-center justify-center text-on-primary font-label-mono text-label-mono font-bold">
+              01
+            </div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Determinism in Probabilistic Systems</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+              Natural language models are stochastic by definition. Production engineering demands determinism. We wrap neural predictions inside deterministic state machines (XState) and typed Pydantic assertion models. If output diverges from the strict JSON contract, the request triggers a structured retry before touching client state.
+            </p>
+</div>
+<div class="mt-space-lg pt-space-sm border-t border-surface-variant">
+<span class="font-label-mono text-label-mono text-primary font-semibold uppercase">→ Pydantic &amp; Zod Schema Enforcers</span>
+</div>
+</div>
+<!-- Pillar 2 -->
+<div class="bg-surface-container p-space-lg flex flex-col justify-between shadow-sm">
+<div class="flex flex-col gap-space-sm">
+<div class="w-10 h-10 bg-tertiary flex items-center justify-center text-on-tertiary font-label-mono text-label-mono font-bold">
+              02
+            </div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">End-to-End Tracing &amp; Observability</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+              Every token, prompt template, vector similarity score, and tool invocation carries a globally unique OpenTelemetry trace ID. System operators can inspect the entire causal graph from the moment an acoustic WebRTC frame enters the edge down to the precise millisecond a database transaction commits.
+            </p>
+</div>
+<div class="mt-space-lg pt-space-sm border-t border-surface-variant">
+<span class="font-label-mono text-label-mono text-tertiary font-semibold uppercase">→ OpenTelemetry &amp; Langfuse Distributed Tracing</span>
+</div>
+</div>
+<!-- Pillar 3 -->
+<div class="bg-surface-container p-space-lg flex flex-col justify-between shadow-sm">
+<div class="flex flex-col gap-space-sm">
+<div class="w-10 h-10 bg-secondary flex items-center justify-center text-on-secondary font-label-mono text-label-mono font-bold">
+              03
+            </div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Security &amp; PII Sanitization at the Edge</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+              User data is never forwarded directly to public model APIs. Before semantic indexing or LLM ingestion, payloads undergo regex and Named Entity Recognition (NER) masking at the edge worker tier. Sensitive identifiers (credit cards, tax numbers, phone records) are replaced with ephemeral tokens and re-hydrated only on dispatch.
+            </p>
+</div>
+<div class="mt-space-lg pt-space-sm border-t border-surface-variant">
+<span class="font-label-mono text-label-mono text-secondary font-semibold uppercase">→ Edge Scrubbing &amp; Token Vaulting</span>
+</div>
+</div>
+</div>
+<!-- Engineering Inquiry Callout Ribbon -->
+<div class="bg-surface-container-high p-space-lg flex flex-col lg:flex-row items-center justify-between gap-space-md shadow-md mt-space-md">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-mono text-label-mono uppercase tracking-widest text-primary font-bold">Technical Consultation &amp; System Audits</span>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">Require an architectural review of your enterprise AI pipeline?</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-2xl">
+            Available for deep-dive technical evaluations, low-latency audio engine design, and multi-agent infrastructure consulting.
+          </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<a class="inline-flex items-center px-space-md py-space-sm bg-primary text-on-primary font-label-technical text-label-technical tracking-wider uppercase hover:bg-primary-container transition-all" data-path="contact" href="#">
+            Initiate Architecture Dialogue
+          </a>
+<a class="inline-flex items-center px-space-md py-space-sm bg-surface text-on-surface font-label-technical text-label-technical tracking-wider uppercase hover:bg-surface-variant transition-all" data-path="work" href="#">
+            Review Case Studies
+          </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Script for Step Switching -->
+<script>
+    const voiceStepData = {
+      1: {
+        badge: "STAGE 01: SILERO_VAD",
+        title: "Engine Mechanism: Voice Activity Detection",
+        desc: "Audio is received as raw PCM chunk packets over a bi-directional WebRTC Datachannel. The lightweight Silero model (ONNX Runtime) computes confidence scores every 30ms. Only frames scoring > 0.65 voice probability are pushed to Deepgram, immediately cutting compute costs and eliminating STT hallucination over background HVAC hums.",
+        duration: "30.0 ms",
+        latency: "< 3.2 ms",
+        loss: "Up to 15%"
+      },
+      2: {
+        badge: "STAGE 02: STREAMING_STT",
+        title: "Engine Mechanism: Deepgram Nova-2 WebSockets",
+        desc: "Pre-filtered audio packets stream over persistent TLS WebSockets with custom domain vocabulary biasing. Nova-2 emits interim transcripts in 140ms increments. When speech pauses for 120ms, an endpoint event triggers downstream reasoning before acoustic decay finishes.",
+        duration: "140.0 ms",
+        latency: "~165 ms",
+        loss: "0% (TCP/WSS)"
+      },
+      3: {
+        badge: "STAGE 03: CLAUDE_PIPELINE",
+        title: "Engine Mechanism: Streaming Token Generation & Tool Routing",
+        desc: "Anthropic Claude 3.5 Sonnet / OpenAI GPT-4o processes the conversational prompt context. We bypass full sentence completion by intercepting the first 4 tokens to begin streaming to the synthesizer. Function calls (e.g. appointment lookups) run concurrently on async tasks.",
+        duration: "Streaming SSE",
+        latency: "~180 ms TTFT",
+        loss: "Strict JSON Guard"
+      },
+      4: {
+        badge: "STAGE 04: ELEVENLABS_TTS",
+        title: "Engine Mechanism: High-Precision Binary Audio Buffering",
+        desc: "ElevenLabs Turbo v2.5 streams chunked MP3/PCM audio frames back over WebSockets. The client's Web Audio API dynamically buffers these chunks into an AudioBufferSourceNode with timestamp synchronization, eliminating audio popping and jitter.",
+        duration: "Continuous Chunk",
+        latency: "< 120 ms chunk",
+        loss: "Ring Buffer Sync"
+      }
+    };
+
+    function switchVoiceStep(stepNum) {
+      // Update Step Card UI
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById('step-btn-' + i);
+        if (btn) {
+          if (i === stepNum) {
+            btn.className = "step-card bg-surface p-space-md cursor-pointer transition-all shadow-md";
+            btn.querySelector('.font-label-mono').className = "font-label-mono text-label-mono text-primary uppercase font-bold";
+          } else {
+            btn.className = "step-card bg-surface-container p-space-md cursor-pointer transition-all";
+            btn.querySelector('.font-label-mono').className = "font-label-mono text-label-mono text-on-surface-variant uppercase font-bold";
+          }
+        }
+      }
+
+      // Update Inspector Panel
+      const data = voiceStepData[stepNum];
+      if (data) {
+        document.getElementById('active-step-badge').textContent = data.badge;
+        const inspector = document.getElementById('inspector-content');
+        inspector.innerHTML = `
+          <span class="font-label-mono text-label-mono text-secondary uppercase tracking-wider font-semibold">${data.title}</span>
+          <p class="font-body-md text-body-md text-on-surface">${data.desc}</p>
+          <div class="grid grid-cols-3 gap-space-sm pt-space-xs">
+            <div class="bg-surface p-space-xs flex flex-col">
+              <span class="font-label-mono text-label-mono text-on-surface-variant">Chunk Duration</span>
+              <span class="font-label-technical text-label-technical text-on-surface font-bold">${data.duration}</span>
+            </div>
+            <div class="bg-surface p-space-xs flex flex-col">
+              <span class="font-label-mono text-label-mono text-on-surface-variant">Inference / TTFT</span>
+              <span class="font-label-technical text-label-technical text-on-surface font-bold">${data.latency}</span>
+            </div>
+            <div class="bg-surface p-space-xs flex flex-col">
+              <span class="font-label-mono text-label-mono text-on-surface-variant">Integrity Rule</span>
+              <span class="font-label-technical text-label-technical text-on-surface font-bold">${data.loss}</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-xl"><div class="w-full px-margin-mobile lg:px-margin py-space-xl flex flex-col gap-space-lg"><div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start"><div class="md:col-span-5 flex flex-col gap-space-sm"><div class="flex items-center gap-space-sm"><img alt="Himanshu Bharti Monogram Logo" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UJJ2pvQQ0FOrA5qgfs7cdUk3Sfx3v4uBXHV6UUNdS8QfUaExHu1ZYgXvWtCXTc4DCIebHFZ7PWMg3vVFYUZBSoz18kjRLtZ-6Syys4_Evj4oswoygoJ3VuWXit36JFEYekNV4OHO8-bUB2QQiiD3QIwN5vmJuug05J4308F5qhvVbKVbvXH9ToW8xDYPap8O1dK6Kf_jg7YXa46a5QD8owWeGjg6IiQefZDu1xU6zi3PVJ5u1Ra_oKUrHz"/><span class="font-headline-sm text-headline-sm text-on-surface">Himanshu Bharti</span></div><p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">Architecting cognitive AI workflows, high-precision graphics computing, and refined digital experiences with physical studio realism.</p></div><div class="md:col-span-4 flex flex-col gap-space-xs"><span class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface-variant">Studio Chronometry &amp; Engine</span><div class="flex items-center gap-space-xs font-label-technical text-label-technical text-on-surface"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span>IST (UTC+5:30) · Available for Strategic Engagements</span></div><p class="font-label-mono text-label-mono text-on-surface-variant mt-space-xs">Built with Next.js, React, TypeScript &amp; WebGL</p></div><div class="md:col-span-3 flex flex-col gap-space-xs"><span class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface-variant">Dispatches &amp; Network</span><div class="flex flex-wrap gap-x-space-md gap-y-space-xs font-label-technical text-label-technical"><a class="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors" href="#">GitHub</a><a class="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors" href="#">LinkedIn</a><a class="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors" href="#">Email</a><a class="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors" href="#">X</a></div></div></div><div class="flex flex-col sm:flex-row items-center justify-between pt-space-lg font-label-mono text-label-mono text-on-surface-variant"><p>© 2025 Himanshu Bharti. All rights reserved.</p><p class="tracking-widest uppercase">Curated Broadsheet Edition · Vol. 04</p></div></div></footer></body></html>

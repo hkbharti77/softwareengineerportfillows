@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #fbf9f3;
+  --color-background: #fbf9f3;
+  --color-on-surface: #1b1c18;
+  --color-on-surface-variant: #434653;
+  --color-surface-container: #efeee7;
+  --color-surface-container-low: #f5f4ed;
+  --color-surface-container-high: #e9e8e2;
+  --color-surface-container-highest: #e4e3dc;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-variant: #e4e3dc;
+  --color-surface-bright: #fbf9f3;
+  --color-surface-dim: #dbdad4;
+  --color-surface-tint: #2f56c4;
+  --color-primary: #244dbb;
+  --color-primary-container: #4267d5;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #f1f1ff;
+  --color-primary-fixed: #dce1ff;
+  --color-inverse-primary: #b5c4ff;
+  --color-secondary: #a04100;
+  --color-secondary-container: #fc8546;
+  --color-on-secondary-container: #682700;
+  --color-on-secondary: #ffffff;
+  --color-secondary-fixed: #ffdbcc;
+  --color-on-secondary-fixed: #351000;
+  --color-secondary-fixed-dim: #ffb693;
+  --color-tertiary: #3d5c4f;
+  --color-tertiary-container: #557567;
+  --color-tertiary-fixed: #c7ebd9;
+  --color-tertiary-fixed-dim: #accebe;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-fixed: #002116;
+  --color-outline: #747684;
+  --color-outline-variant: #c4c5d5;
+  --color-inverse-surface: #30312d;
+  --color-inverse-on-surface: #f2f1ea;
+
+  --font-serif: "EB Garamond", Georgia, serif;
+  --font-sans: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display-hero: "EB Garamond", Georgia, serif;
+  --font-headline-lg: "EB Garamond", Georgia, serif;
+  --font-headline-md: "EB Garamond", Georgia, serif;
+  --font-headline-sm: "EB Garamond", Georgia, serif;
+  --font-title-editorial: "EB Garamond", Georgia, serif;
+  --font-body-lg: "Hanken Grotesk", sans-serif;
+  --font-body-md: "Hanken Grotesk", sans-serif;
+  --font-body-sm: "Hanken Grotesk", sans-serif;
+  --font-label-technical: "Hanken Grotesk", sans-serif;
+  --font-label-mono: "Hanken Grotesk", sans-serif;
+
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 2rem;
+  --spacing-space-xl: 4rem;
+  --spacing-margin: 3rem;
+  --spacing-margin-mobile: 1.25rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-mobile: 1rem;
+}
+
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* Inverted Editorial Broadsheet Theme: Deep Obsidian & Warm Cream */
+html.dark,
+.dark {
+  color-scheme: dark;
+  --color-surface: #131411;
+  --color-background: #131411;
+  --color-on-surface: #f2f0e6;
+  --color-on-surface-variant: #b0af9f;
+  --color-surface-container: #1c1d19;
+  --color-surface-container-low: #181915;
+  --color-surface-container-high: #232420;
+  --color-surface-container-highest: #2d2e29;
+  --color-surface-container-lowest: #0c0d0a;
+  --color-surface-variant: #282a24;
+  --color-surface-bright: #1f201c;
+  --color-surface-dim: #0f100d;
+  --color-surface-tint: #5c85fa;
+  --color-primary: #5c85fa;
+  --color-primary-container: #3a5ec7;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #e8ecfc;
+  --color-primary-fixed: #244dbb;
+  --color-inverse-primary: #1b378a;
+  --color-secondary: #ff8543;
+  --color-secondary-container: #fc8546;
+  --color-on-secondary-container: #3d1400;
+  --color-on-secondary: #ffffff;
+  --color-secondary-fixed: #4f1d00;
+  --color-on-secondary-fixed: #ffdbcc;
+  --color-secondary-fixed-dim: #732b00;
+  --color-tertiary: #68a88f;
+  --color-tertiary-container: #3d6354;
+  --color-tertiary-fixed: #1e362d;
+  --color-tertiary-fixed-dim: #2a4c3f;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-fixed: #c7ebd9;
+  --color-outline: #686960;
+  --color-outline-variant: #3a3b34;
+  --color-inverse-surface: #f2f0e6;
+  --color-inverse-on-surface: #131411;
+}
+
+.dark.focus-reading-mode .font-body-md,
+.dark.focus-reading-mode .font-body-lg,
+.dark .focus-reading-mode .font-body-md,
+.dark .focus-reading-mode .font-body-lg {
+  color: #e6e4dc !important;
+}
+
+.font-display-hero {
+  font-family: var(--font-display-hero);
+  letter-spacing: -0.02em;
+}
+
+.font-headline-lg {
+  font-family: var(--font-headline-lg);
+  letter-spacing: -0.015em;
+}
+
+.font-headline-md {
+  font-family: var(--font-headline-md);
+}
+
+.font-headline-sm {
+  font-family: var(--font-headline-sm);
+}
+
+.font-title-editorial {
+  font-family: var(--font-title-editorial);
+}
+
+.font-label-technical {
+  font-family: var(--font-label-technical);
+  letter-spacing: 0.04em;
+}
+
+.font-label-mono {
+  font-family: var(--font-label-mono);
+  letter-spacing: 0.08em;
+}
+
+@keyframes broadsheetFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.broadsheet-view-transition {
+  animation: broadsheetFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+/* Focus / Reading Mode Styles */
+.focus-reading-mode .focus-hide {
+  display: none !important;
+}
+
+.focus-reading-mode article {
+  max-width: 860px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 2.5rem !important;
+  background-color: var(--color-surface-container-low) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+  border-color: var(--color-surface-variant) !important;
+}
+
+.focus-reading-mode .font-body-md,
+.focus-reading-mode .font-body-lg {
+  font-size: 1.0625rem !important;
+  line-height: 1.95 !important;
+  color: #272822 !important;
+}
+
+.focus-reading-mode h3 {
+  font-size: 2rem !important;
+  line-height: 1.3 !important;
+  margin-bottom: 1.25rem !important;
+}

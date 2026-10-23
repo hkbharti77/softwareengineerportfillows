@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_THREEJS_START:ANIMATION_1 class="fixed inset-0 w-full h-full bg-transparent" -->
+<div class="fixed inset-0 w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_1" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_1');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  // Three.js Scene: Realistic 3D Sculptural Composition for Himanshu Bharti Hero Section
+// Art Direction: Chrome sphere, translucent amber glass torus/faceted form, cobalt blue geometric sculpture, warm cream studio lighting
+(function() {
+  const container = document.getElementById('threejs-hero-container') || document.body;
+  const width = container.clientWidth || window.innerWidth;
+  const height = container.clientHeight || window.innerHeight;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+  camera.position.set(2.5, 1.8, 4.5);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+  container.appendChild(renderer.domElement);
+
+  // Studio Lighting (Natural sunlight upper left, warm fill, rim)
+  const ambientLight = new THREE.AmbientLight(0xfff8ee, 0.9);
+  scene.add(ambientLight);
+
+  const sunLight = new THREE.DirectionalLight(0xfff3e0, 2.8);
+  sunLight.position.set(-4, 6, 4);
+  sunLight.castShadow = true;
+  sunLight.shadow.mapSize.width = 1024;
+  sunLight.shadow.mapSize.height = 1024;
+  sunLight.shadow.bias = -0.0005;
+  scene.add(sunLight);
+
+  const cobaltRim = new THREE.DirectionalLight(0x4267D5, 1.4);
+  cobaltRim.position.set(4, -2, -2);
+  scene.add(cobaltRim);
+
+  const tangerineFill = new THREE.PointLight(0xFF8748, 1.6, 12);
+  tangerineFill.position.set(1.5, 2.5, 2);
+  scene.add(tangerineFill);
+
+  // Group for overall composition
+  const mainGroup = new THREE.Group();
+  scene.add(mainGroup);
+
+  // 1. Polished Chrome Mirror Sphere (Reflective, flawless)
+  const sphereGeo = new THREE.SphereGeometry(0.85, 64, 64);
+  const chromeMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    metalness: 0.96,
+    roughness: 0.08,
+    envMapIntensity: 1.5
+  });
+  const chromeSphere = new THREE.Mesh(sphereGeo, chromeMat);
+  chromeSphere.position.set(-0.6, 0.2, 0.3);
+  chromeSphere.castShadow = true;
+  chromeSphere.receiveShadow = true;
+  mainGroup.add(chromeSphere);
+
+  // 2. Translucent Amber Glass Form (Torus or smooth ring interlocking)
+  const amberGeo = new THREE.TorusGeometry(0.95, 0.28, 36, 100);
+  const amberMat = new THREE.MeshPhysicalMaterial({
+    color: 0xFF8748,
+    emissive: 0x331100,
+    metalness: 0.1,
+    roughness: 0.15,
+    transmission: 0.78,
+    thickness: 1.2,
+    ior: 1.52,
+    transparent: true,
+    opacity: 0.88
+  });
+  const amberGlass = new THREE.Mesh(amberGeo, amberMat);
+  amberGlass.position.set(0.2, -0.1, -0.2);
+  amberGlass.rotation.set(Math.PI / 3, Math.PI / 6, 0);
+  amberGlass.castShadow = true;
+  amberGlass.receiveShadow = true;
+  mainGroup.add(amberGlass);
+
+  // 3. Cobalt Blue Geometric Monolith / Chamfered Cylinder
+  const cobaltGeo = new THREE.CylinderGeometry(0.55, 0.55, 1.6, 6);
+  const cobaltMat = new THREE.MeshStandardMaterial({
+    color: 0x4267D5,
+    roughness: 0.22,
+    metalness: 0.25
+  });
+  const cobaltBlock = new THREE.Mesh(cobaltGeo, cobaltMat);
+  cobaltBlock.position.set(0.9, -0.4, 0.6);
+  cobaltBlock.rotation.set(-0.2, 0.4, 0.15);
+  cobaltBlock.castShadow = true;
+  cobaltBlock.receiveShadow = true;
+  mainGroup.add(cobaltBlock);
+
+  // 4. Subtle Butter Yellow Architectural Orb / Disc
+  const yellowGeo = new THREE.SphereGeometry(0.35, 32, 32);
+  const yellowMat = new THREE.MeshStandardMaterial({
+    color: 0xF1D56B,
+    roughness: 0.35,
+    metalness: 0.05
+  });
+  const yellowOrb = new THREE.Mesh(yellowGeo, yellowMat);
+  yellowOrb.position.set(-0.9, -0.7, 1.1);
+  yellowOrb.castShadow = true;
+  mainGroup.add(yellowOrb);
+
+  // 5. Sage Green Floating Torus Ring
+  const sageGeo = new THREE.TorusGeometry(0.45, 0.08, 16, 64);
+  const sageMat = new THREE.MeshStandardMaterial({
+    color: 0xB6D9C8,
+    roughness: 0.4,
+    metalness: 0.15
+  });
+  const sageRing = new THREE.Mesh(sageGeo, sageMat);
+  sageRing.position.set(0.3, 1.1, -0.4);
+  sageRing.rotation.set(1.2, -0.4, 0.8);
+  mainGroup.add(sageRing);
+
+  // Soft Studio Pedestal / Shadow Catcher Plane
+  const shadowPlaneGeo = new THREE.PlaneGeometry(12, 12);
+  const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.14 });
+  const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
+  shadowPlane.rotation.x = -Math.PI / 2;
+  shadowPlane.position.y = -1.25;
+  shadowPlane.receiveShadow = true;
+  scene.add(shadowPlane);
+
+  // Pointer Interaction
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetX = 0;
+  let targetY = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  // Render Loop
+  let clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const time = clock.getElapsedTime();
+
+    targetX += (mouseX - targetX) * 0.04;
+    targetY += (mouseY - targetY) * 0.04;
+
+    mainGroup.rotation.y = time * 0.18 + targetX * 0.35;
+    mainGroup.rotation.x = Math.sin(time * 0.12) * 0.08 - targetY * 0.25;
+
+    amberGlass.rotation.z = time * 0.25;
+    amberGlass.rotation.x = Math.PI / 3 + Math.cos(time * 0.3) * 0.1;
+
+    chromeSphere.position.y = 0.2 + Math.sin(time * 0.8) * 0.05;
+    sageRing.rotation.y = time * 0.4;
+    yellowOrb.position.y = -0.7 + Math.cos(time * 0.9) * 0.04;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Resize handler
+  window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+})();
+
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_1 -->
+</body>
+</html>
