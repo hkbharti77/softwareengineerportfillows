@@ -1,3 +1,5 @@
+import { getApiUrl } from './apiConfig';
+
 export interface ContactInquestPayload {
   name: string;
   email: string;
@@ -28,9 +30,7 @@ export async function submitContactInquest(payload: ContactInquestPayload): Prom
     };
   }
 
-  const envBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
-  const primaryEndpoint = envBase ? `${envBase}/api/public/contact` : '/api/public/contact';
-  const fallbackEndpoint = 'http://localhost:5000/api/public/contact';
+  const endpoint = getApiUrl('/api/public/contact');
 
   const subject = `${payload.inquiryType} Inquest${payload.ndaRequired ? ' [Mutual NDA Requested]' : ''}`;
   const extendedMessage = payload.ndaRequired
@@ -53,7 +53,7 @@ export async function submitContactInquest(payload: ContactInquestPayload): Prom
   };
 
   try {
-    const res = await fetch(primaryEndpoint, {
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,63 +72,11 @@ export async function submitContactInquest(payload: ContactInquestPayload): Prom
       };
     }
 
-    // If relative endpoint returned non-200 and no custom backend base set, attempt localhost:5000 fallback
-    if (!envBase && primaryEndpoint !== fallbackEndpoint) {
-      const fallbackRes = await fetch(fallbackEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-
-      const fallbackData = await fallbackRes.json().catch(() => ({}));
-
-      if (fallbackRes.ok) {
-        return {
-          success: true,
-          message: fallbackData.message || 'Inquest successfully transmitted to studio inbox.',
-          leadId: fallbackData.leadId,
-          duplicate: fallbackData.duplicate,
-        };
-      }
-
-      if (fallbackData.error) {
-        return { success: false, message: fallbackData.error };
-      }
-    }
-
     return {
       success: false,
       message: data.error || 'Failed to transmit inquest. Please reach out directly to hkbharti77@gmail.com.',
     };
   } catch (err) {
-    // If primary network request threw, attempt direct localhost:5000
-    if (!envBase && primaryEndpoint !== fallbackEndpoint) {
-      try {
-        const fallbackRes = await fetch(fallbackEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        });
-
-        const fallbackData = await fallbackRes.json().catch(() => ({}));
-
-        if (fallbackRes.ok) {
-          return {
-            success: true,
-            message: fallbackData.message || 'Inquest successfully transmitted to studio inbox.',
-            leadId: fallbackData.leadId,
-            duplicate: fallbackData.duplicate,
-          };
-        }
-
-        if (fallbackData.error) {
-          return { success: false, message: fallbackData.error };
-        }
-      } catch {
-        // Fallback unavailable
-      }
-    }
-
     console.warn('[Contact Submission Error]:', err);
     return {
       success: false,

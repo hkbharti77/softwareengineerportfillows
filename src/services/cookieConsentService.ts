@@ -1,3 +1,5 @@
+import { getApiUrl } from './apiConfig';
+
 export interface CookiePreferences {
   necessary: boolean;
   functional: boolean;
@@ -22,14 +24,10 @@ export interface ConsentSyncResult {
 /**
  * Dispatches cookie consent telemetry to the backend audit ledger.
  * Connects the 'portfolio' channel with DPDP Act 2023 & GDPR Art. 6 compliance tracking.
- * Gracefully handles offline states without impacting UI/UX.
+ * Base URL is resolved strictly from environment variables.
  */
 export async function syncConsentToBackend(payload: ConsentSyncPayload): Promise<ConsentSyncResult> {
-  const envBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
-  
-  // Prefer environment-configured backend, relative path for local proxy, or default localhost:5000
-  const primaryEndpoint = envBase ? `${envBase}/api/public/cookie-consent` : '/api/public/cookie-consent';
-  const fallbackEndpoint = 'http://localhost:5000/api/public/cookie-consent';
+  const endpoint = getApiUrl('/api/public/cookie-consent');
 
   const body = {
     status: payload.status,
@@ -49,7 +47,7 @@ export async function syncConsentToBackend(payload: ConsentSyncPayload): Promise
   };
 
   try {
-    const res = await fetch(primaryEndpoint, {
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -62,42 +60,8 @@ export async function syncConsentToBackend(payload: ConsentSyncPayload): Promise
       return { success: true, id: data.id, channel: data.channel };
     }
 
-    // If relative endpoint returned non-200 (e.g., when not proxied), try direct localhost:5000
-    if (!envBase && primaryEndpoint !== fallbackEndpoint) {
-      const fallbackRes = await fetch(fallbackEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-
-      if (fallbackRes.ok) {
-        const data = await fallbackRes.json();
-        return { success: true, id: data.id, channel: data.channel };
-      }
-    }
-
     return { success: false, offline: true };
-  } catch (err) {
-    // If primary network request threw (e.g. failed relative fetch), attempt fallbackEndpoint
-    if (!envBase && primaryEndpoint !== fallbackEndpoint) {
-      try {
-        const fallbackRes = await fetch(fallbackEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        });
-
-        if (fallbackRes.ok) {
-          const data = await fallbackRes.json();
-          return { success: true, id: data.id, channel: data.channel };
-        }
-      } catch {
-        // Fallback also unavailable (backend server currently offline)
-      }
-    }
-
-    // Non-blocking graceful degrade
-    console.debug('[Consent Ledger] Local fallback engaged (backend unavailable):', err);
+  } catch {
     return { success: false, offline: true };
   }
 }

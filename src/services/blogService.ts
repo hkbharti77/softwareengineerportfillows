@@ -24,46 +24,23 @@ export interface PostsResponse {
   };
 }
 
-const getApiBaseUrl = (): string => {
-  const envBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
-  return envBase;
-};
+import { getApiUrl } from './apiConfig';
 
 async function executeApiRequest<T>(endpointPath: string): Promise<T> {
-  const base = getApiBaseUrl();
-  const primaryUrl = base ? `${base}${endpointPath}` : endpointPath;
-  const fallbackUrl = `http://localhost:5000${endpointPath}`;
+  const targetUrl = getApiUrl(endpointPath);
 
-  try {
-    const res = await fetch(primaryUrl, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
+  const res = await fetch(targetUrl, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    },
+  });
 
-    if (res.ok) {
-      return (await res.json()) as T;
-    }
-  } catch (err) {
-    console.warn(`[BlogService] Primary fetch failed for ${primaryUrl}, attempting fallback`, err);
+  if (!res.ok) {
+    throw new Error(`API call to ${targetUrl} failed with HTTP status ${res.status}`);
   }
 
-  // Fallback direct to localhost:5000 if running locally and relative/proxy failed
-  if (primaryUrl !== fallbackUrl) {
-    const res = await fetch(fallbackUrl, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
-    if (!res.ok) {
-      throw new Error(`API call failed with HTTP status ${res.status}`);
-    }
-    return (await res.json()) as T;
-  }
-
-  throw new Error(`Failed to load data from ${primaryUrl}`);
+  return (await res.json()) as T;
 }
 
 /**

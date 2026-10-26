@@ -14,61 +14,29 @@ export interface ResumeMetadata {
   introVideoTitle?: string;
 }
 
-const getApiBaseUrl = (): string => {
-  const envBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
-  return envBase;
-};
+import { getApiUrl } from './apiConfig';
 
 /**
  * Returns the dynamic API download endpoint for the resume
  */
 export function getResumeDownloadEndpoint(): string {
-  const base = getApiBaseUrl();
-  return base ? `${base}/api/public/media/resume/download` : '/api/public/media/resume/download';
+  return getApiUrl('/api/public/media/resume/download');
 }
 
 /**
  * Returns the dynamic API inline view endpoint for the resume
  */
 export function getResumeViewEndpoint(): string {
-  const base = getApiBaseUrl();
-  return base ? `${base}/api/public/media/resume/view` : '/api/public/media/resume/view';
+  return getApiUrl('/api/public/media/resume/view');
 }
 
 /**
  * Fetches dynamic resume metadata directly from the backend API endpoint
  */
 export async function fetchResumeMetadata(): Promise<ResumeMetadata> {
-  const base = getApiBaseUrl();
-  const primaryUrl = base ? `${base}/api/public/media/portfolio` : '/api/public/media/portfolio';
-  const fallbackUrl = 'http://localhost:5000/api/public/media/portfolio';
+  const url = getApiUrl('/api/public/media/portfolio');
 
-  try {
-    const res = await fetch(primaryUrl, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      return {
-        resumeUrl: data.resumeUrl,
-        resumeFileName: data.resumeFileName || 'Himanshu_Bharti_Resume.pdf',
-        resumeUpdatedAt: data.resumeUpdatedAt,
-        resumeFileSize: data.resumeFileSize,
-        introVideoUrl: data.introVideoUrl,
-        introVideoPosterUrl: data.introVideoPosterUrl,
-        introVideoTitle: data.introVideoTitle,
-      };
-    }
-  } catch (err) {
-    console.warn(`[ResumeService] Primary fetch failed for ${primaryUrl}, trying fallback ${fallbackUrl}:`, err);
-  }
-
-  // Fallback to localhost:5000 if running locally and relative proxy failed
-  const res = await fetch(fallbackUrl, {
+  const res = await fetch(url, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
