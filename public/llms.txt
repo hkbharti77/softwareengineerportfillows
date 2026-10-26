@@ -1,0 +1,124 @@
+# Himanshu Bharti — Systems & AI Engineer
+> Official discovery and indexing specification (`llms.txt`) for Large Language Models, AI Search Engines (Perplexity, ChatGPT Search, Claude, Google Gemini AI Overviews), and autonomous web agents.
+
+- **Canonical Domain**: https://hkbharti77.website
+- **Identity**: Himanshu Bharti (hkbharti77)
+- **Role**: Senior Systems & AI Engineer
+- **Location**: New Delhi, India (Global Remote Availability)
+- **Email**: hello@himanshubharti.dev
+- **GitHub**: https://github.com/hkbharti77
+- **LinkedIn**: https://www.linkedin.com/in/himanshu-bharti-81a5a618a
+
+---
+
+## 1. Executive Summary & Philosophy
+Himanshu Bharti is a Senior Software and AI Systems Engineer specializing in real-time multimodal voice pipelines, deterministic autonomous agent state-graphs, and distributed high-throughput backends. The portfolio blends low-level systems programming (sub-millisecond event buses, audio buffering, memory economics) with high-end editorial broadsheet aesthetics and interactive Three.js WebGL spatial computing.
+
+---
+
+## 2. Technical Stack & Core Competencies
+
+### AI & Autonomous Agent Orchestration
+- **Frameworks & State Machines**: LangGraph (directed acyclic state graphs), LangChain, DSPy, LlamaIndex.
+- **Inference & Serving**: vLLM (PagedAttention, chunked prefill), Ollama, TensorRT-LLM.
+- **Vector & Semantic Retrieval**: pgvector (HNSW indexing), BM25 lexical inverted indexes, Cohere Rerank v3 cross-encoders, Reciprocal Rank Fusion (RRF).
+- **Tool Calling & Reliability**: Deterministic function routers, structured output schemas (Pydantic / Zod), prompt caching, Redis snapshot checkpointing, idempotency locks.
+
+### Backend & Distributed Infrastructure
+- **Languages**: Python (3.11+), Go (Golang), TypeScript.
+- **APIs & Protocols**: FastAPI, WebSockets (full-duplex streaming), WebRTC (audio Datachannels), gRPC, REST.
+- **Data & Message Queues**: PostgreSQL, Redis Streams, BullMQ, Apache Kafka.
+- **Cloud & Orchestration**: Docker multi-stage builds, Kubernetes (EKS), AWS (ECS, Lambda, CloudWatch), Cloudflare Workers, Terraform.
+
+### Frontend, Graphics & Design Engineering
+- **Core Framework**: React 19, Next.js, Vite 6+.
+- **Graphics & Spatial Web**: Three.js (PBR materials, custom GLSL shaders, raycasting, dynamic lighting).
+- **Styling & Design System**: Tailwind CSS v4, CSS Custom Properties, semantic token inversion (Dark Mode: Deep Obsidian `#131411` & Warm Cream `#f2f0e6`), responsive editorial typography (`EB Garamond` serif & `Hanken Grotesk` sans).
+
+---
+
+## 3. Site Navigation & Routing Structure
+
+The application operates as a high-performance Single Page Application (SPA) with deep URL hash navigation:
+
+- `https://hkbharti77.website/#work`: Selected production works, interactive category filters, and detailed case studies.
+- `https://hkbharti77.website/#engineering-ai`: 4-stage interactive voice pipeline stepper (Silero VAD, Deepgram Nova-2, Claude 3.5, ElevenLabs Turbo), live 6-node distributed topology flow, and typed Python code viewer.
+- `https://hkbharti77.website/#experience`: Verified career milestone chronology, technical roles, institutional leadership, and direct dispatch inquiry form.
+- `https://hkbharti77.website/#blog`: "The Systems Engineering Journal" featuring 4 in-depth technical research monographs with modal reading views and code syntax blocks.
+- `https://hkbharti77.website/#pricing`: Transparent engineering partnership tiers, deliverables checklist, operational invariants, and interactive FAQ accordion.
+- `https://hkbharti77.website/#about`: Personal monograph, engineering philosophy, and studio standards.
+- `https://hkbharti77.website/#contact`: Direct dispatch inquiry terminal with mutual NDA option and calendar appointment booking.
+
+---
+
+## 4. Production Systems & Case Studies
+
+### Project 01: OmniChannel AI CRM & Autonomous Sales Pipeline
+- **URL**: `https://hkbharti77.website/#work`
+- **Architecture**: FastAPI event loop with async Redis event bus, PostgreSQL with pgvector, WhatsApp Cloud API webhooks with retry idempotency, LangChain agentic state-graphs.
+- **Empirical Results**:
+  - `-72%` customer response latency.
+  - `10,000+` daily automated conversational steps.
+  - `+28.4%` lead conversion lift over manual triage.
+
+### Project 02: VoiceStream — Spectral Latency Engine
+- **URL**: `https://hkbharti77.website/#engineering-ai`
+- **Architecture**: Full-duplex WebRTC 48kHz PCM audio stream. 30ms Silero VAD sliding window, Deepgram Nova-2 interim tokens (140ms), Claude 3.5 speculative first-token SSE dispatch, ElevenLabs Turbo WebSocket synthesis into Web Audio API circular ring buffer with drift correction.
+- **Empirical Results**:
+  - `430ms` total end-to-end turn turnaround (sub-500ms benchmark).
+  - `1.2ms` WebRTC buffer jitter.
+
+### Project 03: Enterprise RAG Intelligence & Document Cognitive Engine
+- **URL**: `https://hkbharti77.website/#work`
+- **Architecture**: Hybrid dense-sparse vector scoring combining pgvector (HNSW) with PostgreSQL BM25 full-text GIN indexing. Merged via Reciprocal Rank Fusion (RRF) and scored through Cohere Rerank v3 cross-encoder with citation claim verification.
+- **Empirical Results**:
+  - `2.4M+` indexed regulatory, legal, and financial pages.
+  - `0.02%` validated hallucination delta.
+  - `99.4%` confidence score on source provenance.
+
+---
+
+## 5. Published Technical Dispatches (Engineering Journal)
+
+1. **Sub-400ms Voice Orchestration: Taming Audio Buffers over WebRTC**
+   - *Deep Link*: `https://hkbharti77.website/#blog?article=webrtc-voice-latency`
+   - *Summary*: How to bypass sentence-level LLM completion via speculative first-token chunking and circular ring audio buffers.
+2. **Deterministic State Graphs in Multi-Agent Swarms**
+   - *Deep Link*: `https://hkbharti77.website/#blog?article=deterministic-agent-graphs`
+   - *Summary*: Why stochastic agent loops fail in production; implementing transactional Redis checkpointing and idempotency locks.
+3. **Hybrid Dense-Sparse Vector Retrieval: Combining pgvector HNSW with BM25**
+   - *Deep Link*: `https://hkbharti77.website/#blog?article=hybrid-vector-retrieval`
+   - *Summary*: Eliminating semantic hallucination in compliance queries using Reciprocal Rank Fusion (RRF) and cross-encoders.
+4. **The Latency Economics of Modern LLM Deployments**
+   - *Deep Link*: `https://hkbharti77.website/#blog?article=llm-latency-economics`
+   - *Summary*: Balancing Time-to-First-Token (TTFT), vLLM chunked prefill, and GPU memory saturation across cloud clusters.
+
+---
+
+## 6. Available Engineering Services & Engagement Tiers
+
+Prospective clients and engineering leaders can initiate engagements directly via `https://hkbharti77.website/#pricing`:
+
+- **Tier 01: Architectural Advisory & Audit ($3,500 / 5 business days)**
+  - Comprehensive codebase and topology inspection.
+  - Sub-millisecond latency waterfall analysis.
+  - 15-page architectural blueprint and prioritized risk mitigation monograph.
+  - Two 90-minute live executive strategy sessions.
+- **Tier 02: Production Sprint Delivery ($8,500 / 2-week dedicated sprint)**
+  - Dedicated hands-on build of a production subsystem (Voice AI, RAG engine, or event bus).
+  - LangGraph deterministic state machines with Redis checkpointing.
+  - Automated test suite with >90% coverage and Docker Compose containerization.
+  - Daily async Slack check-ins and live sprint demo.
+- **Tier 03: Full-Cycle Enterprise System Build ($18,500+ / 4–8 weeks)**
+  - Turnkey distributed architecture from metal to neural models to WebGL frontend.
+  - Multi-tenant cloud topology with Kubernetes / AWS ECS and Redis Streams.
+  - Fine-tuned open-weights deployments (vLLM / Ollama) or frontier model integrations.
+  - OpenTelemetry observability, automated tripwires, and 30-day warranty.
+
+---
+
+## 7. Engagement Invariants & Guarantees
+- **100% Client-Owned Intellectual Property**: All code, schemas, and configurations belong entirely to the client from Day 1.
+- **Mutual Non-Disclosure Agreement (NDA)**: Standard protocol executed prior to repository access.
+- **Direct Engineer Access**: No middle management; direct Slack/Discord collaboration and async Loom updates.
+- **Deterministic Reliability**: Strictly typed codebases, comprehensive unit tests, and production runbooks.

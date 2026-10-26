@@ -1,0 +1,27 @@
+{
+  "id": "/",
+  "name": "Himanshu Bharti — Systems & AI Engineer",
+  "short_name": "H. Bharti",
+  "description": "Curated broadsheet portfolio and technical systems dossier for Himanshu Bharti: autonomous AI agents, sub-400ms WebRTC voice pipelines, and distributed backends.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#131411",
+  "theme_color": "#244dbb",
+  "categories": ["portfolio", "developer", "engineering", "technology"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
