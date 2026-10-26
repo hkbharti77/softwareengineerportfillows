@@ -61,33 +61,59 @@
     <priority>0.85</priority>
   </url>
 
-  <!-- Technical Research Dispatches (Blog Deep Dives) -->
+  <!-- Published Technical Dispatches (Live Dynamic Articles from Database) -->
   <url>
-    <loc>https://hkbharti77.website/#blog?article=webrtc-voice-latency</loc>
-    <lastmod>2026-10-18</lastmod>
+    <loc>https://hkbharti77.website/#blog?article=building-modern-full-stack-web-apps</loc>
+    <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
-
   <url>
-    <loc>https://hkbharti77.website/#blog?article=deterministic-agent-graphs</loc>
-    <lastmod>2026-09-24</lastmod>
+    <loc>https://hkbharti77.website/#blog?article=top-7-ai-business-automation-trends-every-company-should-watch-in-2026</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
-
   <url>
-    <loc>https://hkbharti77.website/#blog?article=hybrid-vector-retrieval</loc>
-    <lastmod>2026-08-14</lastmod>
+    <loc>https://hkbharti77.website/#blog?article=rag-vs-fine-tuning</loc>
+    <lastmod>2026-09-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
-
   <url>
-    <loc>https://hkbharti77.website/#blog?article=llm-latency-economics</loc>
+    <loc>https://hkbharti77.website/#blog?article=why-ai-roi-is-moving-from-chatbots-to-workflow-automation</loc>
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://hkbharti77.website/#blog?article=why-offline-first-architecture-is-the-future-of-modern-applicatio</loc>
+    <lastmod>2026-07-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://hkbharti77.website/#blog?article=faiss-vs-pinecone-vs-qdrant-vs-chromadb-vs-mongodb-vector-search-which-vector-database-is-best-for-ai-applications-in-2026</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://hkbharti77.website/#blog?article=retrieval-augmented-generation-rag-vs-fine-tuning-which-one-should-you-choose-for-your-ai-application</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://hkbharti77.website/#blog?article=retrieval-augmented-generation-rag-the-future-of-enterprise-ai-in-2026</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
-
+  <url>
+    <loc>https://hkbharti77.website/#blog?article=the-future-of-ai-voice-agents-how-conversational-ai-is-transforming-customer-support-in-2026</loc>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
 </urlset>
