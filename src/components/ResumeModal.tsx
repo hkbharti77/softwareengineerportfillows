@@ -1,5 +1,11 @@
-import { useEffect } from 'react';
-import { X, Download, FileText, CheckCircle2, Terminal } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { X, Download, FileText, CheckCircle2, Terminal, ExternalLink, RefreshCw } from 'lucide-react';
+import {
+  fetchResumeMetadata,
+  downloadResumeViaApi,
+  getResumeViewEndpoint,
+  ResumeMetadata,
+} from '../services/resumeService';
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -8,6 +14,10 @@ interface ResumeModalProps {
 }
 
 export default function ResumeModal({ isOpen, onClose, onTriggerToast }: ResumeModalProps) {
+  const [metadata, setMetadata] = useState<ResumeMetadata | null>(null);
+  const [loadingMetadata, setLoadingMetadata] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -15,6 +25,11 @@ export default function ResumeModal({ isOpen, onClose, onTriggerToast }: ResumeM
     if (isOpen) {
       window.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
+      setLoadingMetadata(true);
+      fetchResumeMetadata()
+        .then((data) => setMetadata(data))
+        .catch((err) => console.error('[ResumeModal] Failed to fetch resume metadata from API:', err))
+        .finally(() => setLoadingMetadata(false));
     }
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -24,52 +39,23 @@ export default function ResumeModal({ isOpen, onClose, onTriggerToast }: ResumeM
 
   if (!isOpen) return null;
 
-  const handleDownload = () => {
-    onTriggerToast('Résumé PDF (Himanshu_Bharti_Curriculum_Vitae.pdf) download initialized');
-    // Create a plain text CV blob to trigger real download
-    const cvContent = `HIMANSHU BHARTI — SOFTWARE & AI SYSTEMS ENGINEER
-Email: hello@himanshubharti.dev | Location: New Delhi / Remote | Available Q2/Q3 2025
-
-SUMMARY:
-Senior Software & AI Systems Engineer architecting real-time multimodal voice pipelines, autonomous agent swarms, and high-throughput routing gateways. Specializing in sub-second latency tolerances, deterministic event buses, and distributed search engines.
-
-CORE COMPETENCIES:
-• AI & Agents: LangGraph, DSPy, PyTorch, vLLM, pgvector, HNSW Hybrid Search, Structured Function Calling.
-• Backend & Distributed: FastAPI (Python), Go, Redis Streams, PostgreSQL, WebRTC, BullMQ, Kafka, gRPC.
-• Cloud & DevOps: Docker Multi-Stage, Kubernetes (EKS), AWS ECS, Lambda, Cloudflare Workers, Terraform, CI/CD.
-• Frontend & Graphics: Next.js, React, TypeScript, Three.js, WebGL GLSL, Tailwind CSS.
-
-PROFESSIONAL EXPERIENCE:
-1. Senior AI & Backend Developer / Systems Engineer (2023 — Present)
-   • Architected real-time multimodal voice pipelines, autonomous agent swarms, and high-throughput routing gateways.
-   • Metrics: 320ms p95 Voice E2E, 45M+ Monthly Events, 99.98% Guardrail Verity.
-   • Stack: FastAPI, WebRTC Audio Streaming, LangGraph, Redis Streams, PostgreSQL + pgvector.
-
-2. Full Stack Software Engineer (2021 — 2023)
-   • Developed responsive customer-facing web applications, decoupled monolith core into maintainable microservices.
-   • Metrics: 64% Query Time Slash, 99.95% Continuous SLA, Zero-Downtime CD.
-   • Stack: TypeScript, React, Next.js, Node.js, Docker, GraphQL.
-
-EDUCATION & HONORS:
-• B.Tech in Computer Science & Engineering (Systems & AI Engineering Research)
-• AWS Solutions Architect Associate (ID: AWS-SA-883)
-• Deep Learning Specialization — DeepLearning.AI (ID: DL-SPEC-419)
-• National AI Hackathon Finalist — Autonomous Systems Jury Top 1%
-`;
-    const blob = new Blob([cvContent], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'Himanshu_Bharti_Curriculum_Vitae.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      await downloadResumeViaApi(onTriggerToast, metadata?.resumeFileName);
+    } catch (err: any) {
+      console.error('[ResumeModal] Download error:', err);
+      onTriggerToast?.('Error downloading resume from API.');
+    } finally {
+      setDownloading(false);
+    }
   };
+
+  const viewUrl = getResumeViewEndpoint();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-inverse-surface/60 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-3xl max-h-[90vh] bg-surface text-on-surface shadow-2xl flex flex-col border border-surface-variant overflow-hidden">
+      <div className="relative w-full max-w-4xl max-h-[90vh] bg-surface text-on-surface shadow-2xl flex flex-col border border-surface-variant overflow-hidden">
         {/* Header bar */}
         <div className="px-6 py-4 bg-surface-container-high flex items-center justify-between border-b border-surface-variant">
           <div className="flex items-center gap-3">
@@ -77,7 +63,13 @@ EDUCATION & HONORS:
               <FileText className="w-4 h-4" />
             </div>
             <div>
-              <span className="font-label-mono text-xs uppercase tracking-wider text-on-surface-variant block">Curated Document</span>
+              <div className="flex items-center gap-2">
+                <span className="font-label-mono text-xs uppercase tracking-wider text-on-surface-variant block">Curated Document</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  API Synced
+                </span>
+              </div>
               <h3 className="font-title-editorial text-lg text-on-surface font-semibold">Himanshu Bharti — Curriculum Vitae</h3>
             </div>
           </div>
@@ -97,12 +89,12 @@ EDUCATION & HONORS:
             <div>
               <h2 className="text-2xl font-serif text-on-surface font-semibold">Himanshu Bharti</h2>
               <p className="font-label-mono text-xs text-primary font-bold uppercase tracking-wider mt-0.5">
-                Senior Software &amp; AI Systems Engineer
+                Software Development Engineer (Full Stack &amp; AI)
               </p>
             </div>
             <div className="font-label-mono text-xs text-on-surface-variant mt-2 md:mt-0 text-left md:text-right">
-              <div>hello@himanshubharti.dev</div>
-              <div>New Delhi, India · Remote Globally</div>
+              <div>hkbharti77@gmail.com</div>
+              <div>+91 7050047159 · New Delhi, India</div>
             </div>
           </div>
 
@@ -110,19 +102,19 @@ EDUCATION & HONORS:
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-surface-container-low p-4">
             <div>
               <span className="text-[11px] font-label-mono text-on-surface-variant uppercase">E2E Voice</span>
-              <div className="text-lg font-serif font-bold text-primary">320ms p95</div>
+              <div className="text-lg font-serif font-bold text-primary">&lt;600ms</div>
             </div>
             <div>
-              <span className="text-[11px] font-label-mono text-on-surface-variant uppercase">Monthly Events</span>
-              <div className="text-lg font-serif font-bold text-on-surface">45M+</div>
+              <span className="text-[11px] font-label-mono text-on-surface-variant uppercase">Daily Requests</span>
+              <div className="text-lg font-serif font-bold text-on-surface">15k+</div>
             </div>
             <div>
               <span className="text-[11px] font-label-mono text-on-surface-variant uppercase">SLA Availability</span>
-              <div className="text-lg font-serif font-bold text-tertiary">99.95%</div>
+              <div className="text-lg font-serif font-bold text-tertiary">99.5%</div>
             </div>
             <div>
-              <span className="text-[11px] font-label-mono text-on-surface-variant uppercase">Guardrail Verity</span>
-              <div className="text-lg font-serif font-bold text-secondary">99.98%</div>
+              <span className="text-[11px] font-label-mono text-on-surface-variant uppercase">Retrieval Accuracy</span>
+              <div className="text-lg font-serif font-bold text-secondary">90%+</div>
             </div>
           </div>
 
@@ -132,57 +124,99 @@ EDUCATION & HONORS:
               01 / Professional Record
             </span>
 
+            {/* Mobiloitte Technologies */}
             <div className="space-y-1">
               <div className="flex items-baseline justify-between">
-                <h4 className="font-title-editorial text-base font-semibold text-on-surface">
-                  Senior AI &amp; Backend Developer / Systems Engineer
-                </h4>
-                <span className="font-label-mono text-xs text-primary font-bold">2023 — Present</span>
+                <div>
+                  <h4 className="font-title-editorial text-base font-semibold text-on-surface">
+                    Software Development Engineer (Full-Stack &amp; AI)
+                  </h4>
+                  <span className="font-label-mono text-xs text-secondary font-bold">Mobiloitte Technologies · New Delhi, India</span>
+                </div>
+                <span className="font-label-mono text-xs text-primary font-bold">May 2025 — Present</span>
               </div>
-              <p className="text-on-surface-variant leading-relaxed">
-                Architecting real-time multimodal voice pipelines, autonomous agent swarms, and high-throughput routing gateways capable of processing millions of structured context streams. Spearheaded inference latency optimizations across distributed edge nodes.
-              </p>
-              <div className="flex flex-wrap gap-1.5 pt-1 text-xs font-label-technical text-on-surface">
+              <ul className="text-on-surface-variant leading-relaxed list-disc list-inside space-y-1 text-xs pt-1">
+                <li>Engineered and deployed cross-platform conversational AI bots across 5 channels (WhatsApp, Telegram, Instagram, Slack, Web Chat) using FastAPI and Hybrid RAG, reducing query latency by 30%.</li>
+                <li>Architected real-time AI Voice Calling Agents and IVR Systems integrating Deepgram (STT) and ElevenLabs (TTS) over WebSockets with &lt; 600ms turnaround and 95%+ call completion rate.</li>
+                <li>Built an enterprise Omnichannel Live Agent Handoff Product across 4 messaging platforms with full rich media support, cutting customer ticket resolution time by 25%.</li>
+                <li>Implemented Meta WhatsApp Cloud API and Meta Embedded Signup workflows, automating 1-click WABA onboarding for 10+ enterprise client accounts.</li>
+                <li>Designed tenant-isolated data architectures across PostgreSQL, MongoDB, and Redis distributed caching; containerized microservices via Docker for 15k+ daily requests with 99.5% uptime.</li>
+              </ul>
+              <div className="flex flex-wrap gap-1.5 pt-2 text-xs font-label-technical text-on-surface">
                 <span className="px-2 py-0.5 bg-surface-container">FastAPI</span>
-                <span className="px-2 py-0.5 bg-surface-container">WebRTC</span>
-                <span className="px-2 py-0.5 bg-surface-container">LangGraph</span>
-                <span className="px-2 py-0.5 bg-surface-container">Redis Streams</span>
-                <span className="px-2 py-0.5 bg-surface-container">pgvector</span>
+                <span className="px-2 py-0.5 bg-surface-container">Hybrid RAG</span>
+                <span className="px-2 py-0.5 bg-surface-container">Meta WhatsApp Cloud API</span>
+                <span className="px-2 py-0.5 bg-surface-container">Deepgram &amp; ElevenLabs</span>
+                <span className="px-2 py-0.5 bg-surface-container">Docker</span>
+                <span className="px-2 py-0.5 bg-surface-container">Redis</span>
+                <span className="px-2 py-0.5 bg-surface-container">PostgreSQL</span>
               </div>
             </div>
 
-            <div className="space-y-1 pt-2">
+            {/* QSpiders */}
+            <div className="space-y-1 pt-3 border-t border-surface-variant/40">
               <div className="flex items-baseline justify-between">
-                <h4 className="font-title-editorial text-base font-semibold text-on-surface">
-                  Full Stack Software Engineer
-                </h4>
-                <span className="font-label-mono text-xs text-on-surface-variant">2021 — 2023</span>
+                <div>
+                  <h4 className="font-title-editorial text-base font-semibold text-on-surface">
+                    Full Stack Developer Intern
+                  </h4>
+                  <span className="font-label-mono text-xs text-secondary font-bold">QSpiders · Noida, India</span>
+                </div>
+                <span className="font-label-mono text-xs text-on-surface-variant">Aug 2024 — Apr 2025</span>
               </div>
-              <p className="text-on-surface-variant leading-relaxed">
-                Developed responsive customer-facing web applications, decoupled monolith core into maintainable microservices, optimized indexing strategies for relational datastores, and implemented multi-tenant third-party SaaS integrations.
-              </p>
-              <div className="flex flex-wrap gap-1.5 pt-1 text-xs font-label-technical text-on-surface">
-                <span className="px-2 py-0.5 bg-surface-container">TypeScript</span>
-                <span className="px-2 py-0.5 bg-surface-container">React / Next.js</span>
-                <span className="px-2 py-0.5 bg-surface-container">Node.js</span>
-                <span className="px-2 py-0.5 bg-surface-container">Docker</span>
+              <ul className="text-on-surface-variant leading-relaxed list-disc list-inside space-y-1 text-xs pt-1">
+                <li>Developed 8+ backend RESTful APIs using Java and Spring Boot, implementing layered MVC architecture and reducing API response times by 20%.</li>
+                <li>Designed and optimized normalized relational database schemas across 12+ tables in MySQL, improving complex join query execution speed by 25% through strategic indexing.</li>
+                <li>Built 8+ reusable UI components and client interfaces using React and Vite with &lt; 2s page load times.</li>
+                <li>Authored 30+ unit and integration test cases in JUnit and automated Postman test suites, achieving 80%+ test coverage.</li>
+              </ul>
+              <div className="flex flex-wrap gap-1.5 pt-2 text-xs font-label-technical text-on-surface">
+                <span className="px-2 py-0.5 bg-surface-container">Java</span>
+                <span className="px-2 py-0.5 bg-surface-container">Spring Boot</span>
+                <span className="px-2 py-0.5 bg-surface-container">MySQL</span>
+                <span className="px-2 py-0.5 bg-surface-container">React &amp; Vite</span>
+                <span className="px-2 py-0.5 bg-surface-container">JUnit</span>
               </div>
             </div>
           </div>
 
-          {/* Core Technical Matrix */}
+          {/* Education Record */}
           <div className="space-y-3 pt-2">
             <span className="font-label-mono text-xs text-secondary font-bold uppercase tracking-widest block">
-              02 / Technical Domain Matrix
+              02 / Education &amp; Academic Honors
             </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div className="p-3 bg-surface-container border border-surface-variant/40">
-                <div className="font-semibold text-on-surface mb-1">AI Systems &amp; Agents</div>
-                <div className="text-on-surface-variant">Multi-Agent State-Graphs, Hybrid Vector Search, Schema Validation, Prompt Caching, vLLM</div>
+            <div className="space-y-2 text-xs">
+              <div className="p-3 bg-surface-container border border-surface-variant/40 flex justify-between items-start">
+                <div>
+                  <div className="font-semibold text-on-surface">Bachelor of Technology (B.Tech) — Electronics &amp; Communication Engineering</div>
+                  <div className="text-on-surface-variant">Bihar Engineering University · Bihar, India</div>
+                </div>
+                <div className="text-right font-label-mono">
+                  <span className="text-primary font-bold">CGPA: 7.8 / 10</span>
+                  <div className="text-on-surface-variant">2020 — 2024</div>
+                </div>
               </div>
-              <div className="p-3 bg-surface-container border border-surface-variant/40">
-                <div className="font-semibold text-on-surface mb-1">Distributed Backend</div>
-                <div className="text-on-surface-variant">FastAPI, Golang, Redis BullMQ, PostgreSQL HNSW, WebSockets, gRPC</div>
+
+              <div className="p-3 bg-surface-container border border-surface-variant/40 flex justify-between items-start">
+                <div>
+                  <div className="font-semibold text-on-surface">Class XII (Senior Secondary) — Science (PCM)</div>
+                  <div className="text-on-surface-variant">R.M. College (BSEB) · Saharsa, Bihar, India</div>
+                </div>
+                <div className="text-right font-label-mono">
+                  <span className="text-secondary font-bold">Percentage: 68%</span>
+                  <div className="text-on-surface-variant">2018 — 2020</div>
+                </div>
+              </div>
+
+              <div className="p-3 bg-surface-container border border-surface-variant/40 flex justify-between items-start">
+                <div>
+                  <div className="font-semibold text-on-surface">Class X (Secondary School Certificate)</div>
+                  <div className="text-on-surface-variant">St. Xavier’s School · Saharsa, Bihar, India</div>
+                </div>
+                <div className="text-right font-label-mono">
+                  <span className="text-tertiary font-bold">CGPA: 9.4 / 10</span>
+                  <div className="text-on-surface-variant">2018</div>
+                </div>
               </div>
             </div>
           </div>
@@ -194,37 +228,74 @@ EDUCATION & HONORS:
             </span>
             <div className="flex flex-wrap gap-2 text-xs font-label-mono">
               <span className="px-3 py-1 bg-surface-container text-on-surface flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-tertiary" /> AWS Solutions Architect Associate
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary" /> Salesforce Superbadges: Apex Specialist &amp; Process Automation
               </span>
               <span className="px-3 py-1 bg-surface-container text-on-surface flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-tertiary" /> DeepLearning.AI Specialization
+                <CheckCircle2 className="w-3.5 h-3.5 text-tertiary" /> Cisco CyberOps Associate (2024)
               </span>
               <span className="px-3 py-1 bg-surface-container text-on-surface flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-secondary" /> National AI Hackathon Finalist (Top 1%)
+                <CheckCircle2 className="w-3.5 h-3.5 text-secondary" /> Cisco CCNAv7: Intro to Networks (2023)
+              </span>
+              <span className="px-3 py-1 bg-surface-container text-on-surface flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary" /> Meta Tech Provider &amp; WhatsApp Cloud API Specialist
               </span>
             </div>
           </div>
         </div>
 
         {/* Footer actions */}
-        <div className="px-6 py-4 bg-surface-container-high flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-surface-variant">
-          <div className="flex items-center gap-2 text-xs font-label-mono text-on-surface-variant">
-            <Terminal className="w-4 h-4 text-primary" />
-            <span>PDF SPEC // 240 KB // SHA-256 VERIFIED</span>
+        <div className="px-6 py-3.5 bg-surface-container-high flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-surface-variant">
+          {/* File Spec & Live Status */}
+          <div className="flex items-center gap-2 text-xs font-label-mono text-on-surface-variant min-w-0 w-full sm:w-auto">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <span className="font-semibold text-on-surface truncate max-w-[200px] sm:max-w-xs" title={metadata?.resumeFileName || 'Himanshu_Bharti_Resume.pdf'}>
+              {metadata?.resumeFileName || 'Himanshu_Bharti_Resume.pdf'}
+            </span>
+            <span className="text-on-surface-variant/40 shrink-0">·</span>
+            <span className="text-[11px] font-mono px-2 py-0.5 bg-surface border border-surface-variant/60 rounded text-on-surface-variant shrink-0">
+              {metadata?.resumeFileSize ? `${(metadata.resumeFileSize / 1024).toFixed(0)} KB` : 'PDF'}
+            </span>
+            <span className="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-1.5 py-0.5 rounded shrink-0 hidden md:inline">
+              Live API
+            </span>
           </div>
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end shrink-0">
+            <a
+              href={viewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-label-technical font-semibold uppercase tracking-wider text-on-surface hover:text-primary transition-all border border-surface-variant/80 hover:border-primary/50 bg-surface shadow-2xs whitespace-nowrap cursor-pointer"
+              title="Open raw PDF document in browser"
+            >
+              <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+              <span>Preview</span>
+            </a>
+
             <button
               onClick={onClose}
-              className="px-4 py-2 text-xs font-label-technical uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-colors"
+              className="px-3.5 py-2 text-xs font-label-technical uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface border border-transparent hover:border-surface-variant transition-colors whitespace-nowrap cursor-pointer"
             >
               Close
             </button>
+
             <button
               onClick={handleDownload}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-label-technical text-xs font-semibold uppercase tracking-wider hover:bg-primary-container transition-all shadow-sm"
+              disabled={downloading}
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2 bg-primary text-on-primary font-label-technical text-xs font-bold uppercase tracking-wider hover:bg-primary-container transition-all shadow-sm cursor-pointer whitespace-nowrap disabled:opacity-70"
             >
-              <Download className="w-4 h-4" />
-              <span>Download Curriculum Vitae</span>
+              {downloading ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin shrink-0" />
+                  <span>Downloading...</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-3.5 h-3.5 shrink-0" />
+                  <span>Download PDF</span>
+                </>
+              )}
             </button>
           </div>
         </div>

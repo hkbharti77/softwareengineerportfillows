@@ -1,4 +1,4 @@
-export type TabType = 'work' | 'engineering' | 'experience' | 'blog' | 'pricing' | 'about' | 'contact';
+export type TabType = 'work' | 'engineering' | 'experience' | 'blog' | 'pricing' | 'about' | 'contact' | 'privacy' | 'terms' | 'cookies';
 
 export type ProjectCategory = 'all' | 'generative-ai' | 'distributed-systems' | 'full-stack';
 
@@ -36,27 +36,45 @@ export interface InquestFormData {
   inquiryType: 'Full-time Role' | 'AI System Build' | 'Advisory & Consultation';
   message: string;
   ndaRequired: boolean;
+  consent: boolean;
 }
 
-export type BlogCategory = 'all' | 'voice-ai' | 'distributed' | 'rag-search' | 'architecture';
+export type BlogCategory = string;
 
 export interface DispatchArticle {
   id: string;
-  issueNumber: string;
-  category: BlogCategory;
-  categoryLabel: string;
+  slug: string;
+  slugId?: string;
+  issueNumber?: string;
+  category: string;
+  categoryLabel?: string;
+  channel?: string;
   title: string;
-  subtitle: string;
+  seoTitle?: string;
+  subtitle?: string;
   date: string;
+  createdAt?: string;
   readTime: string;
+  readingTimeMinutes?: number;
   excerpt: string;
-  content: string[];
+  content?: string | string[];
   codeSnippet?: {
     language: string;
     filename: string;
     code: string;
   };
   tags: string[];
+  tag?: string;
+  author?: string;
+  isFeatured?: boolean;
+  imageUrl?: string;
+  coverImage?: string;
+  coverImageAlt?: string;
+  pdfUrl?: string;
+  pdfName?: string;
+  ogImageUrl?: string;
+  prevPost?: { slug: string; title: string } | null;
+  nextPost?: { slug: string; title: string } | null;
 }
 
 export interface PricingTier {

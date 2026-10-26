@@ -3,16 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Himanshu Bharti — Systems &amp; AI Engineer</title>
-    <meta name="description" content="Curated broadsheet portfolio and technical systems dossier for Himanshu Bharti, specializing in autonomous AI workflows, low-latency audio pipelines, and distributed backends." />
-    <meta property="og:title" content="Himanshu Bharti — Systems &amp; AI Engineer" />
-    <meta property="og:description" content="Curated broadsheet portfolio and technical systems dossier for Himanshu Bharti, specializing in autonomous AI workflows, low-latency audio pipelines, and distributed backends." />
+    <title>Himanshu Bharti (hkbharti77) — Software Development Engineer (Full Stack &amp; AI)</title>
+    <meta name="description" content="Official portfolio of Himanshu Bharti (hkbharti77) — Software Development Engineer (Full Stack &amp; AI), New Delhi, India. Specializing in Conversational AI, Hybrid RAG, Meta Cloud WhatsApp API, and Java Spring Boot microservices." />
+    <meta name="keywords" content="Himanshu Bharti, hkbharti77, Software Development Engineer, Full Stack AI, Meta Cloud WhatsApp API, Hybrid RAG, Voice AI, Spring Boot, FastAPI, New Delhi" />
+    <meta name="author" content="Himanshu Bharti (hkbharti77)" />
+    <meta property="og:title" content="Himanshu Bharti (hkbharti77) — Software Development Engineer (Full Stack &amp; AI)" />
+    <meta property="og:description" content="Official portfolio of Himanshu Bharti (hkbharti77). Custom software, AI CRM &amp; ERP platforms, Meta Cloud WhatsApp API, and real-time Voice AI systems." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://github.com/hkbharti77" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@hkbharti77" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Himanshu Bharti",
+      "alternateName": "hkbharti77",
+      "jobTitle": "Software Development Engineer (Full Stack & AI)",
+      "email": "hkbharti77@gmail.com",
+      "sameAs": [
+        "https://github.com/hkbharti77",
+        "https://www.linkedin.com/in/himanshu-bharti-81a5a618a"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "New Delhi",
+        "addressCountry": "IN"
+      }
+    }
+    </script>
     <script>
       (function() {
         try {
@@ -27,9 +50,61 @@
       })();
     </script>
   </head>
-  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- CRM Chat Widget (Business ID: 44c86918-f6e2-46d8-bf68-df397f438dab) -->
+    <script>
+      (function() {
+        function loadScript() {
+          if (window.__chatWidgetInitialized) return;
+          window.__chatWidgetInitialized = true;
+
+          if (!document.querySelector('link[href*="api.gyanvaniai.online/styles.css"]')) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://api.gyanvaniai.online/styles.css';
+            document.head.appendChild(link);
+          }
+
+          var script = document.createElement('script');
+          script.src = "https://api.gyanvaniai.online/chat-widget.js";
+          script.setAttribute('data-business-id', "44c86918-f6e2-46d8-bf68-df397f438dab");
+          script.async = true;
+          document.body.appendChild(script);
+        }
+
+        function initChatWidget() {
+          try {
+            var consentData = localStorage.getItem('hk_portfolio_cookie_consent') || localStorage.getItem('gyanvaniai_cookie_consent');
+            if (consentData) {
+              var parsed = JSON.parse(consentData);
+              if (parsed && (parsed.status === 'all' || (parsed.preferences && (parsed.preferences.functional || parsed.preferences.analytics || parsed.preferences.marketing)))) {
+                loadScript();
+                return;
+              }
+            }
+          } catch (e) {}
+
+          // Auto-mount after small delay so widget is visible to visitors
+          setTimeout(loadScript, 1000);
+        }
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          initChatWidget();
+        } else {
+          window.addEventListener('DOMContentLoaded', initChatWidget);
+          window.addEventListener('load', initChatWidget);
+        }
+
+        window.addEventListener('cookie-consent-updated', initChatWidget);
+        window.addEventListener('click', function(e) {
+          if (e.target && (e.target.closest('#crm-chat-widget') || e.target.closest('.chat-button') || e.target.closest('[data-chat-trigger]'))) {
+            loadScript();
+          }
+        }, { passive: true });
+      })();
+    </script>
   </body>
 </html>
 

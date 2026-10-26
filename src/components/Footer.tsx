@@ -21,7 +21,7 @@ export default function Footer({ onTabChange }: FooterProps) {
               </span>
             </div>
             <p className="font-body-sm text-body-sm text-on-surface-variant max-w-md leading-relaxed">
-              Architecting cognitive AI workflows, high-precision graphics computing, and refined digital experiences with physical studio realism.
+              Software Development Engineer (Full Stack &amp; AI) specializing in production RAG systems, high-concurrency distributed backends, and Meta Cloud API ecosystems.
             </p>
           </div>
 
@@ -32,10 +32,10 @@ export default function Footer({ onTabChange }: FooterProps) {
             </span>
             <div className="flex items-center gap-space-xs font-label-technical text-xs text-on-surface">
               <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse" />
-              <span>IST (UTC+5:30) · Available for Strategic Engagements</span>
+              <span>New Delhi, India (IST UTC+5:30) · Available for Strategic Roles</span>
             </div>
             <p className="font-label-mono text-xs text-on-surface-variant mt-space-xs">
-              Built with Next.js, React, TypeScript &amp; WebGL
+              Software Development Engineer (Full Stack &amp; AI) · hkbharti77@gmail.com
             </p>
           </div>
 
@@ -59,7 +59,7 @@ export default function Footer({ onTabChange }: FooterProps) {
               </button>
               <a
                 className="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors"
-                href="https://github.com"
+                href="https://github.com/hkbharti77"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -67,11 +67,17 @@ export default function Footer({ onTabChange }: FooterProps) {
               </a>
               <a
                 className="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors"
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/himanshu-bharti-81a5a618a"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 LinkedIn ↗
+              </a>
+              <a
+                className="text-on-surface-variant hover:text-on-surface uppercase tracking-wider transition-colors"
+                href="mailto:hkbharti77@gmail.com"
+              >
+                Email ↗
               </a>
               <button
                 onClick={() => onTabChange?.('contact')}
@@ -83,10 +89,33 @@ export default function Footer({ onTabChange }: FooterProps) {
           </div>
         </div>
 
-        {/* Bottom imprint */}
-        <div className="flex flex-col sm:flex-row items-center justify-between pt-space-lg border-t border-surface-variant/40 font-label-mono text-xs text-on-surface-variant">
-          <p>© 2025 Himanshu Bharti. All rights reserved.</p>
-          <p className="tracking-widest uppercase mt-2 sm:mt-0">Curated Broadsheet Edition · Vol. 04</p>
+        {/* Bottom imprint with statutory legal links */}
+        <div className="flex flex-col sm:flex-row items-center justify-between pt-space-lg border-t border-surface-variant/40 font-label-mono text-xs text-on-surface-variant gap-3">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <p>© 2025 Himanshu Bharti. All rights reserved.</p>
+            <span className="text-outline-variant hidden sm:inline">·</span>
+            <button
+              onClick={() => onTabChange?.('privacy')}
+              className="hover:text-primary underline cursor-pointer"
+            >
+              Privacy Policy
+            </button>
+            <span className="text-outline-variant">·</span>
+            <button
+              onClick={() => onTabChange?.('terms')}
+              className="hover:text-primary underline cursor-pointer"
+            >
+              Terms of Service
+            </button>
+            <span className="text-outline-variant">·</span>
+            <button
+              onClick={() => onTabChange?.('cookies')}
+              className="hover:text-primary underline cursor-pointer"
+            >
+              Cookie &amp; Telemetry Policy
+            </button>
+          </div>
+          <p className="tracking-widest uppercase">Curated Broadsheet Edition · Vol. 04</p>
         </div>
       </div>
     </footer>

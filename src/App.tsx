@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ResumeModal from './components/ResumeModal';
+import ScheduleSyncModal from './components/ScheduleSyncModal';
+import CookieConsentBanner from './components/CookieConsentBanner';
 import ScrollProgressBar from './components/ScrollProgressBar';
 import WorkView from './views/WorkView';
 import EngineeringView from './views/EngineeringView';
@@ -9,12 +11,17 @@ import ExperienceView from './views/ExperienceView';
 import BlogView from './views/BlogView';
 import PricingView from './views/PricingView';
 import AboutView from './views/AboutView';
+import PrivacyView from './views/PrivacyView';
+import TermsView from './views/TermsView';
+import CookiesView from './views/CookiesView';
 import type { TabType } from './types';
 import { CheckCircle2, BookOpen } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('work');
   const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isScheduleSyncOpen, setIsScheduleSyncOpen] = useState(false);
+  const handleCloseScheduleSync = useCallback(() => setIsScheduleSyncOpen(false), []);
   const [isReadingMode, setIsReadingMode] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     try {
@@ -55,17 +62,24 @@ export default function App() {
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
-      if (hash === 'engineering-ai' || hash === 'engineering') {
+      const cleanHash = hash.split('?')[0].split('/')[0];
+      if (cleanHash === 'engineering-ai' || cleanHash === 'engineering') {
         setActiveTab('engineering');
-      } else if (hash === 'experience') {
+      } else if (cleanHash === 'experience') {
         setActiveTab('experience');
-      } else if (hash === 'blog' || hash === 'dispatches' || hash === 'journal') {
+      } else if (cleanHash === 'blog' || cleanHash === 'dispatches' || cleanHash === 'journal') {
         setActiveTab('blog');
-      } else if (hash === 'pricing' || hash === 'services' || hash === 'rates') {
+      } else if (cleanHash === 'pricing' || cleanHash === 'services' || cleanHash === 'rates') {
         setActiveTab('pricing');
-      } else if (hash === 'about') {
+      } else if (cleanHash === 'about') {
         setActiveTab('about');
-      } else if (hash === 'contact') {
+      } else if (cleanHash === 'privacy') {
+        setActiveTab('privacy');
+      } else if (cleanHash === 'terms') {
+        setActiveTab('terms');
+      } else if (cleanHash === 'cookies' || cleanHash === 'cookie-policy') {
+        setActiveTab('cookies');
+      } else if (cleanHash === 'contact') {
         setActiveTab('experience');
         setTimeout(() => {
           document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -107,6 +121,9 @@ export default function App() {
     else if (tab === 'blog') window.location.hash = 'blog';
     else if (tab === 'pricing') window.location.hash = 'pricing';
     else if (tab === 'about') window.location.hash = 'about';
+    else if (tab === 'privacy') window.location.hash = 'privacy';
+    else if (tab === 'terms') window.location.hash = 'terms';
+    else if (tab === 'cookies') window.location.hash = 'cookies';
 
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -147,6 +164,7 @@ export default function App() {
               onTabChange={handleTabChange}
               onOpenResume={() => setIsResumeOpen(true)}
               onTriggerToast={triggerToast}
+              onOpenScheduleSync={() => setIsScheduleSyncOpen(true)}
             />
           )}
 
@@ -176,6 +194,7 @@ export default function App() {
             <PricingView
               onTabChange={handleTabChange}
               onTriggerToast={triggerToast}
+              onOpenScheduleSync={() => setIsScheduleSyncOpen(true)}
             />
           )}
 
@@ -183,6 +202,21 @@ export default function App() {
             <AboutView
               onTabChange={handleTabChange}
               onOpenResume={() => setIsResumeOpen(true)}
+            />
+          )}
+
+          {activeTab === 'privacy' && (
+            <PrivacyView onTabChange={handleTabChange} />
+          )}
+
+          {activeTab === 'terms' && (
+            <TermsView onTabChange={handleTabChange} />
+          )}
+
+          {activeTab === 'cookies' && (
+            <CookiesView
+              onTabChange={handleTabChange}
+              onTriggerToast={triggerToast}
             />
           )}
         </div>
@@ -196,12 +230,22 @@ export default function App() {
         />
       </div>
 
-      {/* Curriculum Vitae Modal */}
+      {/* Curriculum Vitae Modal (Document viewer only) */}
       <ResumeModal
         isOpen={isResumeOpen}
         onClose={() => setIsResumeOpen(false)}
         onTriggerToast={triggerToast}
       />
+
+      {/* 20-Min Architecture Sync Appointment Modal */}
+      <ScheduleSyncModal
+        isOpen={isScheduleSyncOpen}
+        onClose={handleCloseScheduleSync}
+        onTriggerToast={triggerToast}
+      />
+
+      {/* Cookie Consent Banner (Navigates directly to dedicated pages without modals) */}
+      <CookieConsentBanner onTabChange={handleTabChange} />
 
       {/* Floating Focus Mode Banner / Exit Pill */}
       {isReadingMode && (

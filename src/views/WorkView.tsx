@@ -7,9 +7,10 @@ interface WorkViewProps {
   onTabChange: (tab: TabType) => void;
   onOpenResume: () => void;
   onTriggerToast: (msg: string) => void;
+  onOpenScheduleSync?: () => void;
 }
 
-export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: WorkViewProps) {
+export default function WorkView({ onTabChange, onOpenResume, onTriggerToast, onOpenScheduleSync }: WorkViewProps) {
   const [activeFilter, setActiveFilter] = useState<ProjectCategory>('all');
 
   const scrollToWork = () => {
@@ -98,13 +99,13 @@ export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: 
               <div className="flex flex-col">
                 <span className="font-label-mono text-xs text-on-surface-variant uppercase">Primary Stack</span>
                 <span className="font-title-editorial text-sm sm:text-base text-on-surface mt-1 font-semibold">
-                  Python · Go · TS · WebGL
+                  Python · Java · TS · FastAPI
                 </span>
               </div>
               <div className="flex flex-col">
                 <span className="font-label-mono text-xs text-on-surface-variant uppercase">Discipline</span>
                 <span className="font-title-editorial text-sm sm:text-base text-on-surface mt-1 font-semibold">
-                  Agentic Engineering
+                  Agentic &amp; Meta Tech
                 </span>
               </div>
             </div>
@@ -148,7 +149,7 @@ export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: 
               <ShieldCheck className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <div className="font-headline-lg text-4xl text-on-surface tracking-tight font-serif">99.9%</div>
+              <div className="font-headline-lg text-4xl text-on-surface tracking-tight font-serif">99.5%</div>
               <p className="font-label-technical text-xs text-on-surface-variant uppercase mt-1">Uptime Production Architectures</p>
             </div>
           </div>
@@ -160,7 +161,7 @@ export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: 
             </div>
             <div>
               <div className="font-headline-lg text-4xl text-on-surface tracking-tight font-serif">
-                &lt;480<span className="text-xl text-secondary">ms</span>
+                &lt;600<span className="text-xl text-secondary">ms</span>
               </div>
               <p className="font-label-technical text-xs text-on-surface-variant uppercase mt-1">Full-Duplex Voice AI Pipelines</p>
             </div>
@@ -172,7 +173,7 @@ export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: 
               <Activity className="w-5 h-5 text-tertiary" />
             </div>
             <div>
-              <div className="font-headline-lg text-4xl text-on-surface tracking-tight font-serif">10k+</div>
+              <div className="font-headline-lg text-4xl text-on-surface tracking-tight font-serif">15k+</div>
               <p className="font-label-technical text-xs text-on-surface-variant uppercase mt-1">Conversational Workflows Executed</p>
             </div>
           </div>
@@ -183,7 +184,7 @@ export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: 
               <Search className="w-5 h-5 text-primary-container" />
             </div>
             <div>
-              <div className="font-headline-lg text-4xl text-on-surface tracking-tight font-serif">94.8%</div>
+              <div className="font-headline-lg text-4xl text-on-surface tracking-tight font-serif">91%+</div>
               <p className="font-label-technical text-xs text-on-surface-variant uppercase mt-1">RAG Context Re-Rank Accuracy</p>
             </div>
           </div>
@@ -241,15 +242,15 @@ export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: 
                   <div className="flex items-center gap-space-xs font-label-mono text-xs uppercase tracking-widest text-on-surface-variant mb-space-xs">
                     <span className="text-secondary font-bold">PROJECT 01</span>
                     <span>·</span>
-                    <span className="px-2 py-0.5 bg-surface-container-high text-on-surface">AI Systems &amp; Automation</span>
+                    <span className="px-2 py-0.5 bg-surface-container-high text-on-surface">Meta Cloud API &amp; AI CRM</span>
                   </div>
 
                   <h3 className="font-headline-md text-2xl sm:text-3xl font-serif text-on-surface mb-space-sm leading-tight">
-                    OmniChannel AI CRM &amp; Autonomous Sales Pipeline
+                    Meta Cloud WhatsApp &amp; AI Support Desk Platform
                   </h3>
 
                   <p className="font-body-md text-sm text-on-surface-variant mb-space-md leading-relaxed">
-                    An enterprise-tier conversational intelligence engine capable of orchestrating full-cycle lead acquisition, dynamic tool calling, and qualification directly over WhatsApp Cloud API and web channels without human latency.
+                    Production Meta Cloud WhatsApp API setup for client businesses. Features automatic webhook verification, RAG-powered auto-replies, interactive quick-reply buttons, and confidence-gated escalation to live support queues with strict multi-tenant data isolation.
                   </p>
 
                   <div className="bg-surface-container-lowest p-space-md shadow-xs mb-space-md border border-surface-variant/40">
@@ -259,15 +260,15 @@ export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: 
                     <ul className="flex flex-col gap-1.5 font-label-technical text-xs text-on-surface">
                       <li className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-secondary-container" />
-                        <span>Backend: FastAPI with Async Redis Event Bus &amp; PostgreSQL</span>
+                        <span>Ingress: Meta Cloud WhatsApp API Webhooks → FastAPI verification layer</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-primary" />
-                        <span>Orchestration: LangChain agentic state-graphs &amp; dynamic function routers</span>
+                        <span>Orchestration: LangChain Intent Classifier &amp; Knowledge RAG Bot with live rep handoff</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-tertiary" />
-                        <span>Edge Connectors: WhatsApp Cloud Webhooks with retry idempotency</span>
+                        <span>Datastores: Encrypted multi-tenant PostgreSQL &amp; Redis distributed token bucket</span>
                       </li>
                     </ul>
                   </div>
@@ -740,8 +741,11 @@ export default function WorkView({ onTabChange, onOpenResume, onTriggerToast }: 
               </button>
               <button
                 onClick={() => {
-                  onTriggerToast('Calendar appointment slot booking link copied: cal.com/himanshu-bharti/arch-sync');
-                  navigator.clipboard?.writeText('https://cal.com/himanshu-bharti/arch-sync');
+                  if (onOpenScheduleSync) {
+                    onOpenScheduleSync();
+                  } else {
+                    onTabChange('contact');
+                  }
                 }}
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-transparent border border-inverse-on-surface/30 text-inverse-on-surface hover:text-secondary-fixed hover:border-secondary-fixed font-label-technical text-xs uppercase tracking-widest transition-colors cursor-pointer"
               >

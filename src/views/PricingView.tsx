@@ -5,64 +5,65 @@ import { Check, ShieldCheck, ArrowRight, Clock, HelpCircle, ChevronDown, Chevron
 interface PricingViewProps {
   onTabChange: (tab: TabType) => void;
   onTriggerToast: (msg: string) => void;
+  onOpenScheduleSync?: () => void;
 }
 
 const tiers: PricingTier[] = [
   {
-    id: 'advisory',
+    id: 'whatsapp-ai',
     tierNumber: 'TIER 01',
-    name: 'Architectural Advisory & Audit',
-    tagline: 'Deep technical diagnosis, latency profiling, and tailored architectural blueprints.',
-    price: '$3,500',
-    period: 'per engagement',
-    commitment: '5 business days turnaround',
+    name: 'Meta WhatsApp & AI Helpdesk Setup',
+    tagline: 'Official Meta Cloud API configuration, AI RAG auto-replies, and live-agent escalation queue.',
+    price: '₹24,999 / $299',
+    period: 'turnkey setup',
+    commitment: '5 business days delivery',
     deliverables: [
-      'Comprehensive codebase & topology inspection (Python, Go, Cloud, LLM pipelines)',
-      'Sub-millisecond latency waterfall analysis (TTFT, VAD, WebRTC buffers, DB queries)',
-      '15-page architectural blueprint & prioritized risk mitigation monograph',
-      'Two 90-minute live executive & engineering team strategy sessions',
-      'Actionable recommendations for prompt-caching and compute cost reduction'
+      'Official Meta WhatsApp Business Cloud API & Webhook ingress setup (FastAPI)',
+      'Custom Knowledge Base RAG Assistant for automated 24/7 client inquiries',
+      'Interactive quick-reply buttons and catalog list message templates',
+      'Confidence-gated live human support queue and rep routing',
+      'Encrypted PostgreSQL chat history storage and delivery status analytics'
     ],
-    idealFor: 'Founders & engineering leads seeking unbiased third-party technical validation before scaling.',
+    idealFor: 'Businesses needing automated 24/7 customer support and verified WhatsApp presence.',
     turnaround: '5 Business Days',
-    ctaText: 'Book Architecture Audit'
+    ctaText: 'Deploy WhatsApp AI Helpdesk'
   },
   {
-    id: 'sprint',
+    id: 'voice-rag-sprint',
     tierNumber: 'TIER 02',
-    name: 'Production Sprint Delivery',
-    tagline: 'Dedicated hands-on build of core AI agents, WebRTC voice pipelines, or distributed backends.',
-    price: '$8,500',
+    name: 'AI CRM, Voice & Hybrid RAG Sprint',
+    tagline: 'Full-duplex Voice AI agents, multi-format RAG pipelines, or custom CRM platform.',
+    price: '₹69,999 / $850',
     period: 'per 2-week sprint',
     commitment: '2 weeks dedicated engineering',
     isPopular: true,
     deliverables: [
-      'Production-ready implementation of a core subsystem (Voice AI, RAG engine, or Event Bus)',
-      'LangGraph deterministic state machines with transactional Redis checkpointing',
-      'FastAPI / Go microservices with async connection pooling and pgvector integration',
-      'Automated test suite with >90% coverage & containerized Docker Compose setup',
-      'Daily async Slack progress updates & end-of-sprint code walkthrough demo'
+      'Sub-600ms AI Voice Calling Agent (Deepgram STT + ElevenLabs TTS over WebSockets)',
+      'Enterprise Hybrid RAG (PDF, DOCX, XLSX parsing with FAISS vector search & cross-encoder rerank)',
+      'FastAPI or Java Spring Boot microservice with Redis caching and JWT authentication',
+      'Comprehensive unit and integration test suite with >80% test coverage',
+      'Docker Compose deployment with multi-tenant database isolation'
     ],
-    idealFor: 'Growth-stage teams needing immediate senior velocity to ship a mission-critical feature.',
+    idealFor: 'Growing companies needing dedicated engineering velocity to ship mission-critical AI features.',
     turnaround: '14 Calendar Days',
     ctaText: 'Reserve Sprint Slot'
   },
   {
-    id: 'enterprise',
+    id: 'enterprise-meta',
     tierNumber: 'TIER 03',
-    name: 'Full-Cycle Enterprise System Build',
-    tagline: 'Turnkey distributed architecture: from metal and neural models to tactile web interfaces.',
-    price: '$18,500+',
-    period: 'custom scope',
+    name: 'Full Enterprise AI & Meta Tech Suite',
+    tagline: 'Turnkey distributed architecture: Meta Tech Provider status, Bulk Broadcasting, and custom ERP.',
+    price: 'Custom Scope',
+    period: 'multi-milestone engagement',
     commitment: '4 to 8 weeks engagement',
     deliverables: [
-      'Full-stack system architecture: low-latency backend, neural routing, and WebGL frontend',
-      'Multi-tenant cloud infrastructure (Kubernetes, AWS ECS, Redis Streams, PostgreSQL)',
-      'Fine-tuned open-weights deployments (vLLM / Ollama) or customized frontier models',
-      'OpenTelemetry observability, distributed tracing, and automated failover tripwires',
-      '30-day post-launch warranty, detailed runbooks, and engineering team training'
+      'End-to-end Meta Tech Provider platform with Meta Embedded Signup (1-click WABA setup)',
+      'WhatsApp bulk broadcasting engine with HSM template sync and Redis token-bucket rate limiter',
+      'Instagram Graph API automation (comment-to-DM triggers and story mention lead capture)',
+      'Full ERP/CRM backend (Java Spring Boot / FastAPI, PostgreSQL, Redis distributed locking)',
+      'Docker / Kubernetes production deployment with 99.5% uptime SLA guarantee'
     ],
-    idealFor: 'Enterprises and funded startups building foundational AI products requiring 99.9% uptime SLA.',
+    idealFor: 'Enterprises and agencies requiring high-throughput automation and official Meta Business Partner status.',
     turnaround: '4 to 8 Weeks',
     ctaText: 'Initiate Enterprise Dispatch'
   }
@@ -91,7 +92,7 @@ const faqs = [
   }
 ];
 
-export default function PricingView({ onTabChange, onTriggerToast }: PricingViewProps) {
+export default function PricingView({ onTabChange, onTriggerToast, onOpenScheduleSync }: PricingViewProps) {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const handleSelectTier = (tier: PricingTier) => {
@@ -328,8 +329,11 @@ export default function PricingView({ onTabChange, onTriggerToast }: PricingView
             </button>
             <button
               onClick={() => {
-                onTriggerToast('Meeting booking link copied: cal.com/himanshu-bharti/arch-sync');
-                navigator.clipboard?.writeText('https://cal.com/himanshu-bharti/arch-sync');
+                if (onOpenScheduleSync) {
+                  onOpenScheduleSync();
+                } else {
+                  onTabChange('contact');
+                }
               }}
               className="px-6 py-3 bg-transparent border border-inverse-on-surface/30 text-inverse-on-surface hover:border-secondary-container hover:text-secondary-container font-label-technical text-xs uppercase tracking-wider transition-colors cursor-pointer"
             >

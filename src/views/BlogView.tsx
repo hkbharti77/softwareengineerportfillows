@@ -1,191 +1,168 @@
-import { useState, useMemo } from 'react';
-import type { TabType, BlogCategory, DispatchArticle } from '../types';
-import { BookOpen, Search, ArrowRight, X, Clock, Calendar, Tag, Copy, Check, Terminal, Share2, Sparkles } from 'lucide-react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import type { TabType, DispatchArticle } from '../types';
+import {
+  BookOpen,
+  Search,
+  ArrowRight,
+  ArrowLeft,
+  X,
+  Clock,
+  Calendar,
+  Tag,
+  Copy,
+  Check,
+  Terminal,
+  Share2,
+  RefreshCw,
+  FileText,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  AlertCircle,
+  Sparkles,
+  ArrowUp,
+  User,
+} from 'lucide-react';
+import {
+  fetchPortfolioPosts,
+  fetchPostBySlug,
+  type BlogCategoryItem,
+} from '../services/blogService';
 
 interface BlogViewProps {
   onTabChange: (tab: TabType) => void;
   onTriggerToast: (msg: string) => void;
 }
 
-const articles: DispatchArticle[] = [
-  {
-    id: 'webrtc-voice-latency',
-    issueNumber: 'DISPATCH № 04',
-    category: 'voice-ai',
-    categoryLabel: 'Voice & Multimodal AI',
-    title: 'Sub-400ms Voice Orchestration: Taming Audio Buffers over WebRTC',
-    subtitle: 'How we bypassed sentence-level LLM completion via speculative first-token chunking and zero-jitter audio playback.',
-    date: 'October 18, 2026',
-    readTime: '7 min read',
-    excerpt: 'Natural conversation collapses the moment turnaround latency exceeds 600ms. In this technical deep dive, we detail the complete engineering mechanics behind sub-400ms full-duplex conversational voice agents: from raw Silero VAD frame slicing to WebRTC datachannel transport and streaming Opus synthesis.',
-    content: [
-      'In human conversation, turn-taking intervals average approximately 250 milliseconds. The moment an automated voice agent introduces latencies exceeding 600ms, users perceive unnatural hesitation, interrupt the synthesizer, or assume the connection has degraded.',
-      'Traditional voice bots execute a sequential, blocking waterfall: record audio -> await full sentence pause -> transcribe STT -> submit complete prompt to LLM -> await complete completion -> synthesize full audio file -> stream back. This naive sequence inevitably accumulates between 1,200ms and 2,500ms of end-to-end latency.',
-      'Our architecture breaks this sequential bottleneck by treating speech as an uninterrupted, concurrent pipeline of sliding 30ms PCM audio frames over WebSockets and WebRTC.',
-      'Phase 1 relies on client-side Silero Voice Activity Detection (VAD) running on ONNX Runtime. When user speech energy drops below threshold for just 120ms, an endpoint boundary signal is emitted to the server. Rather than waiting for full punctuation, our FastAPI event loop dispatches interim transcript chunks to Deepgram Nova-2.',
-      'Phase 2 leverages speculative token yield. As Anthropic Claude 3.5 or GPT-4o begins emitting tokens via Server-Sent Events, we do not wait for the entire sentence. The first 4 to 6 tokens are immediately routed to ElevenLabs Turbo streaming API over an open TLS socket.',
-      'Finally, received MP3/PCM audio chunks are injected directly into a custom Web Audio API circular ring buffer with drift compensation. This ensures playback begins while the subsequent half of the agent response is still being reasoned by the model, pulling total turn-taking latency down to 340ms to 420ms consistently.'
-    ],
-    codeSnippet: {
-      language: 'python',
-      filename: 'voice_pipeline_router.py',
-      code: `async def stream_speculative_tts(token_stream: AsyncIterator[str], audio_sink: WebRTCAudioSink):
-    """Intercepts first-token burst to begin audio synthesis before sentence completion."""
-    buffer = []
-    chunk_index = 0
-    async for token in token_stream:
-        buffer.append(token)
-        # Flush initial burst early on 5 tokens or punctuation boundary
-        if (chunk_index == 0 and len(buffer) >= 5) or any(p in token for p in {".", ",", "?", "!"}):
-            clause = "".join(buffer)
-            buffer.clear()
-            chunk_index += 1
-            # Dispatch directly to persistent ElevenLabs WebSocket connection
-            asyncio.create_task(eleven_client.stream_chunk(clause, audio_sink))`
-    },
-    tags: ['WebRTC', 'FastAPI', 'Deepgram', 'ElevenLabs', 'Low-Latency']
-  },
-  {
-    id: 'deterministic-agent-graphs',
-    issueNumber: 'DISPATCH № 03',
-    category: 'distributed',
-    categoryLabel: 'Distributed Systems',
-    title: 'Deterministic State Graphs in Multi-Agent Swarms',
-    subtitle: 'Why stochastic agent loops fail in production, and how Redis checkpointing guarantees state recovery.',
-    date: 'September 24, 2026',
-    readTime: '9 min read',
-    excerpt: 'Autonomous multi-agent systems built with free-form while-loops produce catastrophic non-deterministic failure modes in production. We explore graph-based state-machine architectures with transactional state checkpoints, tool idempotency guards, and automatic rollback reconciliation.',
-    content: [
-      'The early wave of LLM agent frameworks treated agentic workflows as infinite prompting loops: give the model a scratchpad, let it generate tool calls, and hope it terminates. In production, this approach yields cascading token consumption, infinite circular tool calls, and unrecoverable deadlocks.',
-      'Enterprise environments demand determinism. If an agent initiates a financial transfer or modifies an ERP order, that step must be idempotent, strictly auditable, and resilient to worker node restarts.',
-      'We designed our agent runtime on top of LangGraph-inspired directed acyclic state graphs (DAGs). Every state transition is modeled as a pure function: State_n+1 = Node_f(State_n).',
-      'Before any tool with external side-effects (e.g., database writes, webhook dispatches) is triggered, the execution engine writes a state snapshot to Redis with an idempotency key. If a Kubernetes pod is terminated midway through execution, the replacement worker resumes from the exact checkpoint without re-executing completed operations.',
-      'Furthermore, human-in-the-loop gates are treated as first-class asynchronous pause states. An agent can pause its thread for 48 hours awaiting executive review, while its state persists serialized in PostgreSQL JSONB with zero memory overhead on active server workers.'
-    ],
-    codeSnippet: {
-      language: 'python',
-      filename: 'state_checkpoint.py',
-      code: `@dataclass
-class AgentState:
-    session_id: str
-    step_id: int
-    context_tokens: int
-    scratchpad: list[dict]
-    checkpoint_hash: str
-
-async def execute_guarded_node(state: AgentState, tool_fn: Callable) -> AgentState:
-    # 1. Verify idempotency lock in Redis
-    lock_key = f"agent_lock:{state.session_id}:{state.step_id}"
-    if not await redis_pool.set(lock_key, "ACTIVE", nx=True, ex=60):
-        return await recover_from_checkpoint(state.session_id)
-    # 2. Execute deterministic transition
-    next_state = await tool_fn(state)
-    await persist_checkpoint(next_state)
-    return next_state`
-    },
-    tags: ['LangGraph', 'Redis', 'Python', 'Agentic Systems', 'Idempotency']
-  },
-  {
-    id: 'hybrid-vector-retrieval',
-    issueNumber: 'DISPATCH № 02',
-    category: 'rag-search',
-    categoryLabel: 'RAG & Vector Search',
-    title: 'Hybrid Dense-Sparse Vector Retrieval: Combining pgvector HNSW with BM25',
-    subtitle: 'Eliminating semantic hallucination in regulatory compliance queries with reciprocal rank fusion.',
-    date: 'August 14, 2026',
-    readTime: '6 min read',
-    excerpt: 'Dense vector embeddings alone often miss precise acronyms, contract clauses, and SKU numbers. By combining pgvector HNSW semantic search with BM25 inverted lexical indexing and cross-encoder re-ranking, we achieved 99.4% citation verity across 2.4 million regulatory documents.',
-    content: [
-      'Dense vector embeddings (like OpenAI text-embedding-3 or Cohere Embed v3) excel at semantic similarity — recognizing that "automobile" and "car" represent equivalent concepts. However, they struggle with exact lexical matches: ISO standard numbers, legal clause citations (e.g., "Section 14.2(b)"), and specialized acronyms.',
-      'Conversely, classical lexical search (BM25) guarantees precision for exact token lookups but fails when users phrase inquiries using alternative terminology.',
-      'Our solution implements a dual-stage hybrid retrieval mesh. Incoming queries are simultaneously executed against an HNSW index in PostgreSQL using pgvector, and a PostgreSQL full-text search tsvector column indexed via GIN.',
-      'The top 50 candidates from each retrieval channel are merged using Reciprocal Rank Fusion (RRF). RRF calculates a combined score: Score = Sum(1 / (60 + rank_i)), which gracefully balances dense and sparse positions without requiring complex score normalization.',
-      'Finally, the top 15 fused chunks pass through a Cohere Rerank v3 cross-encoder model. The cross-encoder analyzes full query-passage interaction rather than separate vector dot-products, discarding irrelevant context and delivering verified source grounding.'
-    ],
-    codeSnippet: {
-      language: 'sql',
-      filename: 'hybrid_search.sql',
-      code: `-- Reciprocal Rank Fusion of Dense Embeddings & BM25 Sparse Search
-WITH semantic_search AS (
-    SELECT id, document_id, ROW_NUMBER() OVER (ORDER BY embedding <=> $1) AS rank
-    FROM document_chunks
-    ORDER BY embedding <=> $1 LIMIT 50
-),
-lexical_search AS (
-    SELECT id, document_id, ROW_NUMBER() OVER (ORDER BY ts_rank_cd(tsv_content, plainto_tsquery('english', $2)) DESC) AS rank
-    FROM document_chunks
-    WHERE tsv_content @@ plainto_tsquery('english', $2) LIMIT 50
-)
-SELECT COALESCE(s.id, l.id) AS chunk_id,
-       COALESCE(1.0 / (60 + s.rank), 0.0) + COALESCE(1.0 / (60 + l.rank), 0.0) AS rrf_score
-FROM semantic_search s
-FULL OUTER JOIN lexical_search l ON s.id = l.id
-ORDER BY rrf_score DESC LIMIT 15;`
-    },
-    tags: ['pgvector', 'PostgreSQL', 'BM25', 'RAG', 'Cohere Rerank']
-  },
-  {
-    id: 'llm-latency-economics',
-    issueNumber: 'DISPATCH № 01',
-    category: 'architecture',
-    categoryLabel: 'Systems Architecture',
-    title: 'The Latency Economics of Modern LLM Deployments',
-    subtitle: 'Balancing Time-to-First-Token, PagedAttention chunked prefill, and GPU memory saturation.',
-    date: 'June 30, 2026',
-    readTime: '8 min read',
-    excerpt: 'Optimizing open-weights inference isn\'t just about purchasing faster GPUs; it\'s about KV-cache memory management, continuous batching, and chunked prefill strategies that prevent interactive chat streams from choking under batch ingestion workloads.',
-    content: [
-      'In high-throughput LLM deployments, two distinct metrics govern user satisfaction: Time to First Token (TTFT), which determines perceived conversational snappiness, and Inter-Token Latency (ITL), which dictates reading fluency.',
-      'A common architectural failure occurs when a large batch document processing job enters the cluster while real-time users are chatting. Long prompt evaluation (prefill phase) monopolizes GPU compute cores, causing interactive user generation steps to stutter.',
-      'Using vLLM and TensorRT-LLM with chunked prefill, we split massive 8,000-token prompt evaluations into 512-token chunks. This enables the scheduler to interleave decode tokens for real-time users between prompt evaluation slices, keeping TTFT sub-200ms even at 85% cluster load.',
-      'We also examine the impact of prompt-caching architecture in production. For structured agent swarms sharing a static 2,000-token system prompt containing schemas and tools, KV-cache reuse cuts input compute costs by up to 70% while dropping prefill latency to single-digit milliseconds.'
-    ],
-    codeSnippet: {
-      language: 'bash',
-      filename: 'vllm_cluster_launch.sh',
-      code: `# Production vLLM deployment with chunked prefill and speculative decoding
-python3 -m vllm.entrypoints.openai.api_server \\
-  --model meta-llama/Llama-3.1-70B-Instruct \\
-  --tensor-parallel-size 4 \\
-  --max-num-seqs 256 \\
-  --enable-chunked-prefill \\
-  --max-num-batched-tokens 2048 \\
-  --gpu-memory-utilization 0.92 \\
-  --kv-cache-dtype auto \\
-  --port 8000`
-    },
-    tags: ['vLLM', 'GPU Inference', 'PagedAttention', 'Llama 3.1', 'KV Cache']
-  }
-];
-
 export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps) {
-  const [selectedCategory, setSelectedCategory] = useState<BlogCategory>('all');
+  const [articles, setArticles] = useState<DispatchArticle[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeArticle, setActiveArticle] = useState<DispatchArticle | null>(null);
+  const [loadingFullArticle, setLoadingFullArticle] = useState<boolean>(false);
   const [hasCopiedCode, setHasCopiedCode] = useState(false);
+  const [hasCopiedShare, setHasCopiedShare] = useState(false);
 
-  // Filtered articles
+  // Load portfolio channel articles from MongoDB database via API
+  const loadArticles = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetchPortfolioPosts({ limit: 50 });
+      setArticles(response.posts);
+    } catch (err: any) {
+      console.error('[BlogView] Failed to retrieve portfolio articles from API:', err);
+      setError(err?.message || 'Failed to establish connection to database portfolio endpoint.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadArticles();
+  }, [loadArticles]);
+
+  // URL Hash Synchronisation:
+  // Listens to #blog?article=slug or #blog/slug, rendering full page article view without popup modal
+  useEffect(() => {
+    const syncFromHash = async () => {
+      const hash = window.location.hash.replace('#', '');
+      let slug = '';
+
+      if (hash.includes('article=')) {
+        const match = hash.match(/[?&]article=([^&]+)/);
+        if (match && match[1]) slug = decodeURIComponent(match[1]);
+      } else if (hash.startsWith('blog/') && hash.length > 5) {
+        slug = decodeURIComponent(hash.substring(5));
+      }
+
+      if (slug) {
+        const existing = articles.find((a) => a.slug === slug || a.id === slug);
+        if (existing && existing.content && typeof existing.content === 'string' && existing.content.length > 150) {
+          setActiveArticle(existing);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          setLoadingFullArticle(true);
+          const full = await fetchPostBySlug(slug);
+          setActiveArticle(full || existing || null);
+          setLoadingFullArticle(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } else {
+        setActiveArticle(null);
+      }
+    };
+
+    syncFromHash();
+    window.addEventListener('hashchange', syncFromHash);
+    return () => window.removeEventListener('hashchange', syncFromHash);
+  }, [articles]);
+
+  // Dynamic category pills gathered from portfolio articles
+  const categories = useMemo(() => {
+    const map = new Map<string, number>();
+    articles.forEach((art) => {
+      const cat = art.category?.trim() || 'Engineering';
+      map.set(cat, (map.get(cat) || 0) + 1);
+    });
+
+    const list: { id: string; label: string; count: number }[] = [
+      { id: 'all', label: 'All Dispatches', count: articles.length },
+    ];
+
+    map.forEach((count, cat) => {
+      list.push({ id: cat, label: cat, count });
+    });
+
+    return list;
+  }, [articles]);
+
+  // Filtered articles based on category and search query
   const filteredArticles = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
     return articles.filter((art) => {
-      const matchesCat = selectedCategory === 'all' || art.category === selectedCategory;
-      const query = searchQuery.toLowerCase().trim();
+      const matchesCat =
+        selectedCategory === 'all' ||
+        art.category?.toLowerCase() === selectedCategory.toLowerCase();
+
       const matchesSearch =
         query === '' ||
         art.title.toLowerCase().includes(query) ||
-        art.subtitle.toLowerCase().includes(query) ||
-        art.excerpt.toLowerCase().includes(query) ||
+        (art.subtitle && art.subtitle.toLowerCase().includes(query)) ||
+        (art.excerpt && art.excerpt.toLowerCase().includes(query)) ||
+        (art.category && art.category.toLowerCase().includes(query)) ||
         art.tags.some((t) => t.toLowerCase().includes(query));
+
       return matchesCat && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [articles, selectedCategory, searchQuery]);
 
-  const categories: { id: BlogCategory; label: string }[] = [
-    { id: 'all', label: 'All Dispatches' },
-    { id: 'voice-ai', label: 'Voice & Multimodal' },
-    { id: 'distributed', label: 'Distributed Systems' },
-    { id: 'rag-search', label: 'RAG & Vector Search' },
-    { id: 'architecture', label: 'Systems Architecture' },
-  ];
+  // Related articles for the active article (same category or others in portfolio)
+  const relatedArticles = useMemo(() => {
+    if (!activeArticle) return [];
+    return articles
+      .filter((a) => a.slug !== activeArticle.slug && a.id !== activeArticle.id)
+      .slice(0, 3);
+  }, [articles, activeArticle]);
+
+  // Navigate to full-page article view via URL
+  const handleOpenArticle = (art: DispatchArticle) => {
+    window.location.hash = `blog?article=${encodeURIComponent(art.slug || art.id)}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Back to dispatches catalog via URL
+  const handleBackToList = () => {
+    window.location.hash = 'blog';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavigateAdjacent = (targetSlug: string) => {
+    window.location.hash = `blog?article=${encodeURIComponent(targetSlug)}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard?.writeText(code);
@@ -194,12 +171,336 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
     setTimeout(() => setHasCopiedCode(false), 2500);
   };
 
-  const handleShareArticle = (art: DispatchArticle) => {
-    const url = `${window.location.origin}/#blog?article=${art.id}`;
+  const handleShareArticle = (art: DispatchArticle, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const url = `${window.location.origin}/#blog?article=${encodeURIComponent(art.slug || art.id)}`;
     navigator.clipboard?.writeText(url);
-    onTriggerToast(`Article share link copied: "${art.title}"`);
+    setHasCopiedShare(true);
+    onTriggerToast(`Article link copied: "${art.title}"`);
+    setTimeout(() => setHasCopiedShare(false), 2500);
   };
 
+  /* ========================================================================
+     VIEW 1: DEDICATED FULL-PAGE ARTICLE VIEW (NO POPUP / NO MODAL)
+     ======================================================================== */
+  if (activeArticle) {
+    return (
+      <div className="w-full flex flex-col broadsheet-view-transition bg-surface">
+        {/* Top Breadcrumb & Action Toolbar */}
+        <div className="w-full border-b border-surface-variant/40 bg-surface-container-low/60 sticky top-20 z-30 backdrop-blur-md">
+          <div className="max-w-4xl mx-auto px-margin-mobile lg:px-margin py-3.5 flex items-center justify-between">
+            <button
+              onClick={handleBackToList}
+              className="inline-flex items-center gap-2 font-label-mono text-xs uppercase text-on-surface hover:text-primary transition-colors cursor-pointer group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span className="font-semibold">All Dispatches</span>
+              <span className="text-on-surface-variant hidden sm:inline">/</span>
+              <span className="text-on-surface-variant hidden sm:inline">{activeArticle.category}</span>
+            </button>
+
+            <div className="flex items-center gap-2">
+              {activeArticle.pdfUrl && (
+                <a
+                  href={activeArticle.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-xs font-label-mono text-on-surface transition-colors border border-surface-variant/50"
+                  title="Download / View Monograph PDF"
+                >
+                  <FileText className="w-3.5 h-3.5 text-primary" />
+                  <span className="hidden sm:inline">Monograph PDF</span>
+                </a>
+              )}
+
+              <button
+                onClick={(e) => handleShareArticle(activeArticle, e)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-xs font-label-mono text-on-surface transition-colors border border-surface-variant/50 cursor-pointer"
+                title="Copy permanent share link"
+              >
+                {hasCopiedShare ? <Check className="w-3.5 h-3.5 text-tertiary" /> : <Share2 className="w-3.5 h-3.5" />}
+                <span className="hidden sm:inline">{hasCopiedShare ? 'Copied' : 'Share'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Full-Page Article Main Container */}
+        <main className="w-full max-w-4xl mx-auto px-margin-mobile lg:px-margin py-10 sm:py-14 flex flex-col gap-8">
+          {/* Article Header & Editorial Masthead */}
+          <header className="border-b border-surface-variant/50 pb-8 flex flex-col gap-4">
+            <div className="flex flex-wrap items-center gap-3 text-xs font-label-mono text-on-surface-variant">
+              <span className="px-2.5 py-0.5 bg-secondary-container text-on-secondary-container uppercase font-bold tracking-wider">
+                {activeArticle.issueNumber || 'DISPATCH'}
+              </span>
+              <span className="px-2 py-0.5 bg-surface-container-high text-on-surface font-semibold">
+                {activeArticle.category}
+              </span>
+              <span>·</span>
+              <span className="flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5" />
+                {activeArticle.date}
+              </span>
+              <span>·</span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5" />
+                {activeArticle.readTime}
+              </span>
+            </div>
+
+            <h1 className="font-headline-lg text-3xl sm:text-5xl text-on-surface font-serif leading-tight">
+              {activeArticle.title}
+            </h1>
+
+            {activeArticle.subtitle && (
+              <p className="font-title-editorial text-lg sm:text-xl text-on-surface-variant italic leading-relaxed">
+                {activeArticle.subtitle}
+              </p>
+            )}
+
+            {/* Author Byline */}
+            <div className="flex items-center justify-between pt-4 border-t border-surface-variant/30 text-xs font-label-mono text-on-surface-variant">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-none bg-surface-container-high border border-surface-variant/80 flex items-center justify-center font-serif font-bold text-on-surface">
+                  HB
+                </div>
+                <div>
+                  <span className="text-on-surface font-semibold block">
+                    {activeArticle.author || 'Himanshu Bharti'}
+                  </span>
+                  <span className="text-[11px] text-on-surface-variant">
+                    Systems &amp; AI Engineer
+                  </span>
+                </div>
+              </div>
+
+              {activeArticle.tags && activeArticle.tags.length > 0 && (
+                <div className="hidden sm:flex flex-wrap gap-1.5">
+                  {activeArticle.tags.map((t) => (
+                    <span key={t} className="text-[11px] font-label-mono text-on-surface-variant bg-surface-container px-2 py-0.5">
+                      #{t}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </header>
+
+          {/* Featured Cover Image (if available & not a raw google drive link) */}
+          {activeArticle.imageUrl && !activeArticle.imageUrl.includes('drive.google.com') && (
+            <div className="w-full max-h-[460px] overflow-hidden border border-surface-variant/60 bg-surface-container-high shadow-xs">
+              <img
+                src={activeArticle.imageUrl}
+                alt={activeArticle.coverImageAlt || activeArticle.title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget.parentElement as HTMLElement).style.display = 'none';
+                }}
+              />
+            </div>
+          )}
+
+          {/* Loading Full Article Content Spinner */}
+          {loadingFullArticle && (
+            <div className="py-12 flex items-center justify-center gap-3 text-on-surface-variant font-label-mono text-xs">
+              <RefreshCw className="w-4 h-4 animate-spin text-primary" />
+              <span>Fetching full study from MongoDB database...</span>
+            </div>
+          )}
+
+          {/* Rich Body Content Rendered Directly in Page */}
+          {!loadingFullArticle && activeArticle.content && (
+            <article className="blog-prose-content">
+              {typeof activeArticle.content === 'string' ? (
+                <div dangerouslySetInnerHTML={{ __html: activeArticle.content }} />
+              ) : Array.isArray(activeArticle.content) ? (
+                activeArticle.content.map((para, i) => (
+                  <p key={i} className="leading-relaxed">
+                    {para}
+                  </p>
+                ))
+              ) : (
+                <p>{activeArticle.excerpt}</p>
+              )}
+            </article>
+          )}
+
+          {/* Excerpt Fallback */}
+          {!loadingFullArticle && !activeArticle.content && (
+            <div className="space-y-4 font-body-md text-base text-on-surface leading-relaxed">
+              <p>{activeArticle.excerpt}</p>
+            </div>
+          )}
+
+          {/* Interactive Code Snippet (if explicitly defined on article object) */}
+          {activeArticle.codeSnippet && (
+            <div className="my-6 bg-surface-container-lowest border border-surface-variant/60 shadow-sm overflow-hidden">
+              <div className="bg-surface-container-high px-4 py-2 flex items-center justify-between border-b border-surface-variant/40">
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-3.5 h-3.5 text-tertiary" />
+                  <span className="font-label-mono text-xs text-on-surface font-bold">
+                    {activeArticle.codeSnippet.filename}
+                  </span>
+                </div>
+                <button
+                  onClick={() => handleCopyCode(activeArticle.codeSnippet!.code)}
+                  className="inline-flex items-center gap-1 font-label-mono text-xs text-on-surface-variant hover:text-on-surface cursor-pointer"
+                >
+                  {hasCopiedCode ? <Check className="w-3.5 h-3.5 text-tertiary" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{hasCopiedCode ? 'Copied' : 'Copy'}</span>
+                </button>
+              </div>
+              <pre className="p-4 text-xs font-mono overflow-x-auto text-on-surface leading-relaxed bg-surface-container-low/50">
+                <code>{activeArticle.codeSnippet.code}</code>
+              </pre>
+            </div>
+          )}
+
+          {/* Article Footer Tags */}
+          {activeArticle.tags && activeArticle.tags.length > 0 && (
+            <div className="pt-6 border-t border-surface-variant/40 flex flex-wrap items-center gap-2">
+              <span className="font-label-mono text-xs text-on-surface-variant uppercase tracking-wider flex items-center gap-1 mr-2">
+                <Tag className="w-3 h-3" />
+                Index Tags:
+              </span>
+              {activeArticle.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="font-label-mono text-xs text-on-surface bg-surface-container-high px-2.5 py-1 border border-surface-variant/50"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Previous & Next Article Navigation Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-surface-variant/40">
+            {activeArticle.prevPost ? (
+              <button
+                onClick={() => handleNavigateAdjacent(activeArticle.prevPost!.slug)}
+                className="p-4 bg-surface-container-low border border-surface-variant/50 hover:border-primary/60 text-left flex flex-col gap-1 transition-all cursor-pointer group"
+              >
+                <span className="font-label-mono text-[10px] text-on-surface-variant uppercase flex items-center gap-1">
+                  <ChevronLeft className="w-3 h-3 group-hover:-translate-x-0.5 transition-transform" />
+                  Previous Dispatch
+                </span>
+                <span className="font-serif text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+                  {activeArticle.prevPost.title}
+                </span>
+              </button>
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+
+            {activeArticle.nextPost && (
+              <button
+                onClick={() => handleNavigateAdjacent(activeArticle.nextPost!.slug)}
+                className="p-4 bg-surface-container-low border border-surface-variant/50 hover:border-primary/60 text-right flex flex-col items-end gap-1 transition-all cursor-pointer group"
+              >
+                <span className="font-label-mono text-[10px] text-on-surface-variant uppercase flex items-center gap-1">
+                  Next Dispatch
+                  <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                </span>
+                <span className="font-serif text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+                  {activeArticle.nextPost.title}
+                </span>
+              </button>
+            )}
+          </div>
+
+          {/* Author Monograph Card */}
+          <div className="p-6 sm:p-8 bg-surface-container-low border border-surface-variant/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mt-4">
+            <div>
+              <span className="font-label-mono text-xs text-primary font-bold uppercase tracking-wider block">
+                AUTHOR MONOGRAPH
+              </span>
+              <div className="font-serif text-xl text-on-surface font-semibold mt-1">
+                {activeArticle.author || 'Himanshu Bharti — Systems & AI Engineer'}
+              </div>
+              <p className="font-body-sm text-xs text-on-surface-variant mt-1.5 leading-relaxed max-w-xl">
+                Specializing in autonomous agent state-graphs, real-time WebRTC audio engines, high-throughput microservices, and enterprise full-stack systems.
+              </p>
+            </div>
+            <button
+              onClick={() => onTabChange('pricing')}
+              className="px-5 py-2.5 bg-secondary-container text-on-secondary-container font-label-technical text-xs uppercase tracking-wider font-semibold cursor-pointer shrink-0 hover:opacity-90 transition-opacity"
+            >
+              Explore Engagements
+            </button>
+          </div>
+
+          {/* Related Articles from Portfolio Channel */}
+          {relatedArticles.length > 0 && (
+            <div className="pt-10 border-t border-surface-variant/40 flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <h3 className="font-headline-sm text-xl font-serif text-on-surface">
+                  Related Technical Studies
+                </h3>
+                <button
+                  onClick={handleBackToList}
+                  className="font-label-mono text-xs text-primary hover:underline cursor-pointer"
+                >
+                  View All ({articles.length})
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                {relatedArticles.map((rel) => (
+                  <div
+                    key={rel.id}
+                    onClick={() => handleOpenArticle(rel)}
+                    className="p-5 bg-surface-container-low border border-surface-variant/40 hover:border-primary/60 transition-all cursor-pointer group flex flex-col justify-between"
+                  >
+                    <div className="flex flex-col gap-2">
+                      <span className="text-[10px] font-label-mono text-secondary font-bold">
+                        {rel.issueNumber || rel.category}
+                      </span>
+                      <h4 className="font-serif text-sm font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">
+                        {rel.title}
+                      </h4>
+                      <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2">
+                        {rel.excerpt}
+                      </p>
+                    </div>
+                    <div className="pt-3 mt-3 border-t border-surface-variant/30 flex items-center justify-between text-[10px] font-label-mono text-on-surface-variant">
+                      <span>{rel.readTime}</span>
+                      <span className="flex items-center gap-1 group-hover:text-primary font-bold">
+                        Read <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Back to top & Back to all dispatches action bar */}
+          <div className="pt-6 border-t border-surface-variant/40 flex items-center justify-between">
+            <button
+              onClick={handleBackToList}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-on-surface text-surface font-label-technical text-xs uppercase tracking-wider font-bold hover:bg-primary hover:text-on-primary transition-all cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to All Dispatches</span>
+            </button>
+
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="inline-flex items-center gap-1 text-xs font-label-mono text-on-surface-variant hover:text-on-surface cursor-pointer"
+            >
+              <ArrowUp className="w-3.5 h-3.5" />
+              <span>Back to Top</span>
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  /* ========================================================================
+     VIEW 2: EDITORIAL CATALOG STREAM (DEFAULT #blog VIEW)
+     ======================================================================== */
   return (
     <div className="w-full flex flex-col">
       {/* Editorial Masthead */}
@@ -212,8 +513,19 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
               <span>·</span>
               <span>VOL. 2026 // ED. 04</span>
             </div>
-            <div className="font-label-mono text-xs text-tertiary">
-              4 Published Technical Studies
+            <div className="flex items-center gap-3 font-label-mono text-xs text-tertiary">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse" />
+                {loading ? 'Querying Database...' : `${articles.length} Published Technical Studies`}
+              </span>
+              <button
+                onClick={loadArticles}
+                disabled={loading}
+                title="Refresh from MongoDB database"
+                className="p-1 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+              </button>
             </div>
           </div>
 
@@ -235,24 +547,41 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
                 placeholder="Search dispatches & tags..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-surface-container text-xs font-label-technical text-on-surface border border-surface-variant/60 focus:outline-none focus:border-primary placeholder:text-outline"
+                className="w-full pl-9 pr-8 py-2 bg-surface-container text-xs font-label-technical text-on-surface border border-surface-variant/60 focus:outline-none focus:border-primary placeholder:text-outline"
               />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Category Filter Pills */}
+          {/* Dynamic Category Filter Pills */}
           <div className="flex flex-wrap gap-1.5 pt-2 border-t border-surface-variant/30">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 py-1.5 font-label-mono text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                className={`px-3 py-1.5 font-label-mono text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
                   selectedCategory === cat.id
                     ? 'bg-on-surface text-surface font-bold shadow-xs'
                     : 'bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface'
                 }`}
               >
-                {cat.label}
+                <span>{cat.label}</span>
+                <span
+                  className={`text-[10px] px-1 py-0.2 rounded-xs ${
+                    selectedCategory === cat.id
+                      ? 'bg-surface/20 text-surface'
+                      : 'bg-surface-variant/50 text-on-surface-variant'
+                  }`}
+                >
+                  {cat.count}
+                </span>
               </button>
             ))}
           </div>
@@ -261,10 +590,60 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
 
       {/* Main Articles Stream */}
       <section className="w-full max-w-7xl mx-auto px-margin-mobile lg:px-margin py-12 flex flex-col gap-10">
-        {filteredArticles.length === 0 ? (
+        {/* Loading Skeleton */}
+        {loading && (
+          <div className="flex flex-col gap-8 animate-pulse">
+            <div className="bg-surface-container-low p-6 sm:p-10 border border-surface-variant/60 flex flex-col gap-5">
+              <div className="h-4 bg-surface-variant/60 w-1/3 rounded-xs" />
+              <div className="h-10 bg-surface-variant/70 w-3/4 rounded-xs" />
+              <div className="h-5 bg-surface-variant/50 w-1/2 rounded-xs" />
+              <div className="space-y-2 pt-2">
+                <div className="h-3.5 bg-surface-variant/40 w-full rounded-xs" />
+                <div className="h-3.5 bg-surface-variant/40 w-5/6 rounded-xs" />
+                <div className="h-3.5 bg-surface-variant/40 w-4/6 rounded-xs" />
+              </div>
+              <div className="h-9 bg-surface-variant/60 w-40 mt-4 rounded-xs" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="bg-surface-container-low p-6 border border-surface-variant/50 flex flex-col gap-4">
+                  <div className="h-3 bg-surface-variant/60 w-1/2 rounded-xs" />
+                  <div className="h-6 bg-surface-variant/70 w-5/6 rounded-xs" />
+                  <div className="space-y-2">
+                    <div className="h-3 bg-surface-variant/40 w-full rounded-xs" />
+                    <div className="h-3 bg-surface-variant/40 w-4/5 rounded-xs" />
+                  </div>
+                  <div className="h-4 bg-surface-variant/50 w-24 mt-4 rounded-xs" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {!loading && error && (
+          <div className="p-10 text-center bg-surface-container-low border border-secondary/40 flex flex-col items-center gap-4">
+            <AlertCircle className="w-10 h-10 text-secondary" />
+            <div className="max-w-md">
+              <h3 className="font-serif text-xl text-on-surface font-semibold">Unable to Load Portfolio Dispatches</h3>
+              <p className="font-body-sm text-xs text-on-surface-variant mt-1.5">{error}</p>
+            </div>
+            <button
+              onClick={loadArticles}
+              className="px-5 py-2.5 bg-primary text-on-primary font-label-technical text-xs uppercase tracking-wider font-semibold cursor-pointer flex items-center gap-2"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Retry Database Query</span>
+            </button>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && filteredArticles.length === 0 && (
           <div className="p-12 text-center bg-surface-container-low border border-surface-variant/40 flex flex-col items-center gap-3">
             <BookOpen className="w-8 h-8 text-on-surface-variant" />
-            <p className="font-title-editorial text-lg text-on-surface">No dispatches match your search criteria.</p>
+            <p className="font-title-editorial text-lg text-on-surface">No portfolio dispatches match your search criteria.</p>
             <button
               onClick={() => {
                 setSelectedCategory('all');
@@ -275,7 +654,10 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
               Reset Filters
             </button>
           </div>
-        ) : (
+        )}
+
+        {/* Articles Stream */}
+        {!loading && !error && filteredArticles.length > 0 && (
           <div className="flex flex-col gap-8">
             {/* Lead Featured Article (First article in filtered list) */}
             {filteredArticles[0] && (
@@ -285,9 +667,14 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
                     <div className="flex items-center gap-2">
                       <span className="text-secondary font-bold">{filteredArticles[0].issueNumber}</span>
                       <span>·</span>
-                      <span className="px-2 py-0.5 bg-surface-container-high text-on-surface">
-                        {filteredArticles[0].categoryLabel}
+                      <span className="px-2 py-0.5 bg-surface-container-high text-on-surface font-semibold">
+                        {filteredArticles[0].category}
                       </span>
+                      {filteredArticles[0].isFeatured && (
+                        <span className="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-bold text-[10px] tracking-wider uppercase">
+                          Featured
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="flex items-center gap-1">
@@ -302,42 +689,87 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
                     </div>
                   </div>
 
-                  <h2 className="font-headline-md text-2xl sm:text-4xl text-on-surface font-serif group-hover:text-primary transition-colors leading-tight">
-                    {filteredArticles[0].title}
-                  </h2>
-                  <p className="font-title-editorial text-lg text-on-surface-variant italic">
-                    {filteredArticles[0].subtitle}
-                  </p>
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div className={`${filteredArticles[0].imageUrl && !filteredArticles[0].imageUrl.includes('drive.google.com') ? 'lg:col-span-8' : 'lg:col-span-12'} flex flex-col gap-3`}>
+                      <h2
+                        onClick={() => handleOpenArticle(filteredArticles[0])}
+                        className="font-headline-md text-2xl sm:text-4xl text-on-surface font-serif group-hover:text-primary transition-colors leading-tight cursor-pointer"
+                      >
+                        {filteredArticles[0].title}
+                      </h2>
 
-                  <p className="font-body-md text-sm text-on-surface/85 leading-relaxed">
-                    {filteredArticles[0].excerpt}
-                  </p>
+                      {filteredArticles[0].subtitle && (
+                        <p className="font-title-editorial text-lg text-on-surface-variant italic">
+                          {filteredArticles[0].subtitle}
+                        </p>
+                      )}
 
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {filteredArticles[0].tags.map((tag) => (
-                      <span key={tag} className="font-label-mono text-[11px] text-on-surface-variant bg-surface-container px-2 py-0.5">
-                        #{tag}
-                      </span>
-                    ))}
+                      <p className="font-body-md text-sm sm:text-base text-on-surface/85 leading-relaxed">
+                        {filteredArticles[0].excerpt}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5 pt-2">
+                        {filteredArticles[0].tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="font-label-mono text-[11px] text-on-surface-variant bg-surface-container px-2 py-0.5"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Featured Cover Image preview (if valid) */}
+                    {filteredArticles[0].imageUrl && !filteredArticles[0].imageUrl.includes('drive.google.com') && (
+                      <div
+                        onClick={() => handleOpenArticle(filteredArticles[0])}
+                        className="lg:col-span-4 overflow-hidden border border-surface-variant/60 bg-surface-container-high h-48 sm:h-56 cursor-pointer"
+                      >
+                        <img
+                          src={filteredArticles[0].imageUrl}
+                          alt={filteredArticles[0].coverImageAlt || filteredArticles[0].title}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                          onError={(e) => {
+                            (e.currentTarget.parentElement as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-6 mt-6 border-t border-surface-variant/40">
                   <button
-                    onClick={() => setActiveArticle(filteredArticles[0])}
+                    onClick={() => handleOpenArticle(filteredArticles[0])}
                     className="inline-flex items-center gap-2 px-5 py-2.5 bg-on-surface text-surface font-label-technical text-xs uppercase tracking-wider font-bold hover:bg-primary hover:text-on-primary transition-all cursor-pointer shadow-xs"
                   >
                     <span>Read Full Dispatch</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
-                  <button
-                    onClick={() => handleShareArticle(filteredArticles[0])}
-                    className="p-2 text-on-surface-variant hover:text-on-surface cursor-pointer"
-                    title="Share dispatch link"
-                  >
-                    <Share2 className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {filteredArticles[0].pdfUrl && (
+                      <a
+                        href={filteredArticles[0].pdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-xs font-label-mono text-on-surface transition-colors"
+                        title="View Monograph PDF"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-primary" />
+                        <span>PDF</span>
+                      </a>
+                    )}
+                    <button
+                      onClick={(e) => handleShareArticle(filteredArticles[0], e)}
+                      className="p-2 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+                      title="Share dispatch link"
+                    >
+                      <Share2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </article>
             )}
@@ -351,27 +783,57 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
                     className="bg-surface-container-low p-6 border border-surface-variant/50 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
                   >
                     <div className="flex flex-col gap-3">
+                      {art.imageUrl && !art.imageUrl.includes('drive.google.com') && (
+                        <div
+                          onClick={() => handleOpenArticle(art)}
+                          className="w-full h-36 overflow-hidden border border-surface-variant/40 bg-surface-container-high mb-1 cursor-pointer"
+                        >
+                          <img
+                            src={art.imageUrl}
+                            alt={art.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500"
+                            onError={(e) => {
+                              (e.currentTarget.parentElement as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      )}
+
                       <div className="flex items-center justify-between font-label-mono text-xs text-on-surface-variant">
                         <span className="text-secondary font-bold">{art.issueNumber}</span>
                         <span>{art.readTime}</span>
                       </div>
 
-                      <span className="text-[11px] font-label-mono text-primary uppercase">
-                        {art.categoryLabel}
+                      <span className="text-[11px] font-label-mono text-primary uppercase font-semibold">
+                        {art.category}
                       </span>
 
-                      <h3 className="font-headline-sm text-xl font-serif text-on-surface group-hover:text-primary transition-colors leading-snug">
+                      <h3
+                        onClick={() => handleOpenArticle(art)}
+                        className="font-headline-sm text-xl font-serif text-on-surface group-hover:text-primary transition-colors leading-snug cursor-pointer line-clamp-2"
+                      >
                         {art.title}
                       </h3>
 
                       <p className="font-body-sm text-xs text-on-surface-variant line-clamp-3 leading-relaxed">
                         {art.excerpt}
                       </p>
+
+                      {art.tags && art.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {art.tags.slice(0, 3).map((tag) => (
+                            <span key={tag} className="font-label-mono text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div className="pt-6 mt-4 border-t border-surface-variant/30 flex items-center justify-between">
                       <button
-                        onClick={() => setActiveArticle(art)}
+                        onClick={() => handleOpenArticle(art)}
                         className="inline-flex items-center gap-1.5 font-label-technical text-xs uppercase tracking-wider text-on-surface font-bold hover:text-primary transition-colors cursor-pointer"
                       >
                         <span>Open Essay</span>
@@ -388,118 +850,6 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
           </div>
         )}
       </section>
-
-      {/* Full-Article Reader Modal */}
-      {activeArticle && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-inverse-surface/70 backdrop-blur-md animate-fade-in overflow-hidden">
-          <div className="relative w-full max-w-4xl max-h-[92vh] bg-surface text-on-surface shadow-2xl flex flex-col border border-surface-variant overflow-hidden">
-            {/* Modal Sticky Header */}
-            <div className="px-6 py-4 bg-surface-container-high border-b border-surface-variant/60 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="px-2.5 py-0.5 bg-secondary-container text-on-secondary-container font-label-mono text-xs uppercase font-bold">
-                  {activeArticle.issueNumber}
-                </span>
-                <span className="font-label-mono text-xs text-on-surface-variant hidden sm:inline">
-                  {activeArticle.categoryLabel}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => handleShareArticle(activeArticle)}
-                  className="p-2 text-on-surface-variant hover:text-on-surface cursor-pointer"
-                  title="Share dispatch link"
-                >
-                  <Share2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setActiveArticle(null)}
-                  className="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface transition-colors cursor-pointer"
-                  aria-label="Close reader"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Body / Scrollable Content */}
-            <div className="flex-1 overflow-y-auto p-6 sm:p-12 space-y-6">
-              {/* Article Topline */}
-              <div className="border-b border-surface-variant/40 pb-6">
-                <div className="flex items-center gap-4 text-xs font-label-mono text-on-surface-variant mb-2">
-                  <span>Published {activeArticle.date}</span>
-                  <span>·</span>
-                  <span>{activeArticle.readTime}</span>
-                </div>
-
-                <h1 className="font-headline-lg text-2xl sm:text-4xl text-on-surface font-serif leading-tight">
-                  {activeArticle.title}
-                </h1>
-                <p className="font-title-editorial text-lg text-on-surface-variant italic mt-2">
-                  {activeArticle.subtitle}
-                </p>
-              </div>
-
-              {/* Body Prose Paragraphs */}
-              <div className="space-y-4 font-body-md text-sm sm:text-base text-on-surface leading-relaxed max-w-none">
-                {activeArticle.content.map((para, i) => (
-                  <p key={i} className="leading-relaxed">
-                    {para}
-                  </p>
-                ))}
-              </div>
-
-              {/* Embedded Code Snippet (if available) */}
-              {activeArticle.codeSnippet && (
-                <div className="my-6 bg-surface-container-lowest border border-surface-variant/60 shadow-sm overflow-hidden">
-                  <div className="bg-surface-container-high px-4 py-2 flex items-center justify-between border-b border-surface-variant/40">
-                    <div className="flex items-center gap-2">
-                      <Terminal className="w-3.5 h-3.5 text-tertiary" />
-                      <span className="font-label-mono text-xs text-on-surface font-bold">
-                        {activeArticle.codeSnippet.filename}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => handleCopyCode(activeArticle.codeSnippet!.code)}
-                      className="inline-flex items-center gap-1 font-label-mono text-xs text-on-surface-variant hover:text-on-surface cursor-pointer"
-                    >
-                      {hasCopiedCode ? <Check className="w-3.5 h-3.5 text-tertiary" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{hasCopiedCode ? 'Copied' : 'Copy'}</span>
-                    </button>
-                  </div>
-                  <pre className="p-4 text-xs font-mono overflow-x-auto text-on-surface leading-relaxed bg-surface-container-low/50">
-                    <code>{activeArticle.codeSnippet.code}</code>
-                  </pre>
-                </div>
-              )}
-
-              {/* Author Monograph Card */}
-              <div className="p-6 bg-surface-container-low border border-surface-variant/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-8">
-                <div>
-                  <span className="font-label-mono text-xs text-primary font-bold uppercase tracking-wider block">
-                    AUTHOR MONOGRAPH
-                  </span>
-                  <div className="font-serif text-lg text-on-surface font-semibold mt-0.5">
-                    Himanshu Bharti — Systems &amp; AI Engineer
-                  </div>
-                  <p className="font-body-sm text-xs text-on-surface-variant mt-1">
-                    Specializing in autonomous agent state-graphs, real-time WebRTC audio engines, and high-throughput microservices.
-                  </p>
-                </div>
-                <button
-                  onClick={() => {
-                    setActiveArticle(null);
-                    onTabChange('pricing');
-                  }}
-                  className="px-4 py-2 bg-secondary-container text-on-secondary-container font-label-technical text-xs uppercase tracking-wider font-semibold cursor-pointer shrink-0"
-                >
-                  Explore Engagements
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

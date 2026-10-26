@@ -46,13 +46,13 @@ export default function AboutView({ onTabChange, onOpenResume }: AboutViewProps)
 
             <div className="space-y-4 text-on-surface-variant text-sm sm:text-base leading-relaxed">
               <p>
-                My foundation began in core computer science—studying distributed consensus, database storage engines, and operating systems concurrency. That discipline shaped how I perceive the modern AI wave: machine intelligence is only as reliable as the deterministic harness wrapped around it.
+                I am a Software Development Engineer specializing in custom software development, enterprise CRM/ERP platforms, retrieval-augmented generation (RAG), and end-to-end Meta Ecosystem solutions.
               </p>
               <p>
-                Over the past several years, I have architected high-concurrency systems handling tens of millions of monthly events. When applied AI shifted from static one-shot prompts to real-time multimodal voice streaming and multi-step autonomous agent graphs, I focused on solving the hard physics of latency, jitter, and transactional verity.
+                My engineering spans high-throughput Java Spring Boot and Python FastAPI microservices, sub-600ms AI voice calling agents (Deepgram + ElevenLabs over WebSockets), and scalable WhatsApp broadcasting engines. I help businesses automate customer interactions via Meta Cloud WhatsApp APIs, Instagram comment-to-DM funnels, and 1-click Meta Embedded Signup workflows.
               </p>
               <p>
-                In production, stochastic language models cannot be granted direct, unchecked database access. By coupling LangGraph and Pydantic schema validation with Redis distributed locks, WebRTC low-latency streaming gateways, and pgvector HNSW indexing, my systems maintain sub-second responsiveness alongside zero-hallucination guarantees.
+                In production, stochastic models require deterministic guardrails. By coupling LangChain/LangGraph and Pydantic validation with Redis distributed locking, tenant-isolated vector namespaces (FAISS/pgvector), and Dockerized container meshes, my systems maintain 99.5%+ uptime and sub-second responsiveness.
               </p>
             </div>
 
@@ -64,17 +64,17 @@ export default function AboutView({ onTabChange, onOpenResume }: AboutViewProps)
                   Latency Economics
                 </h4>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  Every millisecond of roundtrip time directly degrades human perceived naturalness. We engineer pipeline steps concurrently to shave roundtrips under 450ms.
+                  Every millisecond counts. We optimize full-duplex voice pipelines and vector re-ranking to deliver &lt;600ms conversational turnarounds.
                 </p>
               </div>
 
               <div className="p-space-md bg-surface-container-low border border-surface-variant/40 shadow-xs">
                 <ShieldCheck className="w-5 h-5 text-tertiary mb-2" />
                 <h4 className="font-title-editorial font-serif font-bold text-base text-on-surface mb-1">
-                  Zero-Trust Output Guards
+                  Tenant Isolation &amp; Safety
                 </h4>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  Neural outputs pass through strict JSON schema parsing and cross-encoder validation before any state machine mutation or client dispatch.
+                  Strict multi-tenant partitioning in PostgreSQL and Redis distributed locks protect against race conditions, billing errors, and vector store data leaks.
                 </p>
               </div>
             </div>
@@ -97,8 +97,12 @@ export default function AboutView({ onTabChange, onOpenResume }: AboutViewProps)
                   <span className="font-semibold text-on-surface">Himanshu Bharti</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-surface-variant/30">
-                  <span className="font-label-mono text-on-surface-variant">PRIMARY ROLES</span>
-                  <span className="font-semibold text-on-surface">Senior AI &amp; Backend Engineer</span>
+                  <span className="font-label-mono text-on-surface-variant">PRIMARY ROLE</span>
+                  <span className="font-semibold text-on-surface">SDE (Full Stack &amp; AI)</span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-surface-variant/30">
+                  <span className="font-label-mono text-on-surface-variant">SPECIALIZATION</span>
+                  <span className="font-semibold text-primary font-bold">Full Stack &amp; Conversational AI</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-surface-variant/30">
                   <span className="font-label-mono text-on-surface-variant">CORE BASE</span>
@@ -106,7 +110,7 @@ export default function AboutView({ onTabChange, onOpenResume }: AboutViewProps)
                 </div>
                 <div className="flex justify-between py-1 border-b border-surface-variant/30">
                   <span className="font-label-mono text-on-surface-variant">DISPOSITIONS</span>
-                  <span className="font-semibold text-tertiary">Select High-Impact Roles &amp; Audits</span>
+                  <span className="font-semibold text-tertiary">Immediate · Full-time &amp; Consulting</span>
                 </div>
               </div>
 
@@ -116,7 +120,7 @@ export default function AboutView({ onTabChange, onOpenResume }: AboutViewProps)
                   Frequently Deployed Technologies
                 </span>
                 <div className="flex flex-wrap gap-1.5 font-label-technical text-xs">
-                  {['FastAPI', 'Python 3.12', 'Go', 'TypeScript', 'Redis Streams', 'BullMQ', 'pgvector', 'Docker', 'Kubernetes', 'WebRTC', 'LangGraph', 'Three.js', 'Tailwind CSS'].map((tech) => (
+                  {['Python', 'Java (Spring Boot)', 'TypeScript', 'FastAPI', 'Meta WhatsApp API', 'Instagram Graph API', 'Redis', 'PostgreSQL', 'Docker', 'FAISS', 'Deepgram', 'ElevenLabs', 'LangChain', 'React'].map((tech) => (
                     <span key={tech} className="px-2.5 py-1 bg-surface text-on-surface border border-surface-variant/40 shadow-xs">
                       {tech}
                     </span>

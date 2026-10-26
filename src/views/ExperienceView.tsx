@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import LiveISTClock from '../components/LiveISTClock';
 import type { InquestFormData, TabType } from '../types';
-import { Copy, Check, Send, Download, FileText, ArrowUpRight, Bolt, Layers, Eye, ShieldCheck, Award, Terminal } from 'lucide-react';
+import { Copy, Check, Send, Download, FileText, ArrowUpRight, Bolt, Layers, Eye, ShieldCheck, Award, Terminal, AlertCircle } from 'lucide-react';
+import { submitContactInquest } from '../services/contactService';
 
 interface ExperienceViewProps {
   onTabChange: (tab: TabType) => void;
@@ -9,43 +10,66 @@ interface ExperienceViewProps {
   onTriggerToast: (msg: string) => void;
 }
 
-export default function ExperienceView({ onOpenResume, onTriggerToast }: ExperienceViewProps) {
+export default function ExperienceView({ onTabChange, onOpenResume, onTriggerToast }: ExperienceViewProps) {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [formState, setFormState] = useState<InquestFormData>({
     name: '',
     email: '',
     inquiryType: 'Full-time Role',
     message: '',
-    ndaRequired: false
+    ndaRequired: false,
+    consent: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submissionFeedback, setSubmissionFeedback] = useState<string | null>(null);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
 
   const handleCopyEmail = () => {
-    const email = 'hello@himanshubharti.dev';
+    const email = 'hkbharti77@gmail.com';
     navigator.clipboard?.writeText(email);
     setCopiedEmail(true);
-    onTriggerToast('Email address hello@himanshubharti.dev copied to clipboard');
+    onTriggerToast('Email address hkbharti77@gmail.com copied to clipboard');
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
-  const handleFormSubmit = (e: FormEvent) => {
+  const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
 
+    if (!formState.consent) {
+      setSubmissionError('Statutory consent is mandatory under India DPDP Act 2023. Please check the agreement box before transmitting.');
+      onTriggerToast('Please accept statutory DPDP consent to submit.');
+      return;
+    }
+
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setSubmissionError(null);
+
+    const result = await submitContactInquest(formState);
+
+    setIsSubmitting(false);
+
+    if (result.success) {
       setIsSubmitted(true);
-      onTriggerToast(`Inquest successfully transmitted from ${formState.name}. Himanshu will respond within 24 hours.`);
+      setSubmissionFeedback(result.message);
+      onTriggerToast(`Inquest successfully transmitted from ${formState.name}. Response within 24 hours.`);
       setFormState({
         name: '',
         email: '',
         inquiryType: 'Full-time Role',
         message: '',
-        ndaRequired: false
+        ndaRequired: false,
+        consent: false,
       });
-    }, 850);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setSubmissionFeedback(null);
+      }, 10000);
+    } else {
+      setSubmissionError(result.message);
+      onTriggerToast(result.message);
+    }
   };
 
   return (
@@ -217,123 +241,126 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
         </div>
 
         {/* Timeline Grid Layout */}
+        {/* Timeline Grid Layout */}
         <div className="relative flex flex-col gap-space-lg">
           {/* Vertical Rule */}
           <div className="absolute left-4 md:left-8 top-4 bottom-4 w-0.5 bg-surface-container-highest" />
 
-          {/* Item 1 */}
+          {/* Item 1: Mobiloitte Technologies */}
           <div className="relative pl-12 md:pl-20 group">
             <div className="absolute left-2.5 md:left-6.5 top-2 w-3.5 h-3.5 bg-secondary-container shadow-[0_0_0_4px_#fbf9f3] group-hover:scale-125 transition-transform" />
             <div className="p-space-lg bg-surface-container-low hover:bg-surface-container transition-colors shadow-xs border border-surface-variant/40">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-xs mb-space-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-space-xs sm:gap-space-md">
                   <span className="font-headline-sm text-lg sm:text-xl font-serif font-bold text-on-surface">
-                    Senior AI &amp; Backend Developer / Systems Engineer
+                    Software Development Engineer (Full-Stack &amp; AI)
                   </span>
-                  <span className="px-2.5 py-0.5 bg-secondary-fixed text-on-secondary-fixed font-label-mono text-xs uppercase font-bold tracking-wider self-start sm:self-auto">
-                    Current Role
+                  <span className="px-2.5 py-0.5 bg-surface-container-high text-on-surface-variant font-label-mono text-xs uppercase tracking-wider self-start sm:self-auto">
+                    Mobiloitte Technologies · New Delhi, India
                   </span>
                 </div>
                 <span className="font-label-mono text-xs text-primary font-bold tracking-widest uppercase">
-                  2023 — Present
+                  May 2025 — Present
                 </span>
               </div>
               <p className="font-body-md text-sm text-on-surface-variant max-w-4xl mb-space-md leading-relaxed">
-                Architecting real-time multimodal voice pipelines, autonomous agent swarms, and high-throughput routing gateways capable of processing millions of structured context streams. Spearheaded inference latency optimizations across distributed edge nodes and established verifiable fallback layers.
+                Deployed cross-platform conversational AI bots across 5 channels (WhatsApp, Telegram, Instagram, Slack, Web Chat) with FastAPI and Hybrid RAG. Engineered real-time AI Voice Calling &amp; IVR systems with Deepgram (STT) and ElevenLabs (TTS) over WebSockets with &lt; 600ms latency. Implemented Meta WhatsApp Cloud API and Meta Embedded Signup onboarding for 10+ client enterprises with tenant-isolated PostgreSQL, MongoDB, and Redis caching.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-xs mb-space-md">
                 <div className="p-space-sm bg-surface border border-surface-variant/30">
-                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">Metric Gain</span>
-                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">320ms p95 Voice E2E</span>
+                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">Voice Turnaround</span>
+                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">&lt;600ms E2E Latency</span>
                 </div>
                 <div className="p-space-sm bg-surface border border-surface-variant/30">
                   <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">Scale Ingress</span>
-                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">45M+ Monthly Events</span>
+                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">15k+ Daily Requests</span>
                 </div>
                 <div className="p-space-sm bg-surface border border-surface-variant/30">
-                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">Safety Index</span>
-                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">99.98% Guardrail Verity</span>
+                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">System Availability</span>
+                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">99.5% Continuous Uptime</span>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2 text-xs font-label-technical">
                 <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">FastAPI</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">WebRTC / Audio Streaming</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">LangGraph</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Redis Streams</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">PostgreSQL + pgvector</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Hybrid RAG</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Meta Cloud WhatsApp API</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Deepgram &amp; ElevenLabs</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Docker &amp; Redis</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">PostgreSQL</span>
               </div>
             </div>
           </div>
 
-          {/* Item 2 */}
+          {/* Item 2: QSpiders */}
           <div className="relative pl-12 md:pl-20 group">
             <div className="absolute left-2.5 md:left-6.5 top-2 w-3.5 h-3.5 bg-secondary-container shadow-[0_0_0_4px_#fbf9f3] group-hover:scale-125 transition-transform" />
             <div className="p-space-lg bg-surface-container-low hover:bg-surface-container transition-colors shadow-xs border border-surface-variant/40">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-xs mb-space-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-space-xs sm:gap-space-md">
                   <span className="font-headline-sm text-lg sm:text-xl font-serif font-bold text-on-surface">
-                    Full Stack Software Engineer
+                    Full Stack Developer Intern
                   </span>
                   <span className="px-2.5 py-0.5 bg-surface-container-high text-on-surface-variant font-label-mono text-xs uppercase tracking-wider self-start sm:self-auto">
-                    Product Engineering
+                    QSpiders · Noida, India
                   </span>
                 </div>
                 <span className="font-label-mono text-xs text-on-surface-variant tracking-widest uppercase">
-                  2021 — 2023
+                  Aug 2024 — Apr 2025
                 </span>
               </div>
               <p className="font-body-md text-sm text-on-surface-variant max-w-4xl mb-space-md leading-relaxed">
-                Developed responsive customer-facing web applications, decoupled monolith core into maintainable microservices, optimized indexing strategies for relational datastores, and implemented multi-tenant third-party SaaS integrations with webhooks resilience.
+                Developed 8+ backend RESTful APIs using Java and Spring Boot with layered MVC architecture. Designed and optimized normalized relational database schemas across 12+ tables in MySQL, improving query execution speed by 25% through strategic indexing. Built reusable UI components in React and authored 30+ JUnit test suites with 80%+ coverage.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-xs mb-space-md">
                 <div className="p-space-sm bg-surface border border-surface-variant/30">
-                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">Core DB Efficiency</span>
-                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">64% Query Time Slash</span>
+                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">API Throughput</span>
+                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">20% Response Slash</span>
                 </div>
                 <div className="p-space-sm bg-surface border border-surface-variant/30">
-                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">Platform Availability</span>
-                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">99.95% Continuous SLA</span>
+                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">SQL Indexing Gain</span>
+                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">25% Query Speedup</span>
                 </div>
                 <div className="p-space-sm bg-surface border border-surface-variant/30">
-                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">Release Cycle</span>
-                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">Zero-Downtime CD</span>
+                  <span className="font-label-mono text-[11px] text-on-surface-variant block uppercase tracking-wider">Test Integrity</span>
+                  <span className="font-title-editorial text-base font-serif font-bold text-on-surface">80%+ JUnit Coverage</span>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2 text-xs font-label-technical">
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">TypeScript</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">React &amp; Next.js</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Node.js</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Docker</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">GraphQL</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Java</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Spring Boot</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">MySQL</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">React &amp; Vite</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">JUnit &amp; Postman</span>
               </div>
             </div>
           </div>
 
-          {/* Item 3 */}
+          {/* Item 3: Bihar Engineering University */}
           <div className="relative pl-12 md:pl-20 group">
             <div className="absolute left-2.5 md:left-6.5 top-2 w-3.5 h-3.5 bg-secondary-container shadow-[0_0_0_4px_#fbf9f3] group-hover:scale-125 transition-transform" />
             <div className="p-space-lg bg-surface-container-low hover:bg-surface-container transition-colors shadow-xs border border-surface-variant/40">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-xs mb-space-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-space-xs sm:gap-space-md">
                   <span className="font-headline-sm text-lg sm:text-xl font-serif font-bold text-on-surface">
-                    Systems &amp; AI Engineering Research
+                    B.Tech in Electronics &amp; Communication Engineering
                   </span>
                   <span className="px-2.5 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed font-label-mono text-xs uppercase tracking-wider self-start sm:self-auto">
-                    Academic Foundation
+                    Bihar Engineering University
                   </span>
                 </div>
                 <span className="font-label-mono text-xs text-tertiary font-bold tracking-widest uppercase">
-                  B.Tech in Computer Science
+                  2020 — 2024 (CGPA: 7.8 / 10)
                 </span>
               </div>
               <p className="font-body-md text-sm text-on-surface-variant max-w-4xl mb-space-md leading-relaxed">
-                Rigorous undergraduate focus in Computer Science &amp; Engineering. Advanced research tracks covering distributed consensus algorithms, machine learning mathematical foundations, relational database engine internals, and compiler design concepts.
+                Rigorous four-year engineering curriculum focused on microprocessors, computer networks, digital communications, signal processing, and high-concurrency software architectures. Completed specialized training in Salesforce Apex &amp; Automation and Cisco cybersecurity frameworks.
               </p>
               <div className="flex flex-wrap gap-2 text-xs font-label-technical">
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Distributed Systems</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Neural Net Theory</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">OS Concurrency</span>
-                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Linear Algebra</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Digital Communications</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Microprocessors</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">Computer Networks</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">C++ / Python</span>
+                <span className="px-2.5 py-1 bg-surface text-on-surface uppercase tracking-wider border border-surface-variant/30">SQL</span>
               </div>
             </div>
           </div>
@@ -349,12 +376,12 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 03 / Verified Registry
               </span>
               <h2 className="font-headline-lg text-2xl sm:text-4xl font-serif text-on-surface">
-                Credentials, Cloud Verifications &amp; Open Source
+                Credentials, Industry Seals &amp; Professional Certifications
               </h2>
             </div>
             <div className="flex items-center gap-2 text-xs font-label-mono text-on-surface-variant">
               <span className="w-2 h-2 rounded-full bg-primary" />
-              <span>Validated Digital Seals</span>
+              <span>Verified Industry Accreditations</span>
             </div>
           </div>
 
@@ -366,19 +393,19 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 <div className="flex items-center justify-between mb-space-md">
                   <ShieldCheck className="w-6 h-6 text-primary" />
                   <span className="font-label-mono text-[11px] text-on-surface-variant uppercase tracking-widest">
-                    ID: AWS-SA-883
+                    SALESFORCE
                   </span>
                 </div>
                 <h3 className="font-title-editorial text-base font-serif font-bold text-on-surface mb-space-xs">
-                  AWS Solutions Architect Associate
+                  Trailhead Superbadges
                 </h3>
                 <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                  Multi-tier VPC layout, fault-tolerant infrastructure design, SQS decoupled queues, and IAM least-privilege policies.
+                  Apex Specialist &amp; Process Automation Specialist. Advanced backend business logic, triggers, and automated orchestration.
                 </p>
               </div>
               <div className="pt-space-md mt-space-md flex items-center justify-between font-label-mono text-xs text-on-surface-variant uppercase border-t border-surface-variant/30">
-                <span>Amazon Web Services</span>
-                <span className="text-tertiary font-bold">Verified</span>
+                <span>Salesforce</span>
+                <span className="text-tertiary font-bold">Verified 2024</span>
               </div>
             </div>
 
@@ -388,19 +415,19 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 <div className="flex items-center justify-between mb-space-md">
                   <Award className="w-6 h-6 text-secondary" />
                   <span className="font-label-mono text-[11px] text-on-surface-variant uppercase tracking-widest">
-                    ID: DL-SPEC-419
+                    CISCO CYBER
                   </span>
                 </div>
                 <h3 className="font-title-editorial text-base font-serif font-bold text-on-surface mb-space-xs">
-                  Deep Learning Specialization
+                  CyberOps Associate
                 </h3>
                 <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                  Backpropagation mechanics, sequence modeling with Transformers, attention mechanisms, and hyperparameter tuning.
+                  Security operations, host and network-level telemetry monitoring, cryptography, threat triage, and incident response.
                 </p>
               </div>
               <div className="pt-space-md mt-space-md flex items-center justify-between font-label-mono text-xs text-on-surface-variant uppercase border-t border-surface-variant/30">
-                <span>DeepLearning.AI</span>
-                <span className="text-tertiary font-bold">Verified</span>
+                <span>Cisco Networking Academy</span>
+                <span className="text-tertiary font-bold">Verified 2024</span>
               </div>
             </div>
 
@@ -410,19 +437,19 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 <div className="flex items-center justify-between mb-space-md">
                   <Award className="w-6 h-6 text-tertiary" />
                   <span className="font-label-mono text-[11px] text-on-surface-variant uppercase tracking-widest">
-                    Global Track
+                    CISCO CCNAv7
                   </span>
                 </div>
                 <h3 className="font-title-editorial text-base font-serif font-bold text-on-surface mb-space-xs">
-                  National AI Hackathon Finalist
+                  Introduction to Networks
                 </h3>
                 <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                  Awarded for high-concurrency offline speech-to-text triage agent designed for emergency municipal dispatches.
+                  IPv4/IPv6 subnetting, transport layer protocols, Ethernet switching, routing fundamentals, and packet inspection.
                 </p>
               </div>
               <div className="pt-space-md mt-space-md flex items-center justify-between font-label-mono text-xs text-on-surface-variant uppercase border-t border-surface-variant/30">
-                <span>Autonomous Systems Jury</span>
-                <span className="text-secondary font-bold">Top 1%</span>
+                <span>Cisco Networking Academy</span>
+                <span className="text-secondary font-bold">Verified 2023</span>
               </div>
             </div>
 
@@ -432,19 +459,19 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 <div className="flex items-center justify-between mb-space-md">
                   <Terminal className="w-6 h-6 text-primary-container" />
                   <span className="font-label-mono text-[11px] text-on-surface-variant uppercase tracking-widest">
-                    GitHub Core
+                    META ECOSYSTEM
                   </span>
                 </div>
                 <h3 className="font-title-editorial text-base font-serif font-bold text-on-surface mb-space-xs">
-                  Open-Source Contributor
+                  Meta Tech Provider Specialist
                 </h3>
                 <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                  Author and maintainer of lightweight schema validation and async pooling utilities for agentic retrieval augmentations.
+                  WhatsApp Cloud API, Meta Embedded Signup, Instagram Graph API automation, HSM template synchronization, and rate limiting.
                 </p>
               </div>
               <div className="pt-space-md mt-space-md flex items-center justify-between font-label-mono text-xs text-on-surface-variant uppercase border-t border-surface-variant/30">
-                <span>Public Codebase</span>
-                <span className="text-primary font-bold">Active PRs</span>
+                <span>Meta Partner Ecosystem</span>
+                <span className="text-primary font-bold">Specialist 2024</span>
               </div>
             </div>
           </div>
@@ -464,7 +491,7 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 Let's build something remarkable.
               </h2>
               <p className="font-body-lg text-sm sm:text-base text-on-surface-variant mt-space-xs">
-                Open for high-impact software engineering roles, AI consulting, and architectural advisory.
+                Open for high-impact software engineering roles, enterprise AI systems, and Meta Ecosystem solutions.
               </p>
             </div>
 
@@ -473,7 +500,7 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
               <span className="font-label-mono text-xs uppercase tracking-widest text-on-surface-variant">Direct Mail Dispatch</span>
               <div className="flex items-center justify-between bg-surface p-space-sm border border-surface-variant/30">
                 <code className="font-label-mono text-xs sm:text-sm text-on-surface font-semibold select-all">
-                  hello@himanshubharti.dev
+                  hkbharti77@gmail.com
                 </code>
                 <button
                   type="button"
@@ -497,7 +524,7 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 </div>
                 <div className="flex flex-col">
                   <span className="font-title-editorial text-sm font-serif font-semibold text-on-surface">Curriculum Vitae</span>
-                  <span className="font-label-mono text-xs text-on-surface-variant">PDF Spec · 240 KB · Updated Q1 2025</span>
+                  <span className="font-label-mono text-xs text-on-surface-variant">PDF Spec · Verified 2025 Edition</span>
                 </div>
               </div>
               <button
@@ -516,7 +543,7 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
               <div className="flex flex-wrap gap-space-md font-label-technical text-xs">
                 <a
                   className="text-on-surface hover:text-primary transition-colors uppercase tracking-widest flex items-center gap-1"
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/himanshu-bharti-81a5a618a"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -525,7 +552,7 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 </a>
                 <a
                   className="text-on-surface hover:text-primary transition-colors uppercase tracking-widest flex items-center gap-1"
-                  href="https://github.com"
+                  href="https://github.com/hkbharti77"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -534,11 +561,9 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 </a>
                 <a
                   className="text-on-surface hover:text-primary transition-colors uppercase tracking-widest flex items-center gap-1"
-                  href="https://x.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:hkbharti77@gmail.com"
                 >
-                  <span>X (Twitter)</span>
+                  <span>Email</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
               </div>
@@ -659,41 +684,88 @@ export default function ExperienceView({ onOpenResume, onTriggerToast }: Experie
                 />
               </div>
 
-              {/* NDA Checkbox */}
-              <div className="flex items-start gap-space-sm pt-space-xs">
-                <input
-                  id="nda_ready"
-                  type="checkbox"
-                  checked={formState.ndaRequired}
-                  onChange={(e) => setFormState({ ...formState, ndaRequired: e.target.checked })}
-                  className="mt-1 h-4 w-4 rounded-none text-primary focus:ring-0 cursor-pointer bg-surface border border-surface-variant/40"
-                />
-                <label htmlFor="nda_ready" className="font-body-sm text-xs text-on-surface-variant cursor-pointer">
-                  Mutual Non-Disclosure Agreement (NDA) required prior to code examination or architecture handover.
+              {/* Statutory Legal & Protocol Declarations */}
+              <div className="flex flex-col gap-3 pt-2">
+                {/* Mandatory DPDP Act 2023 Consent Checkbox */}
+                <label
+                  htmlFor="privacy_consent"
+                  className="flex items-start gap-3 cursor-pointer group select-none text-xs text-on-surface-variant leading-relaxed"
+                >
+                  <input
+                    id="privacy_consent"
+                    type="checkbox"
+                    required
+                    checked={formState.consent}
+                    onChange={(e) => {
+                      setFormState({ ...formState, consent: e.target.checked });
+                      if (e.target.checked) setSubmissionError(null);
+                    }}
+                    className="mt-0.5 h-4 w-4 rounded-none text-primary focus:ring-0 cursor-pointer bg-surface border border-surface-variant/80 shrink-0"
+                  />
+                  <span className="flex-1">
+                    I consent to the processing of my contact details in accordance with the{' '}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onTabChange('privacy');
+                      }}
+                      className="text-on-surface hover:text-primary underline font-medium cursor-pointer"
+                    >
+                      Privacy Policy
+                    </button>{' '}
+                    and India DPDP Act 2023. <span className="text-secondary font-bold">*</span>
+                  </span>
+                </label>
+
+                {/* Optional Mutual NDA Checkbox */}
+                <label
+                  htmlFor="nda_ready"
+                  className="flex items-start gap-3 cursor-pointer group select-none text-xs text-on-surface-variant leading-relaxed"
+                >
+                  <input
+                    id="nda_ready"
+                    type="checkbox"
+                    checked={formState.ndaRequired}
+                    onChange={(e) => setFormState({ ...formState, ndaRequired: e.target.checked })}
+                    className="mt-0.5 h-4 w-4 rounded-none text-primary focus:ring-0 cursor-pointer bg-surface border border-surface-variant/80 shrink-0"
+                  />
+                  <span className="flex-1">
+                    Mutual Non-Disclosure Agreement (NDA) required prior to code examination or architecture handover.{' '}
+                    <span className="text-on-surface-variant/60 font-mono text-[10px] uppercase tracking-wider">(Optional)</span>
+                  </span>
                 </label>
               </div>
 
               {/* Action Submission */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-space-md pt-space-md">
-                <div className="flex items-center gap-2 text-on-surface-variant font-label-mono text-xs">
-                  <span className="w-2 h-2 rounded-full bg-tertiary" />
-                  <span>Encrypted Transmission</span>
+                <div className="flex items-center gap-2 text-on-surface-variant font-label-mono text-[11px]">
+                  <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse" />
+                  <span>DPDP 2023 · Encrypted Dispatch to Backend</span>
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full sm:w-auto px-6 py-3 bg-secondary-container hover:bg-secondary text-on-secondary-container hover:text-on-secondary transition-all font-label-technical text-xs font-bold uppercase tracking-widest shadow-md flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-60"
                 >
-                  <span>{isSubmitting ? 'Transmitting Dispatch...' : 'Transmit Dispatch'}</span>
+                  <span>{isSubmitting ? 'Transmitting Inquest...' : 'Transmit Inquest'}</span>
                   <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
 
-              {/* Success Notification */}
-              {isSubmitted && (
-                <div className="p-space-md bg-tertiary-fixed text-on-tertiary-fixed font-label-mono text-xs uppercase tracking-wider flex items-center gap-2 border border-tertiary/20 animate-fade-in">
-                  <Check className="w-4 h-4 text-tertiary" />
-                  <span>Dispatch successfully logged into studio inbox. Himanshu will respond within 24 hours.</span>
+              {/* Dynamic Success Notification */}
+              {isSubmitted && submissionFeedback && (
+                <div className="p-space-md bg-tertiary-fixed text-on-tertiary-fixed font-label-mono text-xs flex items-center gap-2.5 border border-tertiary/20 animate-fade-in shadow-xs">
+                  <Check className="w-4 h-4 text-tertiary shrink-0" />
+                  <span className="leading-snug">{submissionFeedback}</span>
+                </div>
+              )}
+
+              {/* Error Notification */}
+              {submissionError && (
+                <div className="p-space-md bg-error-container text-on-error-container font-label-mono text-xs flex items-center gap-2.5 border border-error/20 animate-fade-in shadow-xs">
+                  <AlertCircle className="w-4 h-4 text-error shrink-0" />
+                  <span className="leading-snug">{submissionError}</span>
                 </div>
               )}
             </form>
