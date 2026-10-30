@@ -58,7 +58,7 @@ export default function PrivacyView({ onTabChange }: PrivacyViewProps) {
             <div>
               <span className="text-on-surface-variant block uppercase text-[10px]">Jurisdiction</span>
               <span className="text-on-surface font-semibold flex items-center gap-1.5 mt-0.5">
-                <Globe className="w-3.5 h-3.5 text-tertiary" /> New Delhi, Republic of India
+                <Globe className="w-3.5 h-3.5 text-tertiary" /> Dakbangla Chowk, Simri Bakhtiarpur, Bihar 852127, India
               </span>
             </div>
             <div>
@@ -136,7 +136,7 @@ export default function PrivacyView({ onTabChange }: PrivacyViewProps) {
               <p className="text-on-surface font-semibold text-sm font-serif">Himanshu Bharti</p>
               <p className="text-on-surface-variant text-[11px] leading-relaxed">
                 Software Development Engineer (Full Stack &amp; AI Systems)<br />
-                New Delhi, National Capital Territory of Delhi, India
+                Dakbangla Chowk, Simri Bakhtiarpur, Bihar 852127, India
               </p>
               <a
                 href="mailto:hkbharti77@gmail.com"
@@ -368,7 +368,7 @@ export default function PrivacyView({ onTabChange }: PrivacyViewProps) {
                 <div className="font-label-mono text-xs text-on-surface space-y-1 bg-surface-container-high p-3 border border-surface-variant/60">
                   <p><strong>ATTN:</strong> Himanshu Bharti (Data Protection Officer)</p>
                   <p><strong>Designation:</strong> Software Development Engineer (Full Stack &amp; AI Systems)</p>
-                  <p><strong>Location:</strong> New Delhi, NCT of Delhi, 110001, Republic of India</p>
+                  <p><strong>Location:</strong> Dakbangla Chowk, Simri Bakhtiarpur, Bihar 852127, Republic of India</p>
                   <p><strong>Official Inquiries:</strong> <a href="mailto:hkbharti77@gmail.com" className="text-primary underline">hkbharti77@gmail.com</a></p>
                   <p><strong>Statutory Response Latency:</strong> Within 48 business hours</p>
                 </div>

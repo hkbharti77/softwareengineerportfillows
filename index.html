@@ -1,14 +1,61 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5D0H6YHJ0"></script>
+    <!-- Google tag (gtag.js) with Google Consent Mode v2 (GDPR & DPDP 2023 Compliant) -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'G-N5D0H6YHJ0');
+      // 1. Initial default state: DENIED (Privacy-by-default before user interaction)
+      // Google Advanced Consent Mode sends cookieless aggregate telemetry pings (gcs=G100)
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied',
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'wait_for_update': 500
+      });
+
+      gtag('js', new Date());
+      gtag('config', 'G-N5D0H6YHJ0', {
+        send_page_view: false // Managed dynamically by SPA navigation tracking in React
+      });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5D0H6YHJ0"></script>
+
+    <!-- Telemetry Consent Lifecycle Manager (Applies stored consent on initial parse & live events) -->
+    <script>
+      (function() {
+        function applyConsentState(prefs) {
+          if (!prefs || typeof window.gtag !== 'function') return;
+          var hasAnalytics = Boolean(prefs.analytics);
+          var hasMarketing = Boolean(prefs.marketing);
+          window.gtag('consent', 'update', {
+            'analytics_storage': hasAnalytics ? 'granted' : 'denied',
+            'ad_storage': hasMarketing ? 'granted' : 'denied',
+            'ad_user_data': hasMarketing ? 'granted' : 'denied',
+            'ad_personalization': hasMarketing ? 'granted' : 'denied'
+          });
+        }
+
+        // Apply saved consent from previous visit
+        try {
+          var saved = localStorage.getItem('hk_portfolio_cookie_consent') || localStorage.getItem('gyanvaniai_cookie_consent');
+          if (saved) {
+            var parsed = JSON.parse(saved);
+            if (parsed && parsed.preferences) {
+              applyConsentState(parsed.preferences);
+            }
+          }
+        } catch(e) {}
+
+        // Listen for live updates dispatched by CookieConsentBanner and CookiesView
+        window.addEventListener('cookie-consent-updated', function(e) {
+          if (e && e.detail && e.detail.preferences) {
+            applyConsentState(e.detail.preferences);
+          }
+        });
+      })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -228,4 +275,3 @@
     </script>
   </body>
 </html>
-

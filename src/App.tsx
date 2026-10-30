@@ -16,6 +16,7 @@ import TermsView from './views/TermsView';
 import CookiesView from './views/CookiesView';
 import type { TabType } from './types';
 import { CheckCircle2, BookOpen } from 'lucide-react';
+import { trackPageView, trackCustomEvent } from './services/portfolioTracking';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('work');
@@ -93,6 +94,25 @@ export default function App() {
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
+
+  // Track SPA page view on active tab change (sanitized paths, titles & query params)
+  useEffect(() => {
+    trackPageView(activeTab);
+  }, [activeTab]);
+
+  // Track recruiter engagement (resume modal interaction)
+  useEffect(() => {
+    if (isResumeOpen) {
+      trackCustomEvent('view_resume_modal', { tab: activeTab });
+    }
+  }, [isResumeOpen, activeTab]);
+
+  // Track advisory sync appointment modal interaction
+  useEffect(() => {
+    if (isScheduleSyncOpen) {
+      trackCustomEvent('view_schedule_sync_modal', { tab: activeTab });
+    }
+  }, [isScheduleSyncOpen, activeTab]);
 
   // Escape key listener to exit Reading / Focus Mode
   useEffect(() => {

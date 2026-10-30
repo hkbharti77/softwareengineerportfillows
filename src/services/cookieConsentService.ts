@@ -1,4 +1,5 @@
 import { getApiUrl } from './apiConfig';
+import { updateGoogleConsent, sanitizeUrlPath } from './portfolioTracking';
 
 export interface CookiePreferences {
   necessary: boolean;
@@ -27,7 +28,20 @@ export interface ConsentSyncResult {
  * Base URL is resolved strictly from environment variables.
  */
 export async function syncConsentToBackend(payload: ConsentSyncPayload): Promise<ConsentSyncResult> {
+  // 1. Immediately update Google Consent Mode v2 & dispatch local DOM event
+  try {
+    updateGoogleConsent(payload.preferences);
+  } catch {
+    // ignore
+  }
+
   const endpoint = getApiUrl('/api/public/cookie-consent');
+
+  // Multi-tier sanitization: ensure no raw queries or hashes leak into backend audit log
+  let safePageUrl: string | null = null;
+  if (typeof window !== 'undefined') {
+    safePageUrl = `${window.location.origin}${sanitizeUrlPath(window.location.pathname, window.location.search, window.location.hash)}`;
+  }
 
   const body = {
     status: payload.status,
@@ -42,7 +56,7 @@ export async function syncConsentToBackend(payload: ConsentSyncPayload): Promise
     userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
     language: typeof navigator !== 'undefined' ? navigator.language : null,
     referrer: typeof document !== 'undefined' ? document.referrer || null : null,
-    pageUrl: typeof window !== 'undefined' ? window.location.href : null,
+    pageUrl: safePageUrl,
     consentVersion: '2.0',
   };
 

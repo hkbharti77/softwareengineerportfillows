@@ -52,7 +52,7 @@ export default function TermsView({ onTabChange }: TermsViewProps) {
             <div>
               <span className="text-on-surface-variant block uppercase text-[10px]">Governing Law</span>
               <span className="text-on-surface font-semibold flex items-center gap-1.5 mt-0.5">
-                <Globe className="w-3.5 h-3.5 text-tertiary" /> Courts of New Delhi, India
+                <Globe className="w-3.5 h-3.5 text-tertiary" /> Courts of Bihar, India
               </span>
             </div>
             <div>
@@ -324,7 +324,8 @@ export default function TermsView({ onTabChange }: TermsViewProps) {
                   This Agreement is governed by the laws of the Republic of India. In the event of any contractual dispute, the parties agree to first seek amicable resolution through good-faith technical mediation for 30 days.
                 </p>
                 <div className="font-label-mono text-xs text-on-surface space-y-1 bg-surface-container-high p-3 border border-surface-variant/60">
-                  <p><strong>Primary Forum:</strong> Courts of New Delhi, National Capital Territory of Delhi, India</p>
+                  <p><strong>Primary Forum:</strong> Courts of Bihar, Republic of India</p>
+                  <p><strong>Registered Address:</strong> Dakbangla Chowk, Simri Bakhtiarpur, Bihar 852127, India</p>
                   <p><strong>Arbitration Body:</strong> Indian Arbitration and Conciliation Act, 1996</p>
                   <p><strong>Language of Proceedings:</strong> English</p>
                   <p><strong>Inquiry Contact:</strong> <a href="mailto:hkbharti77@gmail.com" className="text-primary underline">hkbharti77@gmail.com</a></p>
