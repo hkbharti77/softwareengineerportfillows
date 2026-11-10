@@ -24,7 +24,16 @@ export interface PostsResponse {
   };
 }
 
-import { getApiUrl } from './apiConfig';
+import { getApiUrl, getApiBaseUrl } from './apiConfig';
+
+export function resolveBlogImageUrl(url?: string): string {
+  if (!url) return '';
+  if (url.startsWith('/uploads/')) {
+    const base = getApiBaseUrl() || (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
+    return `${base}${url}`;
+  }
+  return url;
+}
 
 async function executeApiRequest<T>(endpointPath: string): Promise<T> {
   const targetUrl = getApiUrl(endpointPath);
@@ -75,9 +84,17 @@ export async function fetchPortfolioPosts(options: BlogFilterOptions = {}): Prom
   const data = await executeApiRequest<PostsResponse>(endpoint);
 
   // Format and enrich each article with display fallbacks
-  const enrichedPosts: DispatchArticle[] = (data.posts || []).map((post, index) => {
+  const enrichedPosts: DispatchArticle[] = (data.posts || []).map((post: any, index) => {
     const issueNum = post.issueNumber || `DISPATCH № ${String(index + 1).padStart(2, '0')}`;
     const cleanCategory = post.category || 'Engineering';
+    const rawImg = post.coverImage || post.imageUrl || post.featuredImage?.url || post.featuredImage || '';
+    const resolvedImg = resolveBlogImageUrl(typeof rawImg === 'string' ? rawImg : rawImg?.url || '');
+
+    const authorName = post.authorDetails?.name || post.author || 'Himanshu Bharti';
+    const authorRole = post.authorDetails?.role || post.authorRole || 'SOFTWARE ENGINEER';
+    const authorAvatar = resolveBlogImageUrl(post.authorDetails?.avatar || post.authorAvatar || '');
+    const authorBio = post.authorDetails?.bio || post.authorBio || '';
+    const authorLinkedin = post.authorDetails?.linkedin || post.authorLinkedin || '';
 
     return {
       ...post,
@@ -88,10 +105,22 @@ export async function fetchPortfolioPosts(options: BlogFilterOptions = {}): Prom
       categoryLabel: cleanCategory,
       date: post.date || (post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Recent'),
       readTime: post.readTime || `${post.readingTimeMinutes || 5} min read`,
-      author: post.author || 'Himanshu Bharti — Systems & AI Engineer',
+      author: authorName,
+      authorDetails: {
+        name: authorName,
+        role: authorRole,
+        avatar: authorAvatar,
+        bio: authorBio,
+        linkedin: authorLinkedin,
+        email: post.authorDetails?.email || '',
+      },
+      authorRole,
+      authorAvatar,
+      authorBio,
+      authorLinkedin,
       tags: Array.isArray(post.tags) && post.tags.length > 0 ? post.tags : [cleanCategory],
-      imageUrl: post.coverImage || post.imageUrl || '',
-      coverImage: post.coverImage || post.imageUrl || '',
+      imageUrl: resolvedImg,
+      coverImage: resolvedImg,
     };
   });
 
@@ -115,7 +144,16 @@ export async function fetchPostBySlug(slugOrId: string): Promise<DispatchArticle
     const res = await executeApiRequest<{ post: DispatchArticle }>(endpoint);
     if (!res || !res.post) return null;
 
-    const post = res.post;
+    const post = res.post as any;
+    const rawImg = post.coverImage || post.imageUrl || post.featuredImage?.url || post.featuredImage || '';
+    const resolvedImg = resolveBlogImageUrl(typeof rawImg === 'string' ? rawImg : rawImg?.url || '');
+
+    const authorName = post.authorDetails?.name || post.author || 'Himanshu Bharti';
+    const authorRole = post.authorDetails?.role || post.authorRole || 'SOFTWARE ENGINEER';
+    const authorAvatar = resolveBlogImageUrl(post.authorDetails?.avatar || post.authorAvatar || '');
+    const authorBio = post.authorDetails?.bio || post.authorBio || '';
+    const authorLinkedin = post.authorDetails?.linkedin || post.authorLinkedin || '';
+
     return {
       ...post,
       id: post.slug || post.id,
@@ -124,10 +162,22 @@ export async function fetchPostBySlug(slugOrId: string): Promise<DispatchArticle
       categoryLabel: post.category || 'Engineering',
       date: post.date || (post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Recent'),
       readTime: post.readTime || `${post.readingTimeMinutes || 5} min read`,
-      author: post.author || 'Himanshu Bharti — Systems & AI Engineer',
+      author: authorName,
+      authorDetails: {
+        name: authorName,
+        role: authorRole,
+        avatar: authorAvatar,
+        bio: authorBio,
+        linkedin: authorLinkedin,
+        email: post.authorDetails?.email || '',
+      },
+      authorRole,
+      authorAvatar,
+      authorBio,
+      authorLinkedin,
       tags: Array.isArray(post.tags) && post.tags.length > 0 ? post.tags : [post.category || 'Engineering'],
-      imageUrl: post.coverImage || post.imageUrl || '',
-      coverImage: post.coverImage || post.imageUrl || '',
+      imageUrl: resolvedImg,
+      coverImage: resolvedImg,
     };
   } catch (err) {
     console.error(`[BlogService] Failed to fetch article ${slugOrId}:`, err);

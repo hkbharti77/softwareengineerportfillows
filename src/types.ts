@@ -41,6 +41,15 @@ export interface InquestFormData {
 
 export type BlogCategory = string;
 
+export interface AuthorDetails {
+  name?: string;
+  role?: string;
+  bio?: string;
+  avatar?: string;
+  linkedin?: string;
+  email?: string;
+}
+
 export interface DispatchArticle {
   id: string;
   slug: string;
@@ -66,6 +75,11 @@ export interface DispatchArticle {
   tags: string[];
   tag?: string;
   author?: string;
+  authorDetails?: AuthorDetails;
+  authorRole?: string;
+  authorAvatar?: string;
+  authorBio?: string;
+  authorLinkedin?: string;
   isFeatured?: boolean;
   imageUrl?: string;
   coverImage?: string;

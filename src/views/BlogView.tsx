@@ -198,6 +198,41 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
      VIEW 1: DEDICATED FULL-PAGE ARTICLE VIEW (NO POPUP / NO MODAL)
      ======================================================================== */
   if (activeArticle) {
+    const authorName =
+      activeArticle.authorDetails?.name ||
+      activeArticle.author ||
+      'Himanshu Bharti';
+
+    const authorRole =
+      activeArticle.authorDetails?.role ||
+      activeArticle.authorRole ||
+      'SOFTWARE ENGINEER';
+
+    const authorAvatar =
+      activeArticle.authorDetails?.avatar ||
+      activeArticle.authorAvatar ||
+      '';
+
+    const isHimanshu = authorName.toLowerCase().includes('himanshu');
+    const authorLinkedin =
+      activeArticle.authorDetails?.linkedin ||
+      activeArticle.authorLinkedin ||
+      (isHimanshu ? 'https://www.linkedin.com/in/himanshu-bharti-81a5a618a' : '');
+
+    const authorBio =
+      activeArticle.authorDetails?.bio ||
+      activeArticle.authorBio ||
+      `${authorName} is a ${authorRole.toLowerCase()} specializing in scalable full-stack engineering, microservices, and AI-driven automation workflows.`;
+
+    const authorInitials =
+      authorName
+        .split(' ')
+        .filter(Boolean)
+        .map((p) => p[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase() || 'HB';
+
     return (
       <div className="w-full flex flex-col broadsheet-view-transition bg-surface">
         {/* Top Breadcrumb & Action Toolbar */}
@@ -275,15 +310,23 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
             {/* Author Byline */}
             <div className="flex items-center justify-between pt-4 border-t border-surface-variant/30 text-xs font-label-mono text-on-surface-variant">
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-none bg-surface-container-high border border-surface-variant/80 flex items-center justify-center font-serif font-bold text-on-surface">
-                  HB
-                </div>
+                {authorAvatar ? (
+                  <img
+                    src={authorAvatar}
+                    alt={authorName}
+                    className="w-8 h-8 rounded-full object-cover border border-surface-variant/80 shrink-0"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-surface-container-high border border-surface-variant/80 flex items-center justify-center font-serif font-bold text-xs text-on-surface shrink-0">
+                    {authorInitials}
+                  </div>
+                )}
                 <div>
                   <span className="text-on-surface font-semibold block">
-                    {activeArticle.author || 'Himanshu Bharti'}
+                    {authorName}
                   </span>
-                  <span className="text-[11px] text-on-surface-variant">
-                    Systems &amp; AI Engineer
+                  <span className="text-[11px] text-on-surface-variant uppercase tracking-wider">
+                    {authorRole}
                   </span>
                 </div>
               </div>
@@ -423,25 +466,55 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
             )}
           </div>
 
-          {/* Author Monograph Card */}
-          <div className="p-6 sm:p-8 bg-surface-container-low border border-surface-variant/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mt-4">
-            <div>
-              <span className="font-label-mono text-xs text-primary font-bold uppercase tracking-wider block">
-                AUTHOR MONOGRAPH
-              </span>
-              <div className="font-serif text-xl text-on-surface font-semibold mt-1">
-                {activeArticle.author || 'Himanshu Bharti — Systems & AI Engineer'}
+          {/* Author Card - Clean Dynamic LinkedIn Style */}
+          <div className="p-6 sm:p-8 bg-surface-container-low border border-surface-variant/60 rounded-xl flex flex-col sm:flex-row items-start gap-6 mt-4 shadow-xs">
+            <div className="shrink-0">
+              {authorAvatar ? (
+                <img
+                  src={authorAvatar}
+                  alt={authorName}
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-surface-variant/80 shadow-xs"
+                />
+              ) : (
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center font-serif font-bold text-2xl text-primary shadow-xs">
+                  {authorInitials}
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <h3 className="font-serif text-2xl text-on-surface font-bold tracking-tight">
+                {authorName}
+              </h3>
+
+              <div className="flex items-center gap-2 mt-1 mb-3">
+                {authorLinkedin ? (
+                  <a
+                    href={authorLinkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-label-mono text-xs font-bold uppercase tracking-wider text-[#0077b5] hover:opacity-80 transition-opacity"
+                    title={`View ${authorName} on LinkedIn`}
+                  >
+                    <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                    <span>{authorRole.toUpperCase()}</span>
+                  </a>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 font-label-mono text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+                    <svg className="w-4 h-4 fill-current shrink-0 text-[#0077b5]" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                    <span>{authorRole.toUpperCase()}</span>
+                  </span>
+                )}
               </div>
-              <p className="font-body-sm text-xs text-on-surface-variant mt-1.5 leading-relaxed max-w-xl">
-                Specializing in autonomous agent state-graphs, real-time WebRTC audio engines, high-throughput microservices, and enterprise full-stack systems.
+
+              <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">
+                {authorBio}
               </p>
             </div>
-            <button
-              onClick={() => onTabChange('pricing')}
-              className="px-5 py-2.5 bg-secondary-container text-on-secondary-container font-label-technical text-xs uppercase tracking-wider font-semibold cursor-pointer shrink-0 hover:opacity-90 transition-opacity"
-            >
-              Explore Engagements
-            </button>
           </div>
 
           {/* Related Articles from Portfolio Channel */}
