@@ -140,7 +140,7 @@ export async function fetchPortfolioPosts(options: BlogFilterOptions = {}): Prom
  */
 export async function fetchPostBySlug(slugOrId: string): Promise<DispatchArticle | null> {
   try {
-    const endpoint = `/api/public/posts/${encodeURIComponent(slugOrId)}?channel=portfolio`;
+    const endpoint = `/api/public/posts/${encodeURIComponent(slugOrId)}?channel=all`;
     const res = await executeApiRequest<{ post: DispatchArticle }>(endpoint);
     if (!res || !res.post) return null;
 
