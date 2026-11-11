@@ -84,9 +84,30 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
       }
 
       if (slug) {
+        const cleanSlug = slug.toLowerCase().trim();
+        const slugify = (text?: string) =>
+          (text || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
         const existing =
-          articles.find((a) => a.slug === slug || a.id === slug) ||
-          STATIC_PORTFOLIO_DISPATCHES.find((a) => a.slug === slug || a.id === slug);
+          articles.find(
+            (a) =>
+              a.slug === slug ||
+              a.id === slug ||
+              a.slug?.toLowerCase() === cleanSlug ||
+              slugify(a.title) === cleanSlug ||
+              (cleanSlug.length > 10 && (a.slug?.toLowerCase().includes(cleanSlug) || cleanSlug.includes(a.slug?.toLowerCase() || '---')))
+          ) ||
+          STATIC_PORTFOLIO_DISPATCHES.find(
+            (a) =>
+              a.slug === slug ||
+              a.id === slug ||
+              a.slug?.toLowerCase() === cleanSlug ||
+              slugify(a.title) === cleanSlug ||
+              (cleanSlug.length > 10 && (a.slug?.toLowerCase().includes(cleanSlug) || cleanSlug.includes(a.slug?.toLowerCase() || '---')))
+          );
 
         if (existing && existing.content && typeof existing.content === 'string' && existing.content.length > 150) {
           setActiveArticle(existing);
@@ -94,7 +115,8 @@ export default function BlogView({ onTabChange, onTriggerToast }: BlogViewProps)
         } else {
           setLoadingFullArticle(true);
           try {
-            const full = await fetchPostBySlug(slug);
+            const queryTarget = existing?.slug || existing?.id || slug;
+            const full = await fetchPostBySlug(queryTarget);
             setActiveArticle(full || existing || null);
           } catch (fetchErr) {
             console.warn('[BlogView] Failed to fetch article from API, falling back to static dispatch:', fetchErr);
