@@ -212,12 +212,27 @@ export function trackPageView(tab: TabType): void {
       }
     }
 
+    let countryCode = null;
+    let countryName = null;
+    try {
+      const geoRaw = localStorage.getItem('gyanvaniai_visitor_geo') || localStorage.getItem('hk_portfolio_geo');
+      if (geoRaw) {
+        const geo = JSON.parse(geoRaw);
+        countryCode = geo.country || geo.countryCode || null;
+        countryName = geo.countryName || null;
+      }
+    } catch {
+      // ignore
+    }
+
     const payload = JSON.stringify({
       path: canonicalPath || '/',
       title,
       referrer: document.referrer || null,
       channel: 'portfolio',
       consent: consentGranted,
+      countryCode,
+      countryName,
     });
 
     if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
