@@ -225,14 +225,34 @@ export function trackPageView(tab: TabType): void {
       // ignore
     }
 
+    let utmSource: string | null = null;
+    let utmMedium: string | null = null;
+    let utmCampaign: string | null = null;
+    if (typeof window !== 'undefined' && window.location.search) {
+      try {
+        const sp = new URLSearchParams(window.location.search);
+        utmSource = sp.get('utm_source');
+        utmMedium = sp.get('utm_medium');
+        utmCampaign = sp.get('utm_campaign');
+      } catch {
+        // ignore
+      }
+    }
+
     const payload = JSON.stringify({
       path: canonicalPath || '/',
       title,
-      referrer: document.referrer || null,
+      referrer: typeof document !== 'undefined' ? document.referrer || null : null,
+      hostname: typeof window !== 'undefined' ? window.location.hostname : 'hkbharti77.website',
       channel: 'portfolio',
       consent: consentGranted,
       countryCode,
       countryName,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      event: 'pageview',
+      flag: consentGranted ? 'consent_granted' : 'consent_essential',
     });
 
     if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
