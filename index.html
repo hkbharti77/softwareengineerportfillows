@@ -6,10 +6,23 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
 
-      // 1. Initial default state: DENIED (Privacy-by-default before user interaction)
-      // Google Advanced Consent Mode sends cookieless aggregate telemetry pings (gcs=G100)
+      // Resolve previously stored consent preference if available
+      var savedConsent = null;
+      var initialAnalytics = 'granted';
+      try {
+        savedConsent = localStorage.getItem('hk_portfolio_cookie_consent') || localStorage.getItem('gyanvaniai_cookie_consent');
+        if (savedConsent) {
+          var parsed = JSON.parse(savedConsent);
+          if (parsed && parsed.preferences && parsed.preferences.analytics === false) {
+            initialAnalytics = 'denied';
+          }
+        }
+      } catch(e) {}
+
+      // 1. Initial state: First-party analytics allowed by default for visitor metrics,
+      // while third-party advertising, remarketing and user profiling remain strictly denied.
       gtag('consent', 'default', {
-        'analytics_storage': 'denied',
+        'analytics_storage': initialAnalytics,
         'ad_storage': 'denied',
         'ad_user_data': 'denied',
         'ad_personalization': 'denied',
@@ -20,8 +33,11 @@
       gtag('config', 'G-N5D0H6YHJ0', {
         send_page_view: false // Managed dynamically by SPA navigation tracking in React
       });
+      gtag('config', 'GT-TX5XDGT3', {
+        send_page_view: false
+      });
     </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5D0H6YHJ0"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GT-TX5XDGT3"></script>
 
     <!-- Telemetry Consent Lifecycle Manager (Applies stored consent on initial parse & live events) -->
     <script>

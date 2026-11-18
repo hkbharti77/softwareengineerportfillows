@@ -101,7 +101,7 @@ export default function ScheduleSyncModal({
     }
 
     if (!formData.consent) {
-      setErrorMessage('Explicit consent under India DPDP Act 2023 is mandatory.');
+      setErrorMessage('Explicit statutory consent and 18+ confirmation under India DPDP Act 2023 are mandatory.');
       return;
     }
 
@@ -387,7 +387,7 @@ ${formData.brief.trim()}`;
                     className="mt-0.5 h-4 w-4 rounded-none text-primary focus:ring-0 cursor-pointer bg-surface border border-surface-variant/80 shrink-0"
                   />
                   <span className="font-label-technical text-xs text-on-surface leading-snug">
-                    I explicitly consent to the transmission and processing of these parameters in accordance with the{' '}
+                    I confirm I am 18 years of age or older and explicitly consent to the transmission and processing of these parameters in accordance with the{' '}
                     <a
                       href="#privacy"
                       target="_blank"

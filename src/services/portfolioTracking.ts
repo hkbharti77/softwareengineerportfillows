@@ -1,5 +1,6 @@
 import type { TabType } from '../types';
 import type { CookiePreferences } from './cookieConsentService';
+import { getApiUrl } from './apiConfig';
 
 // Allowlisted query parameters for portfolio analytics
 const ALLOWED_QUERY_KEYS = new Set(['tab', 'ref', 'source', 'page']);
@@ -144,6 +145,25 @@ export function updateGoogleConsent(prefs: CookiePreferences): void {
       ad_user_data: hasMarketing ? 'granted' : 'denied',
       ad_personalization: hasMarketing ? 'granted' : 'denied',
     });
+
+    if (hasAnalytics) {
+      // Re-dispatch current page view so GA4 immediately records the active view under granted consent
+      const rawHash = (window.location.hash || '').replace(/^#/, '');
+      const validTabs: TabType[] = [
+        'work',
+        'engineering',
+        'experience',
+        'blog',
+        'pricing',
+        'about',
+        'contact',
+        'privacy',
+        'terms',
+        'cookies',
+      ];
+      const currentTab = validTabs.includes(rawHash as TabType) ? (rawHash as TabType) : 'work';
+      trackPageView(currentTab);
+    }
   }
 
   // Dispatch custom event for widgets and page scripts
@@ -176,6 +196,42 @@ export function trackPageView(tab: TabType): void {
       page_path: canonicalPath,
       tab_name: tab,
     });
+  }
+
+  // First-party native visitor tracking (Cookieless, DPDP 2023 & GDPR Compliant)
+  try {
+    const hitEndpoint = getApiUrl('/api/public/analytics/hit');
+    const consentRaw = localStorage.getItem('hk_portfolio_cookie_consent');
+    let consentGranted = false;
+    if (consentRaw) {
+      try {
+        const parsed = JSON.parse(consentRaw);
+        consentGranted = Boolean(parsed.preferences?.analytics || parsed.status === 'all');
+      } catch {
+        // ignore
+      }
+    }
+
+    const payload = JSON.stringify({
+      path: canonicalPath || '/',
+      title,
+      referrer: document.referrer || null,
+      channel: 'portfolio',
+      consent: consentGranted,
+    });
+
+    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+      navigator.sendBeacon(hitEndpoint, new Blob([payload], { type: 'application/json' }));
+    } else {
+      fetch(hitEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true,
+      }).catch(() => {});
+    }
+  } catch {
+    // Non-blocking
   }
 }
 

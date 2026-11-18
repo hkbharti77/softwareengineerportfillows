@@ -38,7 +38,7 @@ export default function ExperienceView({ onTabChange, onOpenResume, onTriggerToa
     if (!formState.name || !formState.email || !formState.message) return;
 
     if (!formState.consent) {
-      setSubmissionError('Statutory consent is mandatory under India DPDP Act 2023. Please check the agreement box before transmitting.');
+      setSubmissionError('Statutory consent and 18+ confirmation are mandatory under India DPDP Act 2023. Please check the agreement box before transmitting.');
       onTriggerToast('Please accept statutory DPDP consent to submit.');
       return;
     }
@@ -703,7 +703,7 @@ export default function ExperienceView({ onTabChange, onOpenResume, onTriggerToa
                     className="mt-0.5 h-4 w-4 rounded-none text-primary focus:ring-0 cursor-pointer bg-surface border border-surface-variant/80 shrink-0"
                   />
                   <span className="flex-1">
-                    I consent to the processing of my contact details in accordance with the{' '}
+                    I confirm I am 18 years of age or older and consent to the processing of my contact details in accordance with the{' '}
                     <button
                       type="button"
                       onClick={(e) => {

@@ -1,5 +1,5 @@
 import type { TabType } from '../types';
-import { ShieldCheck, Lock, FileText, CheckCircle2, Mail, ArrowLeft, Printer, Calendar, Server, Globe, Clock } from 'lucide-react';
+import { ShieldCheck, Lock, FileText, CheckCircle2, Mail, Phone, ArrowLeft, Printer, Calendar, Server, Globe, Clock } from 'lucide-react';
 
 interface PrivacyViewProps {
   onTabChange: (tab: TabType) => void;
@@ -144,6 +144,13 @@ export default function PrivacyView({ onTabChange }: PrivacyViewProps) {
               >
                 <Mail className="w-3.5 h-3.5" />
                 hkbharti77@gmail.com
+              </a>
+              <a
+                href="tel:+918700620913"
+                className="text-primary hover:underline flex items-center gap-1.5 text-[11px] font-bold"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                +91 87006 20913
               </a>
             </div>
           </aside>
@@ -370,6 +377,7 @@ export default function PrivacyView({ onTabChange }: PrivacyViewProps) {
                   <p><strong>Designation:</strong> Software Development Engineer (Full Stack &amp; AI Systems)</p>
                   <p><strong>Location:</strong> Dakbangla Chowk, Simri Bakhtiarpur, Bihar 852127, Republic of India</p>
                   <p><strong>Official Inquiries:</strong> <a href="mailto:hkbharti77@gmail.com" className="text-primary underline">hkbharti77@gmail.com</a></p>
+                  <p><strong>Statutory Compliance Telephone:</strong> <a href="tel:+918700620913" className="text-primary underline">+91 87006 20913</a> (IST UTC+5:30)</p>
                   <p><strong>Statutory Response Latency:</strong> Within 48 business hours</p>
                 </div>
                 <p className="text-[11px] text-on-surface-variant">
